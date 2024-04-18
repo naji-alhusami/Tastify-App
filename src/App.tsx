@@ -1,10 +1,9 @@
-// import "./App.css";
+import Header from './components/Header.tsx';
 
 function App() {
   return (
     <>
-      <div className="text-5xl bg-green-300">Starting Project</div>
-      <div className="text-2xl bg-green-300">Starting Project</div>
+      <Header />
     </>
   );
 }
