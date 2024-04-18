@@ -1,13 +1,16 @@
-import Header from "./components/Header.tsx";
-import OrderSteps from "./components/OrderSteps.tsx";
-import Starting from "./components/Starting.tsx";
+import { Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar.tsx";
+import Home from "./components/Home/Home.tsx";
+import Cuisines from "./components/Cuisines/Cuisines.tsx";
 
 function App() {
   return (
     <>
-      <Header />
-      <Starting />
-      <OrderSteps />
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/cuisines" element={<Cuisines />} />
+      </Routes>
     </>
   );
 }
