@@ -40,8 +40,8 @@ const Starting = () => {
 
   const { lat, lon } = contextValue;
   console.log(lat, lon);
-  const findRestaurantsHandler = () => {
-    navigate(`/restaurants?lon=${lon}&lat=${lat}`);
+  const findCuisinesHandler = () => {
+    navigate(`/cuisines?lon=${lon}&lat=${lat}`);
   };
 
   return (
@@ -61,7 +61,7 @@ const Starting = () => {
         <div className="relative w-full flex flex-col justify-between bg-white p-4 rounded-md gap-2 shadow-lg md:absolute md:top-2/4 md:flex-row md:max-w-2xl lg:top-96">
           <AddressLocator />
           <button
-            onClick={findRestaurantsHandler}
+            onClick={findCuisinesHandler}
             className="text-white bg-rose-500 hover:bg-rose-600 px-4 py-2 rounded-md"
           >
             Search
