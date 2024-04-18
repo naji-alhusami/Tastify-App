@@ -1,4 +1,4 @@
-import HomeImage from "../assets/home-image.jpg";
+import HomeImage from "/Images/home-image.jpg";
 
 const Starting = () => {
   return (
