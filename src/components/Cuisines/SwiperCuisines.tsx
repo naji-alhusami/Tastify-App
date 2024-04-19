@@ -7,7 +7,7 @@ import { Pagination } from "swiper/modules";
 import { ITEMS_CATEGORIES } from "./ItemsCategories";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import StateContext from "../../store/state-context";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 // interface SwiperCuisinesProps {
 //   searchParams: {
@@ -102,8 +102,8 @@ const SwiperCuisines = () => {
             key={i}
             className="relative h-full mx-auto"
           >
-            <a
-              href={`/restaurants/?lon=${params.get("lon")}&lat=${params.get(
+            <Link
+              to={`/cuisines/?lon=${params.get("lon")}&lat=${params.get(
                 "lat"
               )}&cuisine=${item.value}`}
               onClick={() => restaurantsHandler(item.value)}
@@ -119,7 +119,7 @@ const SwiperCuisines = () => {
                 className="-z-10 h-16 w-16 object-cover object-center"
               />
               <p>{item.value}</p>
-            </a>
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>

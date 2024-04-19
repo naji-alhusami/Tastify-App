@@ -21,7 +21,7 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
   const [showRestaurants, setShowRestaurants] = useState<boolean>(false);
 
     const [params] = useSearchParams();
-    console.log(params);
+    // console.log(params.get("cuisine"));
     const latString = params.get("lat");
     const lonString = params.get("lon");
 
