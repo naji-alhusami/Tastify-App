@@ -1,6 +1,7 @@
+import Meals from "./Meals";
 import SwiperCuisines from "./SwiperCuisines";
 
-const Cuisines = () => {
+const MealsPage = () => {
   return (
     <div className="mx-4 mt-4">
       <div>
@@ -9,14 +10,11 @@ const Cuisines = () => {
       <div className="flex justify-center items-center m-4">
         <SwiperCuisines />
       </div>
-      {/* <div>
-        <Restaurants
-          query={{ sort: "desc", limit: 4 }}
-          searchParams={searchParams}
-        />
-      </div> */}
+      <div>
+        <Meals />
+      </div>
     </div>
   );
 };
 
-export default Cuisines;
+export default MealsPage;

@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar.tsx";
-import Home from "./components/Home/Home.tsx";
-import Cuisines from "./components/Cuisines/Cuisines.tsx";
+import Home from "./components/Home/HomePage.tsx";
+import MealsPage from "./components/Cuisines/MealsPage.tsx";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/cuisines" element={<Cuisines />} />
+        <Route path="/cuisines" element={<MealsPage />} />
       </Routes>
     </>
   );
