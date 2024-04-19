@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
 
-import StateContext from "../../store/state-context";
+import StateContext from "../../store/context/state-context";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Basket from "../Basket/Basket";
 

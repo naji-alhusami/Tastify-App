@@ -16,7 +16,7 @@ export default function Basket({ onClose, openBasket }: CartProps) {
       {openBasket && <Backdrop onClick={onClose} />}
       <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50" />
       <dialog
-        id="cart-modal"
+        id="basket-modal"
         className="z-50 p-10 fixed w-[300px] sm:w-[400px] md:w-[500px] bg-white rounded-lg shadow-md"
         open
       >

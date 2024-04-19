@@ -6,7 +6,7 @@ import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { ITEMS_CATEGORIES } from "./ItemsCategories";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import StateContext from "../../store/state-context";
+import StateContext from "../../store/context/state-context";
 import { Link, useSearchParams } from "react-router-dom";
 
 // interface SwiperCuisinesProps {

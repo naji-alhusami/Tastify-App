@@ -1,7 +1,7 @@
 "use client";
 import { FC, useContext } from "react";
 import { LocateFixed } from "lucide-react";
-import StateContext from "../../store/state-context";
+import StateContext from "../../store/context/state-context";
 
 const AddressLocator: FC = () => {
   const contextValue = useContext(StateContext);

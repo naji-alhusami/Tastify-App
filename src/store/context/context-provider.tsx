@@ -5,7 +5,7 @@ import {
 } from "react";
 import StateContext from "./state-context";
 import { useSearchParams } from "react-router-dom";
-import { getAddress } from "../lib/get-address";
+import { getAddress } from "../../lib/get-address";
 // import { useSearchParams } from "react-router-dom";
 // import { getAddress } from "../lib/get-address";
 

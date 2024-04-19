@@ -26,7 +26,7 @@ import { useContext } from "react";
 
 import HomeImage from "/Images/home-image.jpg";
 import AddressLocator from "./locate-address";
-import StateContext from "../../store/state-context";
+import StateContext from "../../store/context/state-context";
 import { useNavigate } from "react-router-dom";
 
 const Starting = () => {
