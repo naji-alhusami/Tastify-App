@@ -7,6 +7,26 @@
   font-weight: 400;
   font-style: normal;
 }
+
+#cart-modal {
+  top: 5rem;
+  background: white;
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  animation: fade-slide-in-from-top 0.3s ease-in-out;
+}
+
+@keyframes fade-slide-in-from-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 /* 
 @layer base {
   :root {

@@ -4,10 +4,10 @@ import Starting from "./Starting";
 
 const Home = () => {
   return (
-    <>
+    <div>
       <Starting />
       <OrderSteps />
-    </>
+    </div>
   );
 };
 
