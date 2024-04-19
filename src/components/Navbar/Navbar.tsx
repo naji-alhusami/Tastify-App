@@ -35,7 +35,7 @@ const Navbar = () => {
         <Basket openBasket={basketIsVisible} onClose={handleCloseBasketClick} />
       )}
       <section
-        className={`bg-white z-10 top-0 w-full sticky shadow-lg px-8 ${heightClass}`}
+        className={`bg-white z-50 top-0 w-full sticky shadow-lg px-8 ${heightClass}`}
       >
         <header className="h-full flex flex-row items-center justify-between">
           <div>
