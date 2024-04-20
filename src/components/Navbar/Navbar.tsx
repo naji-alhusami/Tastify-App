@@ -76,9 +76,10 @@ const Navbar = () => {
             </div>
             <div
               onClick={handleOpenBasketClick}
-              className="m-1 p-3 hover:bg-rose-100 hover:rounded-full hover:p-3  cursor-pointer"
+              className="m-1 p-3 flex flex-row justify-center items-center hover:bg-rose-100 hover:rounded-full hover:p-3  cursor-pointer"
             >
-              <ShoppingCart className="text-rose-500 h-6 w-6" />
+              <ShoppingCart className="text-rose-500 h-6 w-6 mr-2" />
+              (0)
             </div>
           </div>
         </header>
