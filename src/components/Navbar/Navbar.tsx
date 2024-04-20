@@ -5,9 +5,20 @@ import StateContext from "../../store/context/state-context";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Basket from "../Basket/Basket";
 import { useBasketSelector } from "../../store/redux/hooks";
+import AuthModal from "../ui/AuthModal";
+import Signup from "../Auth/Signup";
+import Login from "../Auth/Login";
 
 const Navbar = () => {
+  const [authIsVisible, setAuthIsVisible] = useState<boolean>(false);
+  // const [isThanksModal, setIsThanksModal] = useState<boolean>(false);
+  const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
   const [basketIsVisible, setBasketIsVisible] = useState<boolean>(false);
+  
+  const contextValue = useContext(StateContext);
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+
   const basketQuantity = useBasketSelector((state) =>
     state.basket.items.reduce((val, item) => val + item.quantity, 0)
   );
@@ -20,9 +31,20 @@ const Navbar = () => {
     setBasketIsVisible(false);
   }
 
-  const contextValue = useContext(StateContext);
-  const navigate = useNavigate();
-  const [params] = useSearchParams();
+  const openSignupModalHandler = () => {
+    setIsSignupForm(true);
+    setAuthIsVisible(true);
+  };
+
+  const openLoginModalHandler = () => {
+    setIsSignupForm(false);
+    setAuthIsVisible(true);
+  };
+
+  const closeModalHandler = () => {
+    setAuthIsVisible(false);
+    // setIsThanksModal(false);
+  };
 
   if (!contextValue) {
     // We should handle the case when contextValue is null
@@ -34,10 +56,32 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Navbar */}
+      {authIsVisible && (
+        <AuthModal
+          onClose={closeModalHandler}
+          isSignupForm={isSignupForm}
+          openAuth={authIsVisible}
+        >
+          {isSignupForm ? (
+            <Signup
+              // setIsThanksModal={setIsThanksModal}
+              setIsAuthModal={setAuthIsVisible}
+              setIsSignupForm={setIsSignupForm}
+            />
+          ) : (
+            <Login
+              setIsSignupForm={setIsSignupForm}
+              setIsAuthModal={setAuthIsVisible}
+            />
+          )}
+        </AuthModal>
+      )}
+
       {basketIsVisible && (
         <Basket openBasket={basketIsVisible} onClose={handleCloseBasketClick} />
       )}
+
+      {/* Navbar */}
       <section
         className={`bg-white z-50 top-0 w-full sticky shadow-lg px-8 ${heightClass}`}
       >
@@ -71,10 +115,16 @@ const Navbar = () => {
 
           <div className="lg:flex lg:flex-row">
             <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-10">
-              <button className=" mr-4 bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600">
+              <button
+                onClick={openLoginModalHandler}
+                className=" mr-4 bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
+              >
                 Login
               </button>
-              <button className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white">
+              <button
+                onClick={openSignupModalHandler}
+                className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
+              >
                 Signup
               </button>
             </div>

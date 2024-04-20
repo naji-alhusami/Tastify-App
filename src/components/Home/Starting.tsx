@@ -39,7 +39,7 @@ const Starting = () => {
   }
 
   const { lat, lon } = contextValue;
-  console.log(lat, lon);
+  
   const findCuisinesHandler = () => {
     navigate(`/cuisines?lon=${lon}&lat=${lat}`);
   };
