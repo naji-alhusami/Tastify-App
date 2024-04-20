@@ -4,9 +4,13 @@ import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
 import StateContext from "../../store/context/state-context";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Basket from "../Basket/Basket";
+import { useBasketSelector } from "../../store/redux/hooks";
 
 const Navbar = () => {
   const [basketIsVisible, setBasketIsVisible] = useState<boolean>(false);
+  const basketQuantity = useBasketSelector((state) =>
+    state.basket.items.reduce((val, item) => val + item.quantity, 0)
+  );
 
   function handleOpenBasketClick() {
     setBasketIsVisible(true);
@@ -78,8 +82,8 @@ const Navbar = () => {
               onClick={handleOpenBasketClick}
               className="m-1 p-3 flex flex-row justify-center items-center hover:bg-rose-100 hover:rounded-full hover:p-3  cursor-pointer"
             >
-              <ShoppingCart className="text-rose-500 h-6 w-6 mr-2" />
-              (0)
+              <ShoppingCart className="text-rose-500 h-6 w-6 mr-2" />(
+              {basketQuantity})
             </div>
           </div>
         </header>

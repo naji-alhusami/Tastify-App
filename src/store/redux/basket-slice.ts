@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-type BasketItem = {
+export type BasketItem = {
   id: string;
   name: string;
   price: number;
@@ -16,7 +16,7 @@ const initialState: BasketState = {
 };
 
 export const basketSlice = createSlice({
-  name: "basktet",
+  name: "basket",
   initialState,
   reducers: {
     addToBasket(
