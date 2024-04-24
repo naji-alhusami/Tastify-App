@@ -1,6 +1,6 @@
 import { Bike } from "lucide-react";
 import { addToBasket } from "../../store/redux/basket-slice";
-import { useBasketDispatch } from "../../store/redux/hooks";
+import { useAppDispatch } from "../../store/redux/hooks";
 
 type MealProps = {
   id: string;
@@ -11,7 +11,7 @@ type MealProps = {
 };
 
 export default function Meals({ id, category, name, price, image }: MealProps) {
-  const dispatch = useBasketDispatch();
+  const dispatch = useAppDispatch();
 
   function addToBasketHandler() {
     dispatch(addToBasket({ id, name, price }));

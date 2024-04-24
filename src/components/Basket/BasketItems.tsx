@@ -3,11 +3,11 @@ import {
   removeFromBasket,
   type BasketItem,
 } from "../../store/redux/basket-slice";
-import { useBasketDispatch, useBasketSelector } from "../../store/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 
 export default function BasketItems() {
-  const basketItems = useBasketSelector((state) => state.basket.items);
-  const dispatch = useBasketDispatch();
+  const basketItems = useAppSelector((state) => state.basket.items);
+  const dispatch = useAppDispatch();
 
   const totalPrice = basketItems.reduce(
     (val, item) => val + item.price * item.quantity,
@@ -33,7 +33,10 @@ export default function BasketItems() {
             const formattedPrice = `$${item.price.toFixed(2)}`;
 
             return (
-              <li key={item.id} className="flex flex-row justify-between items-center bg-gray-200 my-4 rounded-md px-2">
+              <li
+                key={item.id}
+                className="flex flex-row justify-between items-center bg-gray-200 my-4 rounded-md px-2"
+              >
                 <div>
                   <span>{item.name}</span>
                   <span> ({formattedPrice})</span>

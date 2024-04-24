@@ -4,7 +4,7 @@ import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
 import StateContext from "../../store/context/state-context";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Basket from "../Basket/Basket";
-import { useBasketSelector } from "../../store/redux/hooks";
+import { useAppSelector } from "../../store/redux/hooks";
 import AuthModal from "../ui/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
@@ -19,7 +19,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
-  const basketQuantity = useBasketSelector((state) =>
+  const basketQuantity = useAppSelector((state) =>
     state.basket.items.reduce((val, item) => val + item.quantity, 0)
   );
 

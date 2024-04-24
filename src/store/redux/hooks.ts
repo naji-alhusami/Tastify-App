@@ -8,5 +8,5 @@ import { AppDispatch, RootState } from "./store";
 
 type DispatchFunction = () => AppDispatch;
 
-export const useBasketDispatch: DispatchFunction = useDispatch;
-export const useBasketSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppDispatch: DispatchFunction = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
