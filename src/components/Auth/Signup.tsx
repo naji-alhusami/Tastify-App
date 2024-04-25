@@ -38,12 +38,21 @@ const Signup = ({
 
   const onSubmit: SubmitHandler<TAuthValidator> = async (data: User, event) => {
     event?.preventDefault(); // Prevent the default form submission behavior
-    dispatch(signupUser({ email: data.email, password: data.password }))
-      .unwrap()
-      .catch((rejectedValueOrSerializedError) => {
-        console.log(rejectedValueOrSerializedError);
-        setError(error);
-      });
+
+    try {
+      await dispatch(
+        signupUser({ email: data.email, password: data.password })
+      ).unwrap();
+      console.log("before dispatch");
+    } catch (error) {
+      if (error && typeof error === "string") {
+        if (error.includes("email-already-in-use")) {
+          setError(
+            "Email is already in use. Please use a different email address."
+          );
+        }
+      }
+    }
   };
   console.log(error);
 
@@ -61,6 +70,7 @@ const Signup = ({
           {errors?.email && (
             <p className="text-sm text-red-500">{errors.email.message}</p>
           )}
+          {error && <p className="text-sm text-red-500">{error}</p>}
         </div>
 
         <div className="grid gap-1 py-2 pb-8">

@@ -87,16 +87,10 @@ const usersSlice = createSlice({
       // state.error = false;
     });
     builder.addCase(signupUser.rejected, (state, action) => {
-      console.log(typeof action.payload === "string");
       state.loading = false;
       state.user = { email: "", password: "" };
       if (action.payload && typeof action.payload === "string") {
-        if (action.payload.includes("email-already-in-use")) {
-          state.error =
-            "Email is already in use. Please use a different email address.";
-        } else {
-          state.error = action.payload;
-        }
+        state.error = action.payload;
       } else {
         state.error = "An error occurred during sign up.";
       }
