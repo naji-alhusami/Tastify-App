@@ -37,7 +37,7 @@ const Signup = ({
   };
 
   const onSubmit: SubmitHandler<TAuthValidator> = async (data: User, event) => {
-    event?.preventDefault(); // Prevent the default form submission behavior
+    event?.preventDefault();
 
     try {
       await dispatch(
@@ -54,7 +54,7 @@ const Signup = ({
       }
     }
   };
-  console.log(error);
+  // console.log(error);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
