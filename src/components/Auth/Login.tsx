@@ -9,6 +9,7 @@ import {
 import { loginUser } from "../../store/redux/user-slice";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface LoginProps {
   setIsSignupForm: (open: boolean) => void;
@@ -17,6 +18,7 @@ interface LoginProps {
 
 const Login = ({
   setIsSignupForm,
+  setIsAuthModal,
 }: // setIsAuthModal
 LoginProps) => {
   const {
@@ -27,31 +29,36 @@ LoginProps) => {
     resolver: zodResolver(AuthValidator),
   });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const SignupFormHandler = () => {
     setIsSignupForm(true);
   };
 
-  const onSubmit: SubmitHandler<TAuthValidator> = async () => {
-    // event?.preventDefault();
-    console.log(email);
-    console.log(password);
+  const onSubmit: SubmitHandler<TAuthValidator> = async (data) => {
+    const { email, password } = data;
+
     try {
-      await dispatch(loginUser({ email, password })).unwrap();
-      console.log("before dispatch");
-    } catch (error) {
-      if (error && typeof error === "string") {
-        if (error.includes("email-already-in-use")) {
-          setError(
-            "Email is already in use. Please use a different email address."
-          );
-        }
+      const res = await dispatch(loginUser({ email, password })).unwrap();
+      console.log(res);
+
+      if (res.userlogin) {
+        setIsAuthModal(false);
+        navigate("/cuisines");
       }
+    } catch (error) {
+      console.log(error);
+      setError("naji");
+      // if (error && typeof error === "string") {
+      //   if (error.includes("email-already-in-use")) {
+      //     setError(
+      //       "Email is already in use. Please use a different email address."
+      //     );
+      //   }
+      // }
     }
   };
 
@@ -59,20 +66,20 @@ LoginProps) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
-          <div className="grid gap-1 py-4">
+          <div className="grid gap-1 py-2">
             <label htmlFor="email">Email</label>
             <Input
               {...register("email")}
               className={`focus-visible:ring-red-500${errors.email}`}
               placeholder="you@example.com"
-              onChange={(event) => setEmail(event.target.value)}
             />
             {errors?.email && (
               <p className="text-sm text-red-500">{errors.email.message}</p>
             )}
+            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
 
-          <div className="grid gap-1 py-4 pb-8">
+          <div className="grid gap-1 py-2 pb-8">
             <label htmlFor="password">Password</label>
             <Input
               {...register("password")}
@@ -81,7 +88,7 @@ LoginProps) => {
                 "focus-visible:ring-red-500" ${errors.password},
                 `}
               placeholder="Password"
-              onChange={(event) => setPassword(event.target.value)}
+              // onChange={(event) => setPassword(event.target.value)}
             />
             {errors?.password && (
               <p className="text-sm text-red-500">{errors.password.message}</p>
@@ -94,9 +101,6 @@ LoginProps) => {
             >
               Log in
             </button>
-            {error && (
-              <p className="text-red-500 text-lg text-center">{error}</p>
-            )}
             <button
               className=" w-full bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
               onClick={SignupFormHandler}
