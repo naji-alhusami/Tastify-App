@@ -51,7 +51,13 @@ LoginProps) => {
       }
     } catch (error) {
       console.log(error);
-      setError("naji");
+      if (error && typeof error === "string") {
+        if (error.includes("invalid-credential")) {
+          setError("Check your email or password");
+        } else {
+          setError(error);
+        }
+      }
       // if (error && typeof error === "string") {
       //   if (error.includes("email-already-in-use")) {
       //     setError(
@@ -76,7 +82,6 @@ LoginProps) => {
             {errors?.email && (
               <p className="text-sm text-red-500">{errors.email.message}</p>
             )}
-            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
 
           <div className="grid gap-1 py-2 pb-8">
@@ -94,6 +99,11 @@ LoginProps) => {
               <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
+          {error && (
+            <p className="text-md text-red-500 text-center font-bold">
+              {error}
+            </p>
+          )}
           <div className="pb-8">
             <button
               type="submit"

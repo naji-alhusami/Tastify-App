@@ -8,13 +8,14 @@ import { useAppSelector } from "../../store/redux/hooks";
 import AuthModal from "../ui/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
+import ThanksModal from "../ui/ThanksModal";
 
 const Navbar = () => {
   const [authIsVisible, setAuthIsVisible] = useState<boolean>(false);
-  // const [isThanksModal, setIsThanksModal] = useState<boolean>(false);
+  const [thanksModal, setThanksModal] = useState<boolean>(false);
   const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
   const [basketIsVisible, setBasketIsVisible] = useState<boolean>(false);
-  
+
   const contextValue = useContext(StateContext);
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -39,11 +40,12 @@ const Navbar = () => {
   const openLoginModalHandler = () => {
     setIsSignupForm(false);
     setAuthIsVisible(true);
+    setThanksModal(false);
   };
 
   const closeModalHandler = () => {
     setAuthIsVisible(false);
-    // setIsThanksModal(false);
+    setThanksModal(false);
   };
 
   if (!contextValue) {
@@ -64,7 +66,7 @@ const Navbar = () => {
         >
           {isSignupForm ? (
             <Signup
-              // setIsThanksModal={setIsThanksModal}
+              setThanksModal={setThanksModal}
               setIsAuthModal={setAuthIsVisible}
               setIsSignupForm={setIsSignupForm}
             />
@@ -75,6 +77,14 @@ const Navbar = () => {
             />
           )}
         </AuthModal>
+      )}
+
+      {thanksModal && (
+        <ThanksModal
+          openAuth={authIsVisible}
+          closeModalHandler={closeModalHandler}
+          openLoginModalHandler={openLoginModalHandler}
+        />
       )}
 
       {basketIsVisible && (

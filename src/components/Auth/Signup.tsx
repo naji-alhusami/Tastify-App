@@ -12,17 +12,16 @@ import { useState } from "react";
 // import { ZodError } from "zod";
 
 interface SignupProps {
-  // setIsThanksModal: (open: boolean) => void;
+  setThanksModal: (open: boolean) => void;
   setIsAuthModal: (open: boolean) => void;
   setIsSignupForm: (open: boolean) => void;
 }
 
 const Signup = ({
-  //   setIsThanksModal,
-  //   setIsAuthModal,
+  setThanksModal,
+  setIsAuthModal,
   setIsSignupForm,
 }: SignupProps) => {
-  // const [thanksModal, setThanksModal] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const dispatch = useAppDispatch();
   const {
@@ -44,8 +43,9 @@ const Signup = ({
       await dispatch(
         signupUser({ email: data.email, password: data.password })
       ).unwrap();
-      console.log("before dispatch");
-      // setThanksModal(true);
+
+      setIsAuthModal(false);
+      setThanksModal(true);
     } catch (error) {
       if (error && typeof error === "string") {
         if (error.includes("email-already-in-use")) {
@@ -56,11 +56,9 @@ const Signup = ({
       }
     }
   };
-  // console.log(error);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* {thanksModal && <Thanks />} */}
       <div className="grid gap-2">
         <div className="grid gap-1 py-2">
           <label htmlFor="email">Email</label>

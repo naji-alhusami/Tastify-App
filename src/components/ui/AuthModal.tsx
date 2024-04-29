@@ -5,20 +5,20 @@ import Backdrop from "../ui/Backdrop.tsx";
 import "../../index.css";
 import { type ReactNode } from "react";
 
-type CartProps = {
+interface CartProps {
   onClose: () => void;
   isSignupForm: boolean;
   children: ReactNode;
   openAuth: boolean;
-};
+}
 
 export default function AuthModal({
   onClose,
   openAuth,
   isSignupForm,
   children,
-//   openModal,
-}: CartProps) {
+}: //   openModal,
+CartProps) {
   return createPortal(
     <>
       {openAuth && <Backdrop onClick={onClose} />}
