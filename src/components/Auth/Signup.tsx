@@ -88,13 +88,26 @@ const Signup = ({
             <p className="text-sm text-red-500">{errors.password.message}</p>
           )}
         </div>
-        <div className="pb-8">
+        <div>
           <button
             type="submit"
             className="mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
           >
             Sign up
           </button>
+          <div className="relative py-4">
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 flex items-center"
+            >
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-6 text-muted-foreground">
+                Already A Member?
+              </span>
+            </div>
+          </div>
           <button
             className=" w-full bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
             onClick={loginFormHandler}

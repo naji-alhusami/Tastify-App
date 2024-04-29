@@ -16,6 +16,10 @@ const Navbar = () => {
   const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
   const [basketIsVisible, setBasketIsVisible] = useState<boolean>(false);
 
+  const userLogin = useAppSelector((state) => state.users.userlogin);
+
+  console.log(userLogin);
+
   const contextValue = useContext(StateContext);
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -93,19 +97,19 @@ const Navbar = () => {
 
       {/* Navbar */}
       <section
-        className={`bg-white z-50 top-0 w-full sticky shadow-lg px-8 ${heightClass}`}
+        className={`bg-white z-50 top-0 w-full sticky shadow-lg px-2 md:px-8 ${heightClass}`}
       >
         <header className="h-full flex flex-row items-center justify-between">
-          <div>
-            <CircleUserRound
-              className="text-rose-500 h-6 w-6 lg:hidden"
-              // onClick={openLoginModalHandler}
-            />
+          <div
+            className="p-3 hover:rounded-full hover:bg-rose-100 cursor-pointer lg:hidden"
+            onClick={openLoginModalHandler}
+          >
+            <CircleUserRound className="text-rose-500 h-6 w-6 lg:hidden" />
           </div>
           <div className="ml-0 md:ml-4">
             <h1
               onClick={() => navigate("/")}
-              className="font-bold text-3xl md:text-4xl text-rose-500 pacifico-regular cursor-pointer"
+              className="font-bold text-3xl text-rose-500 pacifico-regular cursor-pointer"
             >
               Tastify
             </h1>
@@ -124,20 +128,31 @@ const Navbar = () => {
           )}
 
           <div className="lg:flex lg:flex-row">
-            <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-10">
-              <button
-                onClick={openLoginModalHandler}
-                className=" mr-4 bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
-              >
-                Login
-              </button>
-              <button
-                onClick={openSignupModalHandler}
-                className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
-              >
-                Signup
-              </button>
-            </div>
+            {!userLogin ? (
+              <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-10">
+                <button
+                  onClick={openLoginModalHandler}
+                  className=" mr-4 bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={openSignupModalHandler}
+                  className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
+                >
+                  Signup
+                </button>
+              </div>
+            ) : (
+              <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-6">
+                <button
+                  onClick={openSignupModalHandler}
+                  className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
             <div
               onClick={handleOpenBasketClick}
               className="m-1 p-3 flex flex-row justify-center items-center hover:bg-rose-100 hover:rounded-full hover:p-3  cursor-pointer"

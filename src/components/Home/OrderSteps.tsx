@@ -11,7 +11,7 @@ export default function OrderSteps() {
             className="flex flex-col justify-center items-center gap-y-4 mx-8"
           >
             <h2 className="text-center font-bold">{step.header}</h2>
-            <img src={step.icon} alt={step.header} className="w-24 h-24" />
+            <img src={step.icon} alt={step.header} className="w-20 h-20" />
             <p className="text-center">{step.paragraph}</p>
           </div>
         ))}
