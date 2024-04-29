@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 
@@ -14,7 +15,7 @@ import { db, auth } from "../../firebase-config";
 import { FirebaseError } from "firebase/app";
 
 export type User = {
-  // id: string;
+  id?: string;
   email: string;
   password: string;
 };
@@ -74,16 +75,13 @@ export const signupUser = createAsyncThunk<
 // Start of Login:
 export const loginUser = createAsyncThunk<
   {
-    id: string;
+    // id: string;
     email: string;
     password: string;
-    userlogin: boolean;
+    // userlogin: boolean;
     error: string | null;
   },
-  User,
-  {
-    rejectValue: string;
-  }
+  User
 >("user/loginUser", async (payload, thunkApi) => {
   const { email, password } = payload;
   try {
@@ -120,6 +118,65 @@ export const loginUser = createAsyncThunk<
   }
 });
 // End of Login.
+
+// Start of Logout User:
+export const logoutUser = createAsyncThunk(
+  "user/logoutUser",
+  async (_, thunkApi) => {
+    try {
+      await signOut(auth);
+      return {};
+    } catch (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+  }
+);
+// End of Logout User.
+
+// Start of Load User:
+export const loadUser = createAsyncThunk<
+  {
+    // id: string;
+    email: string;
+    password: string;
+    // userlogin: boolean;
+    error: string | null;
+  },
+  User
+>("user/loadUser", async (payload, thunkApi) => {
+  try {
+    // if (payload.emailVerified === false) {
+    //   return thunkApi.rejectWithValue("Email is not verified");
+    // }
+    console.log(payload);
+    // if (typeof payload.id !== "string") {
+    //   return thunkApi.rejectWithValue("Some error");
+    // }
+    const docRef = doc(db, "users", payload.id!);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap);
+    if (!docSnap.exists()) {
+      return thunkApi.rejectWithValue("User data not found.");
+    }
+
+    const userData = {
+      id: docSnap.id,
+      email: docSnap.data().email,
+      password: docSnap.data().password,
+      userlogin: true,
+      error: null,
+    };
+
+    return userData;
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    } else {
+      return thunkApi.rejectWithValue("An error occurred during Login.");
+    }
+  }
+});
+// End of of Load User.
 
 const usersSlice = createSlice({
   name: "users",
@@ -172,10 +229,57 @@ const usersSlice = createSlice({
       state.user = { email: "", password: "" };
       if (action.payload && typeof action.payload === "string") {
         state.error = action.payload;
-      } else {
-        state.error = "An error occurred during sign up.";
       }
+      // else {
+      //   state.error = "An error occurred during sign up.";
+      // }
       // state.error = action.payload;
+    });
+
+    // Logout Cases:
+    builder.addCase(logoutUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(logoutUser.fulfilled, (state) => {
+      state.loading = false;
+      state.user = { email: "", password: "" };
+      state.error = null;
+      state.userlogin = false;
+    });
+    builder.addCase(logoutUser.rejected, (state, action) => {
+      state.loading = false;
+      state.user = { email: "", password: "" };
+      if (action.payload && typeof action.payload === "string") {
+        state.error = action.payload;
+      }
+    });
+
+    // Load User Cases:
+    builder.addCase(loadUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(loadUser.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload && action.payload.error) {
+        state.user = { email: "", password: "" };
+        state.userlogin = false;
+        state.error = action.payload.error;
+      } else {
+        state.user = {
+          // id: action.payload.id,
+          email: action.payload.email,
+          password: action.meta.arg.password,
+        };
+        state.userlogin = true;
+        state.error = null;
+      }
+    });
+    builder.addCase(loadUser.rejected, (state, action) => {
+      state.loading = false;
+      state.user = { email: "", password: "" };
+      if (action.payload && typeof action.payload === "string") {
+        state.error = action.payload;
+      }
     });
   },
 });

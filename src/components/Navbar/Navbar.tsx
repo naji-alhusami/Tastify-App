@@ -4,11 +4,12 @@ import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
 import StateContext from "../../store/context/state-context";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Basket from "../Basket/Basket";
-import { useAppSelector } from "../../store/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import AuthModal from "../ui/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import ThanksModal from "../ui/ThanksModal";
+import { logoutUser } from "../../store/redux/user-slice";
 
 const Navbar = () => {
   const [authIsVisible, setAuthIsVisible] = useState<boolean>(false);
@@ -16,6 +17,7 @@ const Navbar = () => {
   const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
   const [basketIsVisible, setBasketIsVisible] = useState<boolean>(false);
 
+  const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
 
   console.log(userLogin);
@@ -50,6 +52,10 @@ const Navbar = () => {
   const closeModalHandler = () => {
     setAuthIsVisible(false);
     setThanksModal(false);
+  };
+
+  const logoutHandler = () => {
+    dispatch(logoutUser());
   };
 
   if (!contextValue) {
@@ -146,7 +152,7 @@ const Navbar = () => {
             ) : (
               <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-6">
                 <button
-                  onClick={openSignupModalHandler}
+                  onClick={logoutHandler}
                   className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
                 >
                   Logout
