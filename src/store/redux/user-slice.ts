@@ -15,8 +15,9 @@ import { db, auth } from "../../firebase-config";
 import { FirebaseError } from "firebase/app";
 
 export type User = {
-  id?: string;
+  id: string;
   email: string;
+  emailVerified?: boolean;
   password: string;
 };
 
@@ -29,7 +30,7 @@ type UserState = {
 
 const initialState: UserState = {
   loading: false,
-  user: { email: "", password: "" },
+  user: {} as User,
   error: null,
   userlogin: false,
 };
@@ -37,12 +38,12 @@ const initialState: UserState = {
 // start of signup:
 export const signupUser = createAsyncThunk<
   {
-    //  id: string;
+    id: string;
     email: string;
   },
   User
 >("user/signupUser", async (payload, thunkApi) => {
-  const { email, password } = payload;
+  const { id, email, password } = payload;
   try {
     const { user } = await createUserWithEmailAndPassword(
       auth,
@@ -56,12 +57,17 @@ export const signupUser = createAsyncThunk<
     // Send User Data to firestore:
     const docRef = doc(db, "users", user.uid);
     await setDoc(docRef, {
-      id: user.uid,
+      id,
       email,
       password,
     });
 
-    return { id: user.uid, email: user.email! };
+    const userData = {
+      id: id,
+      email: email,
+    };
+
+    return userData;
   } catch (error) {
     if (error instanceof FirebaseError) {
       return thunkApi.rejectWithValue(error.message);
@@ -78,10 +84,10 @@ export const loginUser = createAsyncThunk<
     // id: string;
     email: string;
     password: string;
-    // userlogin: boolean;
+    userlogin: boolean;
     error: string | null;
   },
-  User
+  { email: string; password: string }
 >("user/loginUser", async (payload, thunkApi) => {
   const { email, password } = payload;
   try {
@@ -107,6 +113,7 @@ export const loginUser = createAsyncThunk<
       userlogin: true,
       error: null,
     };
+    console.log(userData);
 
     return userData;
   } catch (error) {
@@ -136,31 +143,33 @@ export const logoutUser = createAsyncThunk(
 // Start of Load User:
 export const loadUser = createAsyncThunk<
   {
-    // id: string;
+    id: string;
     email: string;
     password: string;
     // userlogin: boolean;
     error: string | null;
   },
-  User
+  { id: string; emailVerified: boolean }
 >("user/loadUser", async (payload, thunkApi) => {
   try {
-    // if (payload.emailVerified === false) {
-    //   return thunkApi.rejectWithValue("Email is not verified");
-    // }
-    console.log(payload);
+    if (payload.emailVerified === false) {
+      return thunkApi.rejectWithValue("Email is not verified");
+    }
+    console.log("payload", payload);
+    // console.log(payload);
     // if (typeof payload.id !== "string") {
     //   return thunkApi.rejectWithValue("Some error");
     // }
-    const docRef = doc(db, "users", payload.id!);
+    const docRef = doc(db, "users", payload.id);
     const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
     console.log(docSnap);
     if (!docSnap.exists()) {
       return thunkApi.rejectWithValue("User data not found.");
     }
 
     const userData = {
-      id: docSnap.id,
+      id: docSnap.data().id,
       email: docSnap.data().email,
       password: docSnap.data().password,
       userlogin: true,
@@ -192,6 +201,7 @@ const usersSlice = createSlice({
     builder.addCase(signupUser.fulfilled, (state, action) => {
       state.loading = false;
       state.user = {
+        id: action.payload.id,
         email: action.payload.email,
         password: action.meta.arg.password,
       };
@@ -199,7 +209,7 @@ const usersSlice = createSlice({
     });
     builder.addCase(signupUser.rejected, (state, action) => {
       state.loading = false;
-      state.user = { email: "", password: "" };
+      state.user = {} as User;
       if (action.payload && typeof action.payload === "string") {
         state.error = action.payload;
       } else {
@@ -208,15 +218,17 @@ const usersSlice = createSlice({
     });
 
     // Login with user & Password Cases:
-    builder.addCase(loginUser.pending, () => {});
+    builder.addCase(loginUser.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(loginUser.fulfilled, (state, action) => {
       if (action.payload.error) {
-        state.user = { email: "", password: "" };
+        state.user = {} as User;
         state.userlogin = false;
         state.error = action.payload.error;
       } else {
         state.user = {
-          // id: action.payload.id,
+          id: "",
           email: action.payload.email,
           password: action.meta.arg.password,
         };
@@ -226,7 +238,7 @@ const usersSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
-      state.user = { email: "", password: "" };
+      state.user = {} as User;
       if (action.payload && typeof action.payload === "string") {
         state.error = action.payload;
       }
@@ -242,13 +254,13 @@ const usersSlice = createSlice({
     });
     builder.addCase(logoutUser.fulfilled, (state) => {
       state.loading = false;
-      state.user = { email: "", password: "" };
+      state.user = {} as User;
       state.error = null;
       state.userlogin = false;
     });
     builder.addCase(logoutUser.rejected, (state, action) => {
       state.loading = false;
-      state.user = { email: "", password: "" };
+      state.user = {} as User;
       if (action.payload && typeof action.payload === "string") {
         state.error = action.payload;
       }
@@ -261,14 +273,15 @@ const usersSlice = createSlice({
     builder.addCase(loadUser.fulfilled, (state, action) => {
       state.loading = false;
       if (action.payload && action.payload.error) {
-        state.user = { email: "", password: "" };
+        state.user = {} as User;
         state.userlogin = false;
         state.error = action.payload.error;
       } else {
         state.user = {
-          // id: action.payload.id,
+          id: action.meta.arg.id,
           email: action.payload.email,
-          password: action.meta.arg.password,
+          // password: action.meta.arg.password,
+          password: "",
         };
         state.userlogin = true;
         state.error = null;
@@ -276,7 +289,7 @@ const usersSlice = createSlice({
     });
     builder.addCase(loadUser.rejected, (state, action) => {
       state.loading = false;
-      state.user = { email: "", password: "" };
+      state.user = {} as User;
       if (action.payload && typeof action.payload === "string") {
         state.error = action.payload;
       }

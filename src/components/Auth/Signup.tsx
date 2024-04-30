@@ -7,9 +7,11 @@ import {
 } from "../../lib/validators/account-validator";
 import { User, signupUser } from "../../store/redux/user-slice";
 // import { useDispatch } from "react-redux";
-import { useAppDispatch } from "../../store/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { useState } from "react";
 // import { ZodError } from "zod";
+import { v4 as uuidv4 } from "uuid";
+import { Loader2 } from "lucide-react";
 
 interface SignupProps {
   setThanksModal: (open: boolean) => void;
@@ -23,7 +25,10 @@ const Signup = ({
   setIsSignupForm,
 }: SignupProps) => {
   const [error, setError] = useState<string>("");
+
   const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.users);
+
   const {
     register,
     handleSubmit,
@@ -36,14 +41,17 @@ const Signup = ({
     setIsSignupForm(false);
   };
 
-  const onSubmit: SubmitHandler<TAuthValidator> = async (data: User, event) => {
+  const onSubmit: SubmitHandler<TAuthValidator & { id: string }> = async (
+    data: User,
+    event
+  ) => {
     event?.preventDefault();
 
     try {
       await dispatch(
-        signupUser({ email: data.email, password: data.password })
+        signupUser({ id: data.id, email: data.email, password: data.password })
       ).unwrap();
-
+      // console.log(user);
       setIsAuthModal(false);
       setThanksModal(true);
     } catch (error) {
@@ -58,7 +66,9 @@ const Signup = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit((data) => onSubmit({ id: uuidv4(), ...data }))}
+    >
       <div className="grid gap-2">
         <div className="grid gap-1 py-2">
           <label htmlFor="email">Email</label>
@@ -91,9 +101,13 @@ const Signup = ({
         <div>
           <button
             type="submit"
-            className="mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
+            className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
           >
-            Sign up
+            {loading ? (
+              <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
+            ) : (
+              "Signup"
+            )}
           </button>
           <div className="relative py-4">
             <div

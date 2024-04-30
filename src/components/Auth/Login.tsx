@@ -7,9 +7,10 @@ import {
   type TAuthValidator,
 } from "../../lib/validators/account-validator";
 import { loginUser } from "../../store/redux/user-slice";
-import { useAppDispatch } from "../../store/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 interface LoginProps {
   setIsSignupForm: (open: boolean) => void;
@@ -31,8 +32,9 @@ LoginProps) => {
 
   const [error, setError] = useState<string>("");
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector((state) => state.users);
 
   const SignupFormHandler = () => {
     setIsSignupForm(true);
@@ -42,10 +44,10 @@ LoginProps) => {
     const { email, password } = data;
 
     try {
-      const res = await dispatch(loginUser({ email, password })).unwrap();
-      console.log(res);
+      const respnose = await dispatch(loginUser({ email, password })).unwrap();
+      console.log(respnose);
 
-      if (res.userlogin) {
+      if (respnose.userlogin) {
         setIsAuthModal(false);
         navigate("/cuisines");
       }
@@ -107,9 +109,13 @@ LoginProps) => {
           <div>
             <button
               type="submit"
-              className="mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
+              className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
             >
-              Log in
+              {loading ? (
+                <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
+              ) : (
+                "Log in"
+              )}
             </button>
             <div className="relative py-4">
               <div
