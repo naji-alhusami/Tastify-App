@@ -1,16 +1,17 @@
 import { Bike } from "lucide-react";
 import { addToBasket } from "../../store/redux/basket-slice";
 import { useAppDispatch } from "../../store/redux/hooks";
+import { Meal } from "./MealsPage";
 
-type MealProps = {
-  id: string;
-  category: string;
-  name: string;
-  price: number;
-  image: string;
-};
+// export type MealProps = {
+//   id: string;
+//   category: string;
+//   name: string;
+//   price: number;
+//   image: string;
+// };
 
-export default function Meals({ id, category, name, price, image }: MealProps) {
+export default function Meals({ id, category, name, price, image }: Meal) {
   const dispatch = useAppDispatch();
 
   function addToBasketHandler() {
@@ -18,10 +19,7 @@ export default function Meals({ id, category, name, price, image }: MealProps) {
   }
 
   return (
-    <div
-      key={id}
-      className="m-4 border border-gray-200 rounded-lg hover:bg-rose-100 overflow-hidden hover:scale-100"
-    >
+    <div className="m-4 border border-gray-200 rounded-lg hover:bg-rose-100 overflow-hidden hover:scale-100">
       <div>
         <img src={image} alt="rest-image" className="w-full h-[250px]" />
       </div>

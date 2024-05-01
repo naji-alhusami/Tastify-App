@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
-  console.log(userLogin);
+  // console.log(userLogin);
   const contextValue = useContext(StateContext);
   const navigate = useNavigate();
   const [params] = useSearchParams();
