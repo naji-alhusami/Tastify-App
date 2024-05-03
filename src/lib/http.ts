@@ -11,19 +11,39 @@ export class FetchError extends Error {
   }
 }
 
-export async function fetchMeals(): Promise<Meal[]> {
+interface FetchMealsOptions {
+  signal?: AbortSignal; // Type for signal, assuming you're using AbortController
+  isRestaurant?: string; // Type for cuisine, assuming it's a string
+}
+
+export async function fetchMeals({
+  signal,
+  isRestaurant,
+}: FetchMealsOptions): Promise<Meal[]> {
+  console.log(isRestaurant);
+
   const response = await fetch(
-    "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json"
+    "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json",
+    { signal: signal }
   );
 
   if (!response.ok) {
     console.log("res not ok");
     const info = await response.json();
-    console.log(info);
+    // console.log(info);
     throw new FetchError("Error occurred", response.status, info);
   }
 
   const data = await response.json();
-  console.log(data);
+
+  if (isRestaurant) {
+    const filteredMeals = data.filter(
+      (meal: Meal) => meal.category === isRestaurant
+    );
+
+    // console.log(filteredMeals);
+    return filteredMeals;
+  }
+  // console.log(data);
   return data;
 }

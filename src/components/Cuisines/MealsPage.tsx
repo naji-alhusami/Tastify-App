@@ -1,10 +1,12 @@
-import { useSearchParams } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 import Meals from "./Meals";
 import SwiperCuisines from "./SwiperCuisines";
 // import { MEALSDATA } from "./Meals-data";
 import { useQuery } from "@tanstack/react-query";
 import { FetchError, fetchMeals } from "../../lib/http";
 import Loading from "../ui/Loading";
+import { useContext } from "react";
+import StateContext from "../../store/context/state-context";
 
 export type Meal = {
   id: string;
@@ -15,47 +17,76 @@ export type Meal = {
 };
 
 const MealsPage = () => {
-  const [params] = useSearchParams();
-  const cuisine = params.get("cuisine");
+  // const [params] = useSearchParams();
+  // const cuisine = params.get("cuisine");
 
-  const { data, isPending, isError, error } = useQuery({
+  const {
+    data: allMealsData,
+    isPending: allMealsPending,
+    isError: allMealsIsError,
+    error: allMealsError,
+  } = useQuery({
     queryKey: ["meals"],
-    queryFn: fetchMeals,
+    queryFn: () => fetchMeals({}),
+    staleTime: 5000, // this ensure that the data will not be fetched from cache always, but in every 5 sec
+    // gcTime:1000 this is the time that talk about how much the data will kept around
   });
 
+  const contextValue = useContext(StateContext) as { isRestaurant: string };
+
+  const { isRestaurant } = contextValue;
+
+  const {
+    data: filteredMealsData,
+    isLoading: filteredMealsLoading,
+    isError: filteredMealsIsError,
+    error: filteredMealsError,
+  } = useQuery({
+    queryKey: ["meals", { cuisine: isRestaurant }],
+    queryFn: ({ signal }) => fetchMeals({ signal, isRestaurant }),
+    enabled: !!isRestaurant, // the isLoading will not be true if this query is just disabled
+  });
+
+  // console.log(allMealsData);
+  // console.log(filteredMealsData);
+
   let content;
-  // console.log("loading:", isPending);
-  if (isPending) {
+  if (allMealsPending || filteredMealsLoading) {
     content = <Loading />;
-  } else if (isError) {
-    console.log("before the check");
-    if (error instanceof FetchError) {
-      console.log("after the check");
+  } else if (allMealsIsError || filteredMealsIsError) {
+    if (
+      allMealsError instanceof FetchError ||
+      filteredMealsError instanceof FetchError
+    ) {
       content = (
         <div>
-          <h1>Error occurred: {error.message}</h1>
-          <p>Error code: {error.code}</p>
-          <p>Error info: {error.info}</p>
+          <h1>
+            Error occurred:
+            {allMealsError?.message || filteredMealsError?.message}
+          </h1>
+          {/* <p>Error code: {allMealsError?.code || filteredMealsError?.code}</p>
+          <p>Error info: {allMealsError?.info || filteredMealsError?.info}</p> */}
         </div>
       );
     }
-  } else if (cuisine && data) {
-    const filteredMeals = data.filter(
-      (meal: Meal) => meal.category === cuisine
-    );
+  } else if (filteredMealsData) {
+    // cuisine &&
+    // const filteredMeals = data.filter(
+    //   (meal: Meal) => meal.category === cuisine
+    // );
     content = (
       <div className="flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
-        {filteredMeals.map((meal: Meal) => (
+        {filteredMealsData.map((meal: Meal) => (
           <div key={meal.id}>
             <Meals {...meal} />
           </div>
         ))}
       </div>
     );
-  } else {
+  } else if (allMealsData) {
     content = (
       <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
-        {data?.map((meal: Meal) => (
+        {allMealsData.map((meal: Meal) => (
           <div key={meal.id}>
             <Meals {...meal} />
           </div>

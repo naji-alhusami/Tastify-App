@@ -7,7 +7,7 @@ import { Pagination } from "swiper/modules";
 import { ITEMS_CATEGORIES } from "./ItemsCategories";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import StateContext from "../../store/context/state-context";
-import { Link, useSearchParams } from "react-router-dom";
+// import { Link, useSearchParams } from "react-router-dom";
 
 // interface SwiperCuisinesProps {
 //   searchParams: {
@@ -17,7 +17,7 @@ import { Link, useSearchParams } from "react-router-dom";
 // }
 
 const SwiperCuisines = () => {
-  const [params] = useSearchParams();
+  // const [params] = useSearchParams();
   const [swiper, setSwiper] = useState<null | SwiperType>(null);
   //   const [activeLink, setActiveLink] = useState<string>("");
   const contextValue = useContext(StateContext);
@@ -28,8 +28,9 @@ const SwiperCuisines = () => {
   }
   const { isRestaurant, setIsRestaurant, setShowRestaurants } = contextValue;
 
-  const restaurantsHandler = (name: string) => {
-    setIsRestaurant(name);
+  const restaurantsHandler = (cuisine: string) => {
+    console.log(cuisine);
+    setIsRestaurant(cuisine);
     setShowRestaurants(true);
   };
 
@@ -102,10 +103,10 @@ const SwiperCuisines = () => {
             key={i}
             className="relative h-full mx-auto"
           >
-            <Link
-              to={`/cuisines/?lon=${params.get("lon")}&lat=${params.get(
-                "lat"
-              )}&cuisine=${item.value}`}
+            <div
+              // to={`/cuisines/?lon=${params.get("lon")}&lat=${params.get(
+              //   "lat"
+              // )}&cuisine=${item.value}`}
               onClick={() => restaurantsHandler(item.value)}
               className={`hover:text-rose-500 text-center ${
                 isRestaurant === item.value ? "text-rose-500 font-bold" : ""
@@ -119,7 +120,7 @@ const SwiperCuisines = () => {
                 className="-z-10 h-16 w-16 object-cover object-center"
               />
               <p>{item.value}</p>
-            </Link>
+            </div>
           </SwiperSlide>
         ))}
       </Swiper>

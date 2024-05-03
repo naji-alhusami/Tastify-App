@@ -20,25 +20,25 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
   const [isRestaurant, setIsRestaurant] = useState<string | null>(null);
   const [showRestaurants, setShowRestaurants] = useState<boolean>(false);
 
-    const [params] = useSearchParams();
-    // console.log(params.get("cuisine"));
-    const latString = params.get("lat");
-    const lonString = params.get("lon");
+  const [params] = useSearchParams();
+  // console.log(params.get("cuisine"));
+  const latString = params.get("lat");
+  const lonString = params.get("lon");
 
-    const lata = latString ? parseFloat(latString) : null;
-    const lona = lonString ? parseFloat(lonString) : null;
+  const lata = latString ? parseFloat(latString) : null;
+  const lona = lonString ? parseFloat(lonString) : null;
 
-    useEffect(() => {
-      const fetchAddress = async () => {
-        if (lata !== null && lona !== null) {
-          const fetchedAddress = await getAddress(lata, lona);
-          setAddress(fetchedAddress);
-        }
-      };
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (lata !== null && lona !== null) {
+        const fetchedAddress = await getAddress(lata, lona);
+        setAddress(fetchedAddress);
+      }
+    };
 
-      fetchAddress();
-      setShowRestaurants(false);
-    }, [lata, lona, setAddress]);
+    fetchAddress();
+    setShowRestaurants(false);
+  }, [lata, lona, setAddress]);
 
   const value = {
     address,
