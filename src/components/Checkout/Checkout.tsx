@@ -43,7 +43,7 @@ const Checkout = () => {
         </div>
 
         <div className="grid gap-1 py-2 pb-8">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Name</label>
           <Input
             {...register("name")}
             type="password"
@@ -66,7 +66,7 @@ const Checkout = () => {
             ) : ( */}
             Signup
           </button>
-          <div className="relative py-4">
+          {/* <div className="relative py-4">
             <div
               aria-hidden="true"
               className="absolute inset-0 flex items-center"
@@ -78,7 +78,7 @@ const Checkout = () => {
                 Already A Member?
               </span>
             </div>
-          </div>
+          </div> */}
           {/* <button
             className=" w-full bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
             onClick={loginFormHandler}

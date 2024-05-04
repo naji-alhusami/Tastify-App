@@ -5,19 +5,20 @@ import StateContext from "../../store/context/state-context";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Basket from "../Basket/Basket";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
-import AuthModal from "../ui/AuthModal";
+import AuthModal from "../Auth/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import ThanksModal from "../ui/ThanksModal";
 import { logoutUser } from "../../store/redux/user-slice";
-import Checkout from "../Checkout/Checkout";
+import Checkout from "../Checkout/CheckoutModal";
 
 const Navbar = () => {
   const [authIsVisible, setAuthIsVisible] = useState<boolean>(false);
-  const [thanksModal, setThanksModal] = useState<boolean>(false);
-  const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
   const [basketIsVisible, setBasketIsVisible] = useState<boolean>(false);
   const [checkoutIsVisible, setCheckoutIsVisible] = useState<boolean>(false);
+  const [thanksIsVisible, setThanksIsVisible] = useState<boolean>(false);
+
+  const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
@@ -46,12 +47,12 @@ const Navbar = () => {
   const openLoginModalHandler = () => {
     setIsSignupForm(false);
     setAuthIsVisible(true);
-    setThanksModal(false);
+    setThanksIsVisible(false);
   };
 
   const closeModalHandler = () => {
     setAuthIsVisible(false);
-    setThanksModal(false);
+    setThanksIsVisible(false);
   };
 
   const openCheckoutHandler = () => {
@@ -84,8 +85,8 @@ const Navbar = () => {
         >
           {isSignupForm ? (
             <Signup
-              setThanksModal={setThanksModal}
-              setIsAuthModal={setAuthIsVisible}
+              setThanksIsVisible={setThanksIsVisible}
+              setAuthIsVisible={setAuthIsVisible}
               setIsSignupForm={setIsSignupForm}
             />
           ) : (
@@ -97,7 +98,7 @@ const Navbar = () => {
         </AuthModal>
       )}
 
-      {thanksModal && (
+      {thanksIsVisible && (
         <ThanksModal
           openAuth={authIsVisible}
           closeModalHandler={closeModalHandler}
@@ -106,12 +107,16 @@ const Navbar = () => {
       )}
 
       {basketIsVisible && (
-        <Basket openBasket={basketIsVisible} onClose={handleCloseBasketClick} />
+        <Basket
+          openBasket={basketIsVisible}
+          onClose={handleCloseBasketClick}
+          openCheckoutHandler={openCheckoutHandler}
+        />
       )}
 
       {checkoutIsVisible && (
         <Checkout
-          openCheckout={openCheckoutHandler}
+          openCheckout={checkoutIsVisible}
           closeCheckout={closeCheckoutHandler}
         />
       )}

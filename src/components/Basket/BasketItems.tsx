@@ -5,7 +5,11 @@ import {
 } from "../../store/redux/basket-slice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 
-export default function BasketItems() {
+interface BasketItemsProps {
+  openCheckoutHandler: () => void;
+}
+
+export default function BasketItems({ openCheckoutHandler }: BasketItemsProps) {
   const basketItems = useAppSelector((state) => state.basket.items);
   const dispatch = useAppDispatch();
 
@@ -57,6 +61,7 @@ export default function BasketItems() {
       <div id="flex flex-row justify-end items-center">
         Cart Total: <strong>${formattedTotalPrice}</strong>
       </div>
+      <button onClick={openCheckoutHandler}>Submit</button>
     </div>
   );
 }

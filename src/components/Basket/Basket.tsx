@@ -8,9 +8,14 @@ import "../../index.css";
 type CartProps = {
   onClose: () => void;
   openBasket: boolean;
+  openCheckoutHandler: () => void;
 };
 
-export default function Basket({ onClose, openBasket }: CartProps) {
+export default function Basket({
+  onClose,
+  openBasket,
+  openCheckoutHandler,
+}: CartProps) {
   return createPortal(
     <>
       {openBasket && <Backdrop onClick={onClose} />}
@@ -27,7 +32,7 @@ export default function Basket({ onClose, openBasket }: CartProps) {
           />
 
           <h1 className="font-bold text-2xl pb-10">Your Basket</h1>
-          <BasketItems />
+          <BasketItems openCheckoutHandler={openCheckoutHandler} />
           <div className="flex flex-row justify-end items-center">
             <button
               onClick={onClose}

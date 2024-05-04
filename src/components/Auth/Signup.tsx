@@ -14,14 +14,14 @@ import { v4 as uuidv4 } from "uuid";
 import { Loader2 } from "lucide-react";
 
 interface SignupProps {
-  setThanksModal: (open: boolean) => void;
-  setIsAuthModal: (open: boolean) => void;
+  setThanksIsVisible: (open: boolean) => void;
+  setAuthIsVisible: (open: boolean) => void;
   setIsSignupForm: (open: boolean) => void;
 }
 
 const Signup = ({
-  setThanksModal,
-  setIsAuthModal,
+  setThanksIsVisible,
+  setAuthIsVisible,
   setIsSignupForm,
 }: SignupProps) => {
   const [error, setError] = useState<string>("");
@@ -52,8 +52,8 @@ const Signup = ({
         signupUser({ id: data.id, email: data.email, password: data.password })
       ).unwrap();
       // console.log(user);
-      setIsAuthModal(false);
-      setThanksModal(true);
+      setAuthIsVisible(false);
+      setThanksIsVisible(true);
     } catch (error) {
       if (error && typeof error === "string") {
         if (error.includes("email-already-in-use")) {
