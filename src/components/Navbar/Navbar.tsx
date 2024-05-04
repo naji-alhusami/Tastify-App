@@ -10,12 +10,14 @@ import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import ThanksModal from "../ui/ThanksModal";
 import { logoutUser } from "../../store/redux/user-slice";
+import Checkout from "../Checkout/Checkout";
 
 const Navbar = () => {
   const [authIsVisible, setAuthIsVisible] = useState<boolean>(false);
   const [thanksModal, setThanksModal] = useState<boolean>(false);
   const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
   const [basketIsVisible, setBasketIsVisible] = useState<boolean>(false);
+  const [checkoutIsVisible, setCheckoutIsVisible] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
@@ -50,6 +52,14 @@ const Navbar = () => {
   const closeModalHandler = () => {
     setAuthIsVisible(false);
     setThanksModal(false);
+  };
+
+  const openCheckoutHandler = () => {
+    setCheckoutIsVisible(true);
+  };
+
+  const closeCheckoutHandler = () => {
+    setCheckoutIsVisible(false);
   };
 
   const logoutHandler = () => {
@@ -97,6 +107,13 @@ const Navbar = () => {
 
       {basketIsVisible && (
         <Basket openBasket={basketIsVisible} onClose={handleCloseBasketClick} />
+      )}
+
+      {checkoutIsVisible && (
+        <Checkout
+          openCheckout={openCheckoutHandler}
+          closeCheckout={closeCheckoutHandler}
+        />
       )}
 
       {/* Navbar */}
