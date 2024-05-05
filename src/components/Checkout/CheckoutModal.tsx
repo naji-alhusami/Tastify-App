@@ -42,8 +42,7 @@ const CheckoutModal = ({ openCheckout, closeCheckout }: CheckoutProps) => {
             onClick={closeCheckout}
             className="text-rose-500 h-8 w-8 self-end hover:bg-rose-200 hover:rounded-full cursor-pointer"
           />
-          <h1 className="font-bold text-2xl pb-4 text-center">Welcome!</h1>
-          {/* <MailCheck className="text-rose-500 h-12 w-12 self-center my-6" /> */}
+          <h1 className="font-bold text-2xl pb-4 text-center">Checkout</h1>
           {/* <h1 className="text-md text-center my-6">
             Thanks for signing-up, We have sent an email verification for you.
           </h1> */}

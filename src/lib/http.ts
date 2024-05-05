@@ -20,7 +20,7 @@ export async function fetchMeals({
   signal,
   isRestaurant,
 }: FetchMealsOptions): Promise<Meal[]> {
-  console.log(isRestaurant);
+  // console.log(isRestaurant);
 
   const response = await fetch(
     "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json",

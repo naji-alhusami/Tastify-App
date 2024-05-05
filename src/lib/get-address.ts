@@ -4,6 +4,13 @@ interface NominatimResponse {
   display_name: string;
 }
 
+interface addressDetails {
+  street: string;
+  city: string;
+  state: string;
+  zipCode: string;
+}
+
 export const getAddress = async (
   lat: number,
   lon: number
@@ -19,4 +26,15 @@ export const getAddress = async (
     console.error("Error fetching address:", error);
     return null;
   }
+};
+
+export const etractAddressDetails = (address: string): addressDetails => {
+  const addressDetails = address.split(",");
+
+  const street = addressDetails[1].trim();
+  const city = addressDetails[3].trim();
+  const state = addressDetails[4].trim();
+  const zipCode = addressDetails[5].trim();
+
+  return { street, city, state, zipCode };
 };
