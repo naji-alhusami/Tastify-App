@@ -34,7 +34,7 @@ const CheckoutModal = ({ openCheckout, closeCheckout }: CheckoutProps) => {
       <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50" />
       <dialog
         id="basket-modal"
-        className="z-50 p-6 fixed w-[300px] sm:w-[400px] md:w-[500px] bg-white rounded-lg shadow-md"
+        className="z-50 p-6 fixed w-[300px] sm:w-[400px] md:w-[800px] bg-white rounded-lg shadow-md"
         open
       >
         <div className="flex flex-col">

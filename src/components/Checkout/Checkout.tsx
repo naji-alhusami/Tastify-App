@@ -1,6 +1,6 @@
 // import React from "react";
 
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "../ui/Input";
 import {
   CheckoutValidator,
@@ -10,7 +10,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppSelector } from "../../store/redux/hooks";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
-// import { etractAddressDetails } from "../../lib/get-address";
+import { etractAddressDetails } from "../../lib/get-address";
+import { useMutation } from "@tanstack/react-query";
+import { sendOrders } from "../../lib/http";
 // import { Loader2 } from "lucide-react";
 
 // interface CheckoutProps {
@@ -18,10 +20,20 @@ import StateContext from "../../store/context/state-context";
 //   closeCheckout: (open: boolean) => void;
 // }
 
+export type Order = {
+  name: string;
+  email: string;
+  state: string;
+  city: string;
+  zip: string;
+  street: string;
+  house: string;
+};
+
 const Checkout = () => {
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     formState: { errors },
   } = useForm<TCheckoutValidator>({
     resolver: zodResolver(CheckoutValidator),
@@ -30,10 +42,9 @@ const Checkout = () => {
   const contextValue = useContext(StateContext) as { address: string };
 
   const { address } = contextValue;
-  console.log(address);
 
-  // const { street, city, state, zipCode } = etractAddressDetails(address);
-
+  const { street, city, state, zipCode } = etractAddressDetails(address);
+  // console.log(typeof )
   const basketItems = useAppSelector((state) => state.basket.items);
 
   const totalPrice = basketItems.reduce(
@@ -42,36 +53,44 @@ const Checkout = () => {
   );
   const formattedTotalPrice = totalPrice.toFixed(2);
 
+  const { mutate } = useMutation({
+    mutationFn: sendOrders,
+  });
+
+  const onSubmit: SubmitHandler<TCheckoutValidator> = async (data: Order) => {
+    mutate(data);
+  };
+
   return (
-    <form
-    //   onSubmit={handleSubmit((data) => onSubmit({ id: uuidv4(), ...data }))}
-    >
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-2">
         <div className="grid gap-1 py-2">
-          <div className="grid gap-1 py-2">
-            <label htmlFor="password">Name</label>
-            <Input
-              {...register("name")}
-              type="password"
-              className={`focus-visible:ring-red-500 ${errors.name}`}
-              placeholder="Password"
-            />
-            {errors?.name && (
-              <p className="text-sm text-red-500">{errors.name.message}</p>
-            )}
+          <div className=" flex flex-row justify-center items-center">
+            <div className="w-full grid gap-1 py-2 pr-2">
+              <label htmlFor="password">Name</label>
+              <Input
+                {...register("name")}
+                // type="password"
+                className={`focus-visible:ring-red-500 ${errors.name}`}
+                placeholder="Password"
+              />
+              {errors?.name && (
+                <p className="text-sm text-red-500">{errors.name.message}</p>
+              )}
+            </div>
+            <div className="w-full grid gap-1 py-2">
+              <label htmlFor="email">Email</label>
+              <Input
+                {...register("email")}
+                className={`focus-visible:ring-red-500 ${errors.email}`}
+                placeholder="you@example.com"
+              />
+              {errors?.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
+            </div>
           </div>
-          <div className="grid gap-1 py-2 pb-4">
-            <label htmlFor="email">Email</label>
-            <Input
-              {...register("email")}
-              className={`focus-visible:ring-red-500 ${errors.email}`}
-              placeholder="you@example.com"
-            />
-            {errors?.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
-          </div>
-          <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row items-center justify-start">
             <div className="flex flex-col items-start justify-center pr-2">
               <label htmlFor="state" className="pb-2">
                 State
@@ -79,38 +98,25 @@ const Checkout = () => {
               <Input
                 {...register("state")}
                 className={`focus-visible:ring-red-500 ${errors.state}`}
+                defaultValue={state}
                 placeholder="Bavaria"
               />
               {errors?.state && (
                 <p className="text-sm text-red-500">{errors.state.message}</p>
               )}
             </div>
-            <div className="flex flex-col items-start justify-center">
+            <div className="flex flex-col items-start justify-center pr-2">
               <label htmlFor="city" className="pb-2">
                 City
               </label>
               <Input
                 {...register("city")}
                 className={`focus-visible:ring-red-500 ${errors.city}`}
+                defaultValue={city}
                 placeholder="Munich"
               />
               {errors?.city && (
                 <p className="text-sm text-red-500">{errors.city.message}</p>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-row items-center justify-between py-2">
-            <div className="flex flex-col items-start justify-center pr-2">
-              <label htmlFor="street" className="pb-2">
-                Street
-              </label>
-              <Input
-                {...register("street")}
-                className={`focus-visible:ring-red-500 ${errors.street}`}
-                placeholder="Fauststraße"
-              />
-              {errors?.street && (
-                <p className="text-sm text-red-500">{errors.street.message}</p>
               )}
             </div>
             <div className="flex flex-col items-start justify-center pr-2">
@@ -119,19 +125,39 @@ const Checkout = () => {
               </label>
               <Input
                 {...register("zip")}
+                type="number"
                 className={`focus-visible:ring-red-500 ${errors.zip}`}
+                defaultValue={zipCode}
                 placeholder="12345"
               />
               {errors?.zip && (
                 <p className="text-sm text-red-500">{errors.zip.message}</p>
               )}
             </div>
+          </div>
+          <div className="flex flex-row items-center justify-start py-2">
+            <div className="flex flex-col items-start justify-center pr-2">
+              <label htmlFor="street" className="pb-2">
+                Street
+              </label>
+              <Input
+                {...register("street")}
+                className={`focus-visible:ring-red-500 ${errors.street}`}
+                defaultValue={street}
+                placeholder="Fauststraße"
+              />
+              {errors?.street && (
+                <p className="text-sm text-red-500">{errors.street.message}</p>
+              )}
+            </div>
+
             <div className="flex flex-col items-start justify-center">
               <label htmlFor="house" className="pb-2">
                 House Number
               </label>
               <Input
                 {...register("house")}
+                type="number"
                 className={`focus-visible:ring-red-500 ${errors.house}`}
                 placeholder="23"
               />

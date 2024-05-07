@@ -42,10 +42,10 @@ LoginProps) => {
 
   const onSubmit: SubmitHandler<TAuthValidator> = async (data) => {
     const { email, password } = data;
+    // console.log(data);
 
     try {
       const respnose = await dispatch(loginUser({ email, password })).unwrap();
-      console.log(respnose);
 
       if (respnose.userlogin) {
         setIsAuthModal(false);
@@ -95,7 +95,6 @@ LoginProps) => {
                 "focus-visible:ring-red-500" ${errors.password},
                 `}
               placeholder="Password"
-              // onChange={(event) => setPassword(event.target.value)}
             />
             {errors?.password && (
               <p className="text-sm text-red-500">{errors.password.message}</p>

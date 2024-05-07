@@ -1,30 +1,18 @@
 import { z } from "zod";
 
 export const CheckoutValidator = z.object({
-  name: z.string().email(),
-  email: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters." }),
-  address: z
-    .string()
-    .min(6, { message: "address must be at least 6 characters." }),
-  state: z.string().min(6, { message: "state must be at least 6 characters." }),
-  city: z.string().min(6, { message: "city must be at least 6 characters." }),
+  email: z.string().email(),
+  name: z.string().min(6, { message: "name must be at least 6 characters." }),
+  // address: z
+  //   .string()
+  //   .min(6, { message: "address must be at least 6 characters." }),
+  state: z.string().min(4, { message: "state must be at least 6 characters." }),
+  city: z.string().min(4, { message: "city must be at least 6 characters." }),
+  zip: z.string().max(5, { message: "zip must be at max 6 numbers." }),
   street: z
     .string()
     .min(6, { message: "street must be at least 6 characters." }),
-  zip: z
-    .number({
-      required_error: "Zip is required",
-      // invalid_type_error: "Age must be a number",
-    })
-    .lte(5, { message: "this" }),
-  house: z
-    .number({
-      required_error: "house is required",
-      // invalid_type_error: "Age must be a number",
-    })
-    .lte(5, { message: "this" }),
+  house: z.string().min(1, { message: "house must be at max 6 numbers." }),
 });
 
 export type TCheckoutValidator = z.infer<typeof CheckoutValidator>;
