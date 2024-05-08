@@ -28,7 +28,7 @@ export const getAddress = async (
   }
 };
 
-export const etractAddressDetails = (address: string): addressDetails => {
+export const extractAddressDetails = (address: string): addressDetails => {
   const addressDetails = address.split(",");
 
   const street = addressDetails[1].trim();

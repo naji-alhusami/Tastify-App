@@ -7,13 +7,15 @@ import {
   TCheckoutValidator,
 } from "../../lib/validators/checkout-validators";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAppSelector } from "../../store/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
-import { etractAddressDetails } from "../../lib/get-address";
+import { extractAddressDetails } from "../../lib/get-address";
 import { useMutation } from "@tanstack/react-query";
 import { sendOrders } from "../../lib/http";
-// import { Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { clearBasket } from "../../store/redux/basket-slice";
 
 // interface CheckoutProps {
 //   openCheckout: (open: boolean) => void;
@@ -31,6 +33,7 @@ export type Order = {
 };
 
 const Checkout = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -39,12 +42,15 @@ const Checkout = () => {
     resolver: zodResolver(CheckoutValidator),
   });
 
-  const contextValue = useContext(StateContext) as { address: string };
+  const contextValue = useContext(StateContext) as {
+    address: string;
+  };
 
   const { address } = contextValue;
 
-  const { street, city, state, zipCode } = etractAddressDetails(address);
-  // console.log(typeof )
+  const { street, city, state, zipCode } = extractAddressDetails(address);
+
+  const dispatch = useAppDispatch();
   const basketItems = useAppSelector((state) => state.basket.items);
 
   const totalPrice = basketItems.reduce(
@@ -53,9 +59,17 @@ const Checkout = () => {
   );
   const formattedTotalPrice = totalPrice.toFixed(2);
 
-  const { mutate } = useMutation({
+  const { mutate, isPending, isError, error } = useMutation({
     mutationFn: sendOrders,
+    onSuccess: () => {
+      navigate("/");
+      dispatch(clearBasket());
+    },
   });
+
+  // console.log(isError);
+  // console.log(error);
+  // console.log(error instanceof FetchError);
 
   const onSubmit: SubmitHandler<TCheckoutValidator> = async (data: Order) => {
     mutate(data);
@@ -168,9 +182,19 @@ const Checkout = () => {
           </div>
           {/* {error && <p className="text-sm text-red-500">{error}</p>} */}
         </div>
+        {isError && (
+          <div>
+            <h1 className="text-rose-500">
+              Error occurred:
+              {error?.message}
+            </h1>
+            {/* <p>Error code: {error?.code}</p>
+          <p>Error info: {error?.info}</p> */}
+          </div>
+        )}
         <div className="pb-4 text-center flex flex-row justify-between items-center">
           <div className="text-2xl flex flex-row justify-center items-center">
-            Total Price:
+            Total:
             <p className="text-rose-500 font-bold pl-2">
               {formattedTotalPrice}$
             </p>
@@ -180,11 +204,11 @@ const Checkout = () => {
               type="submit"
               className="flex flex-row items-center justify-center px-4 py-2  text-white rounded-md bg-rose-500 hover:bg-rose-600"
             >
-              {/* {loading ? ( */}
-              {/* <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" /> */}
-              {/* ) : ( */}
-              Submit Order
-              {/* )} */}
+              {isPending ? (
+                <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
+              ) : (
+                "Submit"
+              )}
             </button>
           </div>
         </div>

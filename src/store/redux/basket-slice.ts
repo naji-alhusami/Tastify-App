@@ -36,6 +36,7 @@ export const basketSlice = createSlice({
         state.items.push({ ...action.payload, quantity: 1 });
       }
     },
+
     removeFromBasket(state, action: PayloadAction<string>) {
       //string its the id type
       const itemIndex = state.items.findIndex(
@@ -48,7 +49,12 @@ export const basketSlice = createSlice({
         state.items[itemIndex].quantity--;
       }
     },
+
+    clearBasket(state) {
+      state.items = [];
+    },
   },
 });
 
-export const { addToBasket, removeFromBasket } = basketSlice.actions;
+export const { addToBasket, removeFromBasket, clearBasket } =
+  basketSlice.actions;

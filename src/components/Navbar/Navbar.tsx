@@ -23,7 +23,7 @@ const Navbar = () => {
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
   // console.log(userLogin);
-  const contextValue = useContext(StateContext);
+
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
@@ -67,12 +67,9 @@ const Navbar = () => {
     dispatch(logoutUser());
   };
 
-  if (!contextValue) {
-    // We should handle the case when contextValue is null
-    return null; // or any other fallback logic
-  }
-
+  const contextValue = useContext(StateContext) as { address: string };
   const { address } = contextValue;
+
   const heightClass = params.size > 0 ? " lg:h-16" : "h-16";
 
   return (

@@ -27,6 +27,12 @@ export default function BasketItems({ openCheckoutHandler }: BasketItemsProps) {
     dispatch(removeFromBasket(id));
   }
 
+  // const contextValue = useContext(StateContext) as {
+  //   orderIsSubmitted: boolean;
+  // };
+  // const { orderIsSubmitted } = contextValue;
+  // console.log("orderIsSubmitted", orderIsSubmitted);
+
   return (
     <div id="cart" className="pb-10">
       {basketItems.length === 0 && <p>No items in cart!</p>}
