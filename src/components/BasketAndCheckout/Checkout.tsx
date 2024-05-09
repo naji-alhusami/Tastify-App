@@ -212,36 +212,6 @@ const Checkout = () => {
             </button>
           </div>
         </div>
-        {/* <div> */}
-        {/* <button
-            type="submit"
-            className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
-          > */}
-        {/* {loading ? (
-              <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
-            ) : ( */}
-        {/* Signup */}
-        {/* </button> */}
-        {/* <div className="relative py-4">
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 flex items-center"
-            >
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-6 text-muted-foreground">
-                Already A Member?
-              </span>
-            </div>
-          </div> */}
-        {/* <button
-            className=" w-full bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
-            onClick={loginFormHandler}
-          >
-            Log in
-          </button> */}
-        {/* </div> */}
       </div>
     </form>
   );

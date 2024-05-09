@@ -3,19 +3,25 @@ import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
 
 import StateContext from "../../store/context/state-context";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Basket from "../Basket/Basket";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import AuthModal from "../Auth/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import ThanksModal from "../ui/ThanksModal";
 import { logoutUser } from "../../store/redux/user-slice";
-import Checkout from "../Checkout/CheckoutModal";
+import Checkout from "../BasketAndCheckout/Checkout";
+// import Basket from "../Basket/BasketModal";
+import BasketAndCheckoutModal from "../BasketAndCheckout/BasketAndCheckoutModal";
+import BasketItems from "../BasketAndCheckout/Basket";
 
 const Navbar = () => {
+  const [isBasketAndCheckout, setIsBasketAndCheckout] =
+    useState<boolean>(false);
+  const [isCheckoutForm, setIsCheckoutForm] = useState<boolean>(false);
+
+  // const [isBasketVisible, setIsBasketVisible] = useState<boolean>(false);
+  // const [isCheckoutVisible, setIsCheckoutVisible] = useState<boolean>(false);
   const [authIsVisible, setAuthIsVisible] = useState<boolean>(false);
-  const [basketIsVisible, setBasketIsVisible] = useState<boolean>(false);
-  const [checkoutIsVisible, setCheckoutIsVisible] = useState<boolean>(false);
   const [thanksIsVisible, setThanksIsVisible] = useState<boolean>(false);
 
   const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
@@ -31,13 +37,20 @@ const Navbar = () => {
     state.basket.items.reduce((val, item) => val + item.quantity, 0)
   );
 
-  function handleOpenBasketClick() {
-    setBasketIsVisible(true);
+  function openBasketAndCheckoutModalHandler() {
+    setIsBasketAndCheckout(true);
   }
 
-  function handleCloseBasketClick() {
-    setBasketIsVisible(false);
+  function closeBasketAndCheckoutModalHandler() {
+    setIsBasketAndCheckout(false);
+    setIsCheckoutForm(false);
   }
+
+  // const openCheckoutModalHandler = () => {
+  //   // setIsCheckoutForm(true);
+  //   setIsCheckoutVisible(true);
+  //   setIsBasketVisible(false);
+  // };
 
   const openSignupModalHandler = () => {
     setIsSignupForm(true);
@@ -55,13 +68,9 @@ const Navbar = () => {
     setThanksIsVisible(false);
   };
 
-  const openCheckoutHandler = () => {
-    setCheckoutIsVisible(true);
-  };
-
-  const closeCheckoutHandler = () => {
-    setCheckoutIsVisible(false);
-  };
+  // const closeCheckoutHandler = () => {
+  //   setIsCheckoutVisible(false);
+  // };
 
   const logoutHandler = () => {
     dispatch(logoutUser());
@@ -95,6 +104,44 @@ const Navbar = () => {
         </AuthModal>
       )}
 
+      {isBasketAndCheckout && (
+        <BasketAndCheckoutModal
+          isCheckoutForm={isCheckoutForm}
+          isBasketAndCheckout={isBasketAndCheckout}
+          // openBasketAndCheckout={openBasketAndCheckoutModalHandler}
+          closeBasketAndCheckout={closeBasketAndCheckoutModalHandler}
+        >
+          {isCheckoutForm ? (
+            <Checkout
+            // setThanksIsVisible={setThanksIsVisible}
+            // setAuthIsVisible={setAuthIsVisible}
+            // setIsCheckoutForm={setIsCheckoutForm}
+            />
+          ) : (
+            <BasketItems
+              setIsCheckoutForm={setIsCheckoutForm}
+
+              // setIsAuthModal={setAuthIsVisible}
+            />
+          )}
+        </BasketAndCheckoutModal>
+      )}
+
+      {/* {isBasketVisible && (
+        <Basket
+          isBasketVisible={isBasketVisible}
+          closeBasket={closeBasketModalHandler}
+          openCheckout={openCheckoutModalHandler}
+        />
+      )}
+
+      {isCheckoutVisible && (
+        <Checkout
+          openCheckout={isCheckoutVisible}
+          closeCheckout={closeCheckoutHandler}
+        />
+      )} */}
+
       {thanksIsVisible && (
         <ThanksModal
           openAuth={authIsVisible}
@@ -103,24 +150,9 @@ const Navbar = () => {
         />
       )}
 
-      {basketIsVisible && (
-        <Basket
-          openBasket={basketIsVisible}
-          onClose={handleCloseBasketClick}
-          openCheckoutHandler={openCheckoutHandler}
-        />
-      )}
-
-      {checkoutIsVisible && (
-        <Checkout
-          openCheckout={checkoutIsVisible}
-          closeCheckout={closeCheckoutHandler}
-        />
-      )}
-
       {/* Navbar */}
       <section
-        className={`bg-white z-50 top-0 w-full sticky shadow-lg px-2 md:px-8 ${heightClass}`}
+        className={`bg-white z-30 top-0 w-full sticky shadow-lg px-2 md:px-8 ${heightClass}`}
       >
         <header className="h-full flex flex-row items-center justify-between">
           <div
@@ -177,7 +209,7 @@ const Navbar = () => {
               </div>
             )}
             <div
-              onClick={handleOpenBasketClick}
+              onClick={openBasketAndCheckoutModalHandler}
               className="m-1 p-3 flex flex-row justify-center items-center hover:bg-rose-100 hover:rounded-full hover:p-3  cursor-pointer"
             >
               <ShoppingCart className="text-rose-500 h-6 w-6 mr-2" />(

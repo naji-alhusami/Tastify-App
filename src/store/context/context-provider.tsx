@@ -19,7 +19,6 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
   const [lon, setLon] = useState<number | null>(null);
   const [isRestaurant, setIsRestaurant] = useState<string | null>(null);
   const [showRestaurants, setShowRestaurants] = useState<boolean>(false);
-  const [orderIsSubmitted, setOrderIsSubmitted] = useState<boolean>(false);
 
   const [params] = useSearchParams();
   // console.log(params.get("cuisine"));
@@ -52,8 +51,6 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
     setIsRestaurant,
     showRestaurants,
     setShowRestaurants,
-    orderIsSubmitted,
-    setOrderIsSubmitted,
   };
 
   return (

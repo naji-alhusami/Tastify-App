@@ -1,4 +1,4 @@
-import { Order } from "../components/Checkout/Checkout";
+import { Order } from "../components/BasketAndCheckout/Checkout";
 import { Meal } from "../components/Cuisines/MealsPage";
 
 export class FetchError extends Error {

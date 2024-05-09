@@ -5,11 +5,11 @@ import {
 } from "../../store/redux/basket-slice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 
-interface BasketItemsProps {
-  openCheckoutHandler: () => void;
+interface BasketProps {
+  setIsCheckoutForm: (open: boolean) => void;
 }
 
-export default function BasketItems({ openCheckoutHandler }: BasketItemsProps) {
+export default function Basket({ setIsCheckoutForm }: BasketProps) {
   const basketItems = useAppSelector((state) => state.basket.items);
   const dispatch = useAppDispatch();
 
@@ -25,6 +25,10 @@ export default function BasketItems({ openCheckoutHandler }: BasketItemsProps) {
 
   function handleRemoveFromBasket(id: string) {
     dispatch(removeFromBasket(id));
+  }
+
+  function openCheckoutHandler() {
+    setIsCheckoutForm(true);
   }
 
   // const contextValue = useContext(StateContext) as {
@@ -67,7 +71,7 @@ export default function BasketItems({ openCheckoutHandler }: BasketItemsProps) {
       <div id="flex flex-row justify-end items-center">
         Cart Total: <strong>${formattedTotalPrice}</strong>
       </div>
-      <button onClick={openCheckoutHandler}>Submit</button>
+      <button onClick={openCheckoutHandler}>checkout</button>
     </div>
   );
 }
