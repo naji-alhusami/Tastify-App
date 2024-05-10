@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import AuthModal from "../Auth/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
-import ThanksModal from "../ui/ThanksModal";
+import ThanksModal from "../Thanks/ThanksModal";
 import { logoutUser } from "../../store/redux/user-slice";
 import Checkout from "../BasketAndCheckout/Checkout";
 // import Basket from "../Basket/BasketModal";
@@ -15,16 +15,39 @@ import BasketAndCheckoutModal from "../BasketAndCheckout/BasketAndCheckoutModal"
 import BasketItems from "../BasketAndCheckout/Basket";
 
 const Navbar = () => {
-  const [isBasketAndCheckout, setIsBasketAndCheckout] =
-    useState<boolean>(false);
+  // Authentication (Signup and Login)
+  const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
+  const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
+  const [isThanks, setIsThanks] = useState<boolean>(false);
+
+  const openSignupModalHandler = () => {
+    setIsSignupForm(true);
+    setIsLoginForm(true);
+  };
+
+  const openLoginModalHandler = () => {
+    setIsLoginForm(true);
+    setIsSignupForm(false);
+    setIsThanks(false);
+  };
+
+  const closeAuthModalHandler = () => {
+    setIsLoginForm(false);
+
+    setIsThanks(false);
+  };
+
+  // Basket and Checkout:
+  const [isBasketForm, setIsBasketForm] = useState<boolean>(false);
   const [isCheckoutForm, setIsCheckoutForm] = useState<boolean>(false);
 
-  // const [isBasketVisible, setIsBasketVisible] = useState<boolean>(false);
-  // const [isCheckoutVisible, setIsCheckoutVisible] = useState<boolean>(false);
-  const [authIsVisible, setAuthIsVisible] = useState<boolean>(false);
-  const [thanksIsVisible, setThanksIsVisible] = useState<boolean>(false);
-
-  const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
+  function openBasketModalHandler() {
+    setIsBasketForm(true);
+  }
+  function closeBasketAndCheckoutModalHandler() {
+    setIsBasketForm(false);
+    setIsCheckoutForm(false);
+  }
 
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
@@ -37,41 +60,6 @@ const Navbar = () => {
     state.basket.items.reduce((val, item) => val + item.quantity, 0)
   );
 
-  function openBasketAndCheckoutModalHandler() {
-    setIsBasketAndCheckout(true);
-  }
-
-  function closeBasketAndCheckoutModalHandler() {
-    setIsBasketAndCheckout(false);
-    setIsCheckoutForm(false);
-  }
-
-  // const openCheckoutModalHandler = () => {
-  //   // setIsCheckoutForm(true);
-  //   setIsCheckoutVisible(true);
-  //   setIsBasketVisible(false);
-  // };
-
-  const openSignupModalHandler = () => {
-    setIsSignupForm(true);
-    setAuthIsVisible(true);
-  };
-
-  const openLoginModalHandler = () => {
-    setIsSignupForm(false);
-    setAuthIsVisible(true);
-    setThanksIsVisible(false);
-  };
-
-  const closeModalHandler = () => {
-    setAuthIsVisible(false);
-    setThanksIsVisible(false);
-  };
-
-  // const closeCheckoutHandler = () => {
-  //   setIsCheckoutVisible(false);
-  // };
-
   const logoutHandler = () => {
     dispatch(logoutUser());
   };
@@ -83,39 +71,39 @@ const Navbar = () => {
 
   return (
     <>
-      {authIsVisible && (
+      {isLoginForm && (
         <AuthModal
-          onClose={closeModalHandler}
+          closeAuth={closeAuthModalHandler} //finish
           isSignupForm={isSignupForm}
-          openAuth={authIsVisible}
+          openAuth={isLoginForm}
         >
           {isSignupForm ? (
             <Signup
-              setThanksIsVisible={setThanksIsVisible}
-              setAuthIsVisible={setAuthIsVisible}
-              setIsSignupForm={setIsSignupForm}
+              setAuthIsVisible={setIsLoginForm} //finish
+              setIsSignupForm={setIsSignupForm} //finish
+              setIsThanks={setIsThanks}
             />
           ) : (
             <Login
-              setIsSignupForm={setIsSignupForm}
-              setIsAuthModal={setAuthIsVisible}
+              setIsSignupForm={setIsSignupForm} //finish
+              setIsLoginForm={setIsLoginForm} //finish
             />
           )}
         </AuthModal>
       )}
 
-      {isBasketAndCheckout && (
+      {isBasketForm && (
         <BasketAndCheckoutModal
           isCheckoutForm={isCheckoutForm}
-          isBasketAndCheckout={isBasketAndCheckout}
+          isBasketForm={isBasketForm}
           // openBasketAndCheckout={openBasketAndCheckoutModalHandler}
           closeBasketAndCheckout={closeBasketAndCheckoutModalHandler}
         >
           {isCheckoutForm ? (
             <Checkout
-            // setThanksIsVisible={setThanksIsVisible}
-            // setAuthIsVisible={setAuthIsVisible}
-            // setIsCheckoutForm={setIsCheckoutForm}
+              // setThanksIsVisible={setThanksIsVisible}
+              setIsBasketForm={setIsBasketForm}
+              setIsCheckoutForm={setIsCheckoutForm}
             />
           ) : (
             <BasketItems
@@ -127,25 +115,10 @@ const Navbar = () => {
         </BasketAndCheckoutModal>
       )}
 
-      {/* {isBasketVisible && (
-        <Basket
-          isBasketVisible={isBasketVisible}
-          closeBasket={closeBasketModalHandler}
-          openCheckout={openCheckoutModalHandler}
-        />
-      )}
-
-      {isCheckoutVisible && (
-        <Checkout
-          openCheckout={isCheckoutVisible}
-          closeCheckout={closeCheckoutHandler}
-        />
-      )} */}
-
-      {thanksIsVisible && (
+      {isThanks && (
         <ThanksModal
-          openAuth={authIsVisible}
-          closeModalHandler={closeModalHandler}
+          isThanks={isThanks}
+          closeThanksModalHandler={closeAuthModalHandler}
           openLoginModalHandler={openLoginModalHandler}
         />
       )}
@@ -209,7 +182,7 @@ const Navbar = () => {
               </div>
             )}
             <div
-              onClick={openBasketAndCheckoutModalHandler}
+              onClick={openBasketModalHandler}
               className="m-1 p-3 flex flex-row justify-center items-center hover:bg-rose-100 hover:rounded-full hover:p-3  cursor-pointer"
             >
               <ShoppingCart className="text-rose-500 h-6 w-6 mr-2" />(

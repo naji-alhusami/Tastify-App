@@ -14,12 +14,12 @@ import { Loader2 } from "lucide-react";
 
 interface LoginProps {
   setIsSignupForm: (open: boolean) => void;
-  setIsAuthModal: (open: boolean) => void;
+  setIsLoginForm: (open: boolean) => void;
 }
 
 const Login = ({
   setIsSignupForm,
-  setIsAuthModal,
+  setIsLoginForm,
 }: // setIsAuthModal
 LoginProps) => {
   const {
@@ -48,7 +48,7 @@ LoginProps) => {
       const respnose = await dispatch(loginUser({ email, password })).unwrap();
 
       if (respnose.userlogin) {
-        setIsAuthModal(false);
+        setIsLoginForm(false);
         navigate("/cuisines");
       }
     } catch (error) {
@@ -130,7 +130,7 @@ LoginProps) => {
               </div>
             </div>
             <button
-              className=" w-full bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
+              className="w-full bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
               onClick={SignupFormHandler}
             >
               Sign up

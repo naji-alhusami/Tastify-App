@@ -6,26 +6,25 @@ import "../../index.css";
 import { type ReactNode } from "react";
 import Modal from "../ui/Modal.tsx";
 
-interface CartProps {
-  onClose: () => void;
+interface AuthModalProps {
+  closeAuth: () => void; //finish
   isSignupForm: boolean;
   children: ReactNode;
   openAuth: boolean;
 }
 
 export default function AuthModal({
-  onClose,
+  closeAuth,
   openAuth,
   isSignupForm,
   children,
-}: //   openModal,
-CartProps) {
+}: AuthModalProps) {
   return createPortal(
     <Modal>
-      {openAuth && <Backdrop onClick={onClose} />}
+      {openAuth && <Backdrop onClick={closeAuth} />}
 
       <XCircle
-        onClick={onClose}
+        onClick={closeAuth}
         className="text-rose-500 h-8 w-8 self-end hover:bg-rose-200 hover:rounded-full cursor-pointer"
       />
 
@@ -34,14 +33,6 @@ CartProps) {
         {isSignupForm ? "Sign-up to continue" : "Login to continue"}
       </h1>
       {children}
-      {/* <div className="flex flex-row justify-end items-center">
-            <button
-              onClick={onClose}
-              className="bg-rose-500 hover:bg-rose-600 px-4 py-2 rounded-md text-white"
-            >
-              Close
-            </button>
-          </div> */}
     </Modal>,
     document.getElementById("modal")!
   );

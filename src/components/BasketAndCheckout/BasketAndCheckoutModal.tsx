@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 interface BasketAndCheckoutModalProps {
   children: ReactNode;
   isCheckoutForm: boolean;
-  isBasketAndCheckout: boolean;
+  isBasketForm: boolean;
   //   openBasketAndCheckout: () => void;
   closeBasketAndCheckout: () => void;
 }
@@ -17,13 +17,13 @@ interface BasketAndCheckoutModalProps {
 const BasketAndCheckoutModal = ({
   children,
   isCheckoutForm,
-  isBasketAndCheckout,
+  isBasketForm,
   //   openBasketAndCheckout,
   closeBasketAndCheckout,
 }: BasketAndCheckoutModalProps) => {
   return createPortal(
     <Modal>
-      {isBasketAndCheckout && <Backdrop onClick={closeBasketAndCheckout} />}
+      {isBasketForm && <Backdrop onClick={closeBasketAndCheckout} />}
       <XCircle
         onClick={closeBasketAndCheckout}
         className="text-rose-500 h-8 w-8 self-end hover:bg-rose-200 hover:rounded-full cursor-pointer"

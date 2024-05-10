@@ -17,10 +17,12 @@ import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { clearBasket } from "../../store/redux/basket-slice";
 
-// interface CheckoutProps {
-//   openCheckout: (open: boolean) => void;
-//   closeCheckout: (open: boolean) => void;
-// }
+interface CheckoutProps {
+  // openCheckout: (open: boolean) => void;
+  // closeCheckout: (open: boolean) => void;
+  setIsCheckoutForm: (open: boolean) => void;
+  setIsBasketForm: (open: boolean) => void;
+}
 
 export type Order = {
   name: string;
@@ -32,7 +34,7 @@ export type Order = {
   house: string;
 };
 
-const Checkout = () => {
+const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
   const navigate = useNavigate();
   const {
     register,
@@ -62,6 +64,8 @@ const Checkout = () => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: sendOrders,
     onSuccess: () => {
+      setIsCheckoutForm(false);
+      setIsBasketForm(false);
       navigate("/");
       dispatch(clearBasket());
     },
