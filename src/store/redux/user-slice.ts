@@ -191,7 +191,9 @@ const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    // fill in primary logic here
+    setUserLogin(state, action) {
+      state.userlogin = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // Signup Cases:
@@ -297,4 +299,5 @@ const usersSlice = createSlice({
   },
 });
 
+export const { setUserLogin } = usersSlice.actions;
 export default usersSlice.reducer;

@@ -6,7 +6,7 @@ import {
   AuthValidator,
   type TAuthValidator,
 } from "../../lib/validators/account-validator";
-import { loginUser } from "../../store/redux/user-slice";
+import { loginUser, setUserLogin } from "../../store/redux/user-slice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -48,6 +48,7 @@ LoginProps) => {
       const respnose = await dispatch(loginUser({ email, password })).unwrap();
 
       if (respnose.userlogin) {
+        dispatch(setUserLogin(true));
         setIsLoginForm(false);
         navigate("/cuisines");
       }

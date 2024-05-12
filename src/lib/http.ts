@@ -67,7 +67,6 @@ export async function sendOrders(orders: Order) {
       body: JSON.stringify(orderData),
     }
   );
-  console.log(response);
 
   if (!response.ok) {
     console.log("res not ok");

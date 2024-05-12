@@ -8,7 +8,9 @@ import AuthModal from "../Auth/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import ThanksModal from "../Thanks/ThanksModal";
-import { logoutUser } from "../../store/redux/user-slice";
+import { logoutUser, 
+  // setUserLogin
+ } from "../../store/redux/user-slice";
 import Checkout from "../BasketAndCheckout/Checkout";
 // import Basket from "../Basket/BasketModal";
 import BasketAndCheckoutModal from "../BasketAndCheckout/BasketAndCheckoutModal";
@@ -51,7 +53,7 @@ const Navbar = () => {
 
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
-  // console.log(userLogin);
+  console.log(userLogin);
 
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -59,6 +61,19 @@ const Navbar = () => {
   const basketQuantity = useAppSelector((state) =>
     state.basket.items.reduce((val, item) => val + item.quantity, 0)
   );
+
+  // useEffect(() => {
+  //   // Check if user login state exists in local storage
+  //   const storedUserLogin = localStorage.getItem("userLogin");
+  //   if (storedUserLogin) {
+  //     // If exists, update the state
+  //     dispatch(setUserLogin(JSON.parse(storedUserLogin)));
+  //   }
+  // }, [dispatch]);
+
+  // const setUserLoginLocalStorage = (isLoggedIn) => {
+  //   localStorage.setItem("userLogin", isLoggedIn);
+  // };
 
   const logoutHandler = () => {
     dispatch(logoutUser());
