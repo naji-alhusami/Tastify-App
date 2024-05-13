@@ -2,7 +2,7 @@ import { OrderStepsData } from "./OrderSteps-data";
 
 export default function OrderSteps() {
   return (
-    <div className="text-center mt-20">
+    <div className="text-center mt-52">
       <h1 className="text-4xl pacifico-regular">Order Steps</h1>
       <div className="mx-20 mt-10 flex flex-col justify-center items-center gap-y-6 md:mx-10 md:flex-row md:gap-x-6">
         {OrderStepsData.map((step) => (
