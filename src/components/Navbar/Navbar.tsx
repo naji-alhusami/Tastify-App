@@ -8,9 +8,7 @@ import AuthModal from "../Auth/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import ThanksModal from "../Thanks/ThanksModal";
-import { logoutUser, 
-  // setUserLogin
- } from "../../store/redux/user-slice";
+import { logoutUser, setUserLogin } from "../../store/redux/user-slice";
 import Checkout from "../BasketAndCheckout/Checkout";
 // import Basket from "../Basket/BasketModal";
 import BasketAndCheckoutModal from "../BasketAndCheckout/BasketAndCheckoutModal";
@@ -53,7 +51,17 @@ const Navbar = () => {
 
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
-  console.log(userLogin);
+  const { loading } = useAppSelector((state) => state.users);
+  console.log("userLogin", userLogin);
+  console.log("loading", loading);
+
+  // Check if user state exists in local storage
+  const storedUserLogin = localStorage.getItem("userLogin");
+  console.log("storedUserLogin:", storedUserLogin);
+  if (storedUserLogin) {
+    // Parse stored user state and set Redux state
+    dispatch(setUserLogin(JSON.parse(storedUserLogin)));
+  }
 
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -62,21 +70,9 @@ const Navbar = () => {
     state.basket.items.reduce((val, item) => val + item.quantity, 0)
   );
 
-  // useEffect(() => {
-  //   // Check if user login state exists in local storage
-  //   const storedUserLogin = localStorage.getItem("userLogin");
-  //   if (storedUserLogin) {
-  //     // If exists, update the state
-  //     dispatch(setUserLogin(JSON.parse(storedUserLogin)));
-  //   }
-  // }, [dispatch]);
-
-  // const setUserLoginLocalStorage = (isLoggedIn) => {
-  //   localStorage.setItem("userLogin", isLoggedIn);
-  // };
-
   const logoutHandler = () => {
     dispatch(logoutUser());
+    localStorage.removeItem("userLogin");
   };
 
   const contextValue = useContext(StateContext) as { address: string };
@@ -88,20 +84,20 @@ const Navbar = () => {
     <>
       {isLoginForm && (
         <AuthModal
-          closeAuth={closeAuthModalHandler} //finish
+          closeAuth={closeAuthModalHandler}
           isSignupForm={isSignupForm}
           openAuth={isLoginForm}
         >
           {isSignupForm ? (
             <Signup
-              setAuthIsVisible={setIsLoginForm} //finish
-              setIsSignupForm={setIsSignupForm} //finish
+              setAuthIsVisible={setIsLoginForm}
+              setIsSignupForm={setIsSignupForm}
               setIsThanks={setIsThanks}
             />
           ) : (
             <Login
-              setIsSignupForm={setIsSignupForm} //finish
-              setIsLoginForm={setIsLoginForm} //finish
+              setIsSignupForm={setIsSignupForm}
+              setIsLoginForm={setIsLoginForm}
             />
           )}
         </AuthModal>
@@ -169,7 +165,10 @@ const Navbar = () => {
               )}
             </div>
           )}
-
+          {/* 
+          {loading ? (
+            "loading"
+          ) : ( */}
           <div className="lg:flex lg:flex-row">
             {!userLogin ? (
               <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-10">
@@ -204,6 +203,7 @@ const Navbar = () => {
               {basketQuantity})
             </div>
           </div>
+          {/* // )} */}
         </header>
         {params.size > 0 && (
           <div className="mx-4 text-center flex flex-row items-center justify-center py-4 h-16 lg:hidden">

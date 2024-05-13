@@ -3,6 +3,8 @@ type OrderStepsTypes = {
   header: string;
   paragraph: string;
   icon: iconPath;
+  // arrow?: string;
+  // style?: string;
 };
 
 type iconPath = "/Images/icon1.svg" | "/Images/icon2.svg" | "/Images/icon3.svg";
@@ -14,6 +16,7 @@ export const OrderStepsData: OrderStepsTypes[] = [
     paragraph:
       "Select food, which you want now the most and do not forget about drinks",
     icon: "/Images/icon1.svg",
+    // arrow: "/Images/line.png",
   },
   {
     id: "2",
@@ -21,6 +24,8 @@ export const OrderStepsData: OrderStepsTypes[] = [
     paragraph:
       "Contact us and provide our agent with correct information about your order",
     icon: "/Images/icon2.svg",
+    // arrow: "/Images/line.png",
+    // style: "transform rotate-91",
   },
   {
     id: "3",

@@ -20,7 +20,7 @@ interface LoginProps {
 const Login = ({
   setIsSignupForm,
   setIsLoginForm,
-}: // setIsAuthModal
+}:
 LoginProps) => {
   const {
     register,
@@ -49,6 +49,7 @@ LoginProps) => {
 
       if (respnose.userlogin) {
         dispatch(setUserLogin(true));
+        localStorage.setItem("userLogin", JSON.stringify(respnose.userlogin));
         setIsLoginForm(false);
         navigate("/cuisines");
       }

@@ -13,6 +13,11 @@ export default function OrderSteps() {
             <h2 className="text-center font-bold">{step.header}</h2>
             <img src={step.icon} alt={step.header} className="w-20 h-20" />
             <p className="text-center">{step.paragraph}</p>
+            {/* {step.arrow && <img
+              src={step.arrow}
+              alt={step.header}
+              className={`${step.style} flex justify-start items-start w-20 h-20 text-rose-500 fill-rose-500 transform rotate-45`}
+            />} */}
           </div>
         ))}
       </div>
