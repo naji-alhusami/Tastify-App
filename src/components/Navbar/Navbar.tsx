@@ -140,7 +140,7 @@ const Navbar = () => {
 
       {/* Navbar */}
       <section
-        className={`bg-white z-30 top-0 w-full sticky shadow-lg px-2 md:px-8 ${heightClass}`}
+        className={`bg-white z-30 top-0 w-full px-2 sticky shadow-lg  md:px-8 ${heightClass}`}
       >
         <header className="h-full flex flex-row items-center justify-between">
           <div

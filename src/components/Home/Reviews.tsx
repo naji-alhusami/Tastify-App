@@ -2,10 +2,12 @@ import { Check, Star } from "lucide-react";
 
 const Reviews = () => {
   return (
-    <div className="text-center mt-52">
+    <div className="text-center mt-52 mb-20">
       <h1 className="text-4xl pacifico-regular">Reviews</h1>
       <div className="mx-20 mt-10 flex flex-col justify-center items-center gap-y-6 md:mx-10 md:flex-row md:gap-x-6">
         <div className="mx-auto grid max-w-2xl grid-cols-1 px-4 lg:mx-0 lg:max-w-none lg:grid-cols-2 gap-y-16">
+          
+          {/* First user review */}
           <div className="flex flex-auto flex-col gap-4 lg:pr-12 xl:pr-20">
             <div className="flex gap-0.5 mb-2">
               <Star className="h-5 w-5 text-rose-500 fill-rose-500" />
@@ -43,7 +45,7 @@ const Reviews = () => {
             </div>
           </div>
 
-          {/* second user review */}
+          {/* Second user review */}
           <div className="flex flex-auto flex-col gap-4 lg:pr-8 xl:pr-20">
             <div className="flex gap-0.5 mb-2">
               <Star className="h-5 w-5 text-rose-500 fill-rose-500" />
