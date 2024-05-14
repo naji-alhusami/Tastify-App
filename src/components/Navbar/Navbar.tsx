@@ -51,13 +51,13 @@ const Navbar = () => {
 
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
-  const { loading } = useAppSelector((state) => state.users);
-  console.log("userLogin", userLogin);
-  console.log("loading", loading);
+  // const { loading } = useAppSelector((state) => state.users);
+  // console.log("userLogin", userLogin);
+  // console.log("loading", loading);
 
   // Check if user state exists in local storage
   const storedUserLogin = localStorage.getItem("userLogin");
-  console.log("storedUserLogin:", storedUserLogin);
+  // console.log("storedUserLogin:", storedUserLogin);
   if (storedUserLogin) {
     // Parse stored user state and set Redux state
     dispatch(setUserLogin(JSON.parse(storedUserLogin)));
@@ -72,6 +72,7 @@ const Navbar = () => {
 
   const logoutHandler = () => {
     dispatch(logoutUser());
+    navigate("/");
     localStorage.removeItem("userLogin");
   };
 

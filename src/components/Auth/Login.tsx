@@ -9,7 +9,7 @@ import {
 import { loginUser, setUserLogin } from "../../store/redux/user-slice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
 interface LoginProps {
@@ -32,7 +32,7 @@ LoginProps) => {
 
   const [error, setError] = useState<string>("");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.users);
 
@@ -51,7 +51,7 @@ LoginProps) => {
         dispatch(setUserLogin(true));
         localStorage.setItem("userLogin", JSON.stringify(respnose.userlogin));
         setIsLoginForm(false);
-        navigate("/cuisines");
+        // navigate("/cuisines");
       }
     } catch (error) {
       console.log(error);
