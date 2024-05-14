@@ -7,19 +7,9 @@ import { Pagination } from "swiper/modules";
 import { ITEMS_CATEGORIES } from "./ItemsCategories";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import StateContext from "../../store/context/state-context";
-// import { Link, useSearchParams } from "react-router-dom";
-
-// interface SwiperCuisinesProps {
-//   searchParams: {
-//     lat: string;
-//     lon: string;
-//   };
-// }
 
 const SwiperCuisines = () => {
-  // const [params] = useSearchParams();
   const [swiper, setSwiper] = useState<null | SwiperType>(null);
-  //   const [activeLink, setActiveLink] = useState<string>("");
   const contextValue = useContext(StateContext);
 
   if (!contextValue) {
@@ -35,7 +25,7 @@ const SwiperCuisines = () => {
   };
 
   const activeStyles =
-    "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-40 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
+    "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-30 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
 
   return (
     <div className="relative  h-32 overflow-hidden rounded-xl ">

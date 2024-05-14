@@ -15,11 +15,13 @@ export class FetchError extends Error {
 interface FetchMealsOptions {
   signal?: AbortSignal; // Type for signal, assuming you're using AbortController
   isRestaurant?: string; // Type for cuisine, assuming it's a string
+  id?: string;
 }
 
 export async function fetchMeals({
   signal,
   isRestaurant,
+  id,
 }: FetchMealsOptions): Promise<Meal[]> {
   // console.log(isRestaurant);
 
@@ -44,7 +46,36 @@ export async function fetchMeals({
     // console.log(filteredMeals);
     return filteredMeals;
   }
-  // console.log(data);
+
+  if (id) {
+    console.log(id);
+    const mealDetails = data.filter((meal: Meal) => meal.id === id);
+
+    console.log(mealDetails);
+    return mealDetails;
+  }
+  return data;
+}
+
+export async function fetchMealDetails({
+  signal,
+  id,
+}: FetchMealsOptions): Promise<Meal> {
+  console.log(id);
+  const response = await fetch(
+    `https://food-order-e25e0-default-rtdb.firebaseio.com/meals/${id}.json`,
+    { signal: signal }
+  );
+
+  if (!response.ok) {
+    console.log("res not ok");
+    const info = await response.json();
+    throw new FetchError("Error occurred", response.status, info);
+  }
+
+  const data = await response.json();
+  console.log("data:", data);
+
   return data;
 }
 

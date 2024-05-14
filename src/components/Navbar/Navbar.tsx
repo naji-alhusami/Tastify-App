@@ -33,7 +33,6 @@ const Navbar = () => {
 
   const closeAuthModalHandler = () => {
     setIsLoginForm(false);
-
     setIsThanks(false);
   };
 
@@ -51,9 +50,6 @@ const Navbar = () => {
 
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
-  // const { loading } = useAppSelector((state) => state.users);
-  // console.log("userLogin", userLogin);
-  // console.log("loading", loading);
 
   // Check if user state exists in local storage
   const storedUserLogin = localStorage.getItem("userLogin");
@@ -166,10 +162,6 @@ const Navbar = () => {
               )}
             </div>
           )}
-          {/* 
-          {loading ? (
-            "loading"
-          ) : ( */}
           <div className="lg:flex lg:flex-row">
             {!userLogin ? (
               <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-10">
@@ -204,7 +196,6 @@ const Navbar = () => {
               {basketQuantity})
             </div>
           </div>
-          {/* // )} */}
         </header>
         {params.size > 0 && (
           <div className="mx-4 text-center flex flex-row items-center justify-center py-4 h-16 lg:hidden">

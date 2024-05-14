@@ -71,10 +71,6 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
     },
   });
 
-  // console.log(isError);
-  // console.log(error);
-  // console.log(error instanceof FetchError);
-
   const onSubmit: SubmitHandler<TCheckoutValidator> = async (data: Order) => {
     mutate(data);
   };

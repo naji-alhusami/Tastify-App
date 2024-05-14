@@ -1,7 +1,6 @@
 // import { useSearchParams } from "react-router-dom";
 import Meals from "./Meals";
 import SwiperCuisines from "./SwiperCuisines";
-// import { MEALSDATA } from "./Meals-data";
 import { useQuery } from "@tanstack/react-query";
 import { FetchError, fetchMeals } from "../../lib/http";
 import Loading from "../ui/Loading";
@@ -14,6 +13,7 @@ export type Meal = {
   name: string;
   price: number;
   image: string;
+  description: string;
 };
 
 const MealsPage = () => {
@@ -47,9 +47,6 @@ const MealsPage = () => {
     enabled: !!isRestaurant, // the isLoading will not be true if this query is just disabled
   });
 
-  // console.log(allMealsData);
-  // console.log(filteredMealsData);
-
   let content;
   if (allMealsPending || filteredMealsLoading) {
     content = <Loading />;
@@ -70,10 +67,6 @@ const MealsPage = () => {
       );
     }
   } else if (filteredMealsData) {
-    // cuisine &&
-    // const filteredMeals = data.filter(
-    //   (meal: Meal) => meal.category === cuisine
-    // );
     content = (
       <div className="flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
         {filteredMealsData.map((meal: Meal) => (
@@ -103,14 +96,7 @@ const MealsPage = () => {
       <div className="flex justify-center items-center m-4">
         <SwiperCuisines />
       </div>
-      <div>
-        {content}
-        {/* <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
-          {mealsToDisplay.map((meal) => (
-            <Meals {...meal} />
-          ))}
-        </div> */}
-      </div>
+      <div>{content}</div>
     </div>
   );
 };

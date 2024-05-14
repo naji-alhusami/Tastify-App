@@ -14,9 +14,12 @@ const AddressLocator = () => {
     return null; // or any other fallback logic
   }
 
-  const { lat, lon, setAddress, setLat, setLon } = contextValue;
+  const {
+    //  lat, lon, 
+    setAddress, setLat, setLon } = contextValue;
   const findCuisinesHandler = () => {
-    navigate(`/cuisines?lon=${lon}&lat=${lat}`);
+    // navigate(`/cuisines?lon=${lon}&lat=${lat}`);
+    navigate(`/cuisines`);
   };
 
   const determineAddress = () => {
@@ -55,7 +58,7 @@ const AddressLocator = () => {
         className="border border-gray-300  focus:ring-rose-500 overflow-hidden whitespace-nowrap overflow-ellipsis w-full px-4 py-2 rounded-md"
         placeholder="Locate Address"
         // defaultValue={address || ""}
-        value={inputValue} 
+        value={inputValue}
         // value={address || clearInput}
         readOnly
       />

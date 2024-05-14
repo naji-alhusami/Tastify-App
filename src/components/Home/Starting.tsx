@@ -1,5 +1,5 @@
 import HomeImage from "/Images/home-image.jpg";
-import AddressLocator from "./locate-address";
+import AddressLocator from "./AddressLocator";
 
 const Starting = () => {
   return (
