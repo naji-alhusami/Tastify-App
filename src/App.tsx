@@ -4,6 +4,7 @@ import Home from "./components/Home/HomePage.tsx";
 import MealsPage from "./components/Cuisines/MealsPage.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import MealDetails from "./components/Cuisines/MealDetails.tsx";
+import Footer from "./components/Footer/Footer.tsx";
 
 function App() {
   const queryClient = new QueryClient();
@@ -17,6 +18,7 @@ function App() {
           <Route path="/cuisines" element={<MealsPage />} />
           <Route path="/cuisines/:id" element={<MealDetails />} />
         </Routes>
+        <Footer />
       </QueryClientProvider>
     </>
   );

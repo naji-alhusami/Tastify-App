@@ -1,4 +1,3 @@
-import Footer from "./Footer";
 import OrderSteps from "./OrderSteps";
 import Reviews from "./Reviews";
 import Starting from "./Starting";
@@ -9,7 +8,6 @@ const Home = () => {
       <Starting />
       <OrderSteps />
       <Reviews />
-      <Footer />
     </div>
   );
 };
