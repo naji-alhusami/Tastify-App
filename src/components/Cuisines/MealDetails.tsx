@@ -55,7 +55,7 @@ const MealDetails = () => {
       <div className="flex justify-center items-center m-12">
         <div className="w-full md:w-[800px] md:h-[400px] flex flex-col justify-center items-center">
           <div className="w-full">
-            <h1 className="bg-gray-500 text-lg p-4 font-bold text-white text-center">
+            <h1 className="bg-amber-500 text-lg p-4 font-bold text-white text-center">
               {mealData.name}
             </h1>
           </div>
@@ -65,8 +65,9 @@ const MealDetails = () => {
             </div>
             <div className="h-full w-full p-4 shadow-xl flex flex-col justify-between">
               <div>
-                <p className="pb-4">{mealData.description}</p>
-                <p className="">Price: {mealData.price}$</p>
+                <p>Meal: {mealData.name}</p>
+                <p className="pb-4">Meal Content: {mealData.description}</p>
+                  <p className="">Price: {mealData.price}$</p>
               </div>
               <div>
                 <button

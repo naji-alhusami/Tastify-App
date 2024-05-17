@@ -17,11 +17,7 @@ interface LoginProps {
   setIsLoginForm: (open: boolean) => void;
 }
 
-const Login = ({
-  setIsSignupForm,
-  setIsLoginForm,
-}:
-LoginProps) => {
+const Login = ({ setIsSignupForm, setIsLoginForm }: LoginProps) => {
   const {
     register,
     handleSubmit,
@@ -45,11 +41,11 @@ LoginProps) => {
     // console.log(data);
 
     try {
-      const respnose = await dispatch(loginUser({ email, password })).unwrap();
-
-      if (respnose.userlogin) {
+      const response = await dispatch(loginUser({ email, password })).unwrap();
+      console.log("response:", response.role);
+      if (response.userlogin && response.role) {
         dispatch(setUserLogin(true));
-        localStorage.setItem("userLogin", JSON.stringify(respnose.userlogin));
+        localStorage.setItem("userLogin", JSON.stringify(response.userlogin));
         setIsLoginForm(false);
         // navigate("/cuisines");
       }

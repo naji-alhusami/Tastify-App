@@ -19,6 +19,7 @@ export type User = {
   email: string;
   emailVerified?: boolean;
   password: string;
+  role: "user";
 };
 
 type UserState = {
@@ -60,11 +61,13 @@ export const signupUser = createAsyncThunk<
       id,
       email,
       password,
+      role: "user",
     });
 
     const userData = {
       id: id,
       email: email,
+      role: "user",
     };
 
     return userData;
@@ -86,13 +89,13 @@ export const loginUser = createAsyncThunk<
     password: string;
     userlogin: boolean;
     error: string | null;
+    role: string;
   },
   { email: string; password: string }
 >("user/loginUser", async (payload, thunkApi) => {
   const { email, password } = payload;
   try {
     const response = await signInWithEmailAndPassword(auth, email, password);
-    console.log(email);
 
     if (response.user.emailVerified === false) {
       return thunkApi.rejectWithValue("Email is Not Verified");
@@ -100,10 +103,9 @@ export const loginUser = createAsyncThunk<
 
     const docRef = doc(db, "users", response.user.uid);
     const docSnap = await getDoc(docRef);
-    console.log(docSnap.data());
 
     if (!docSnap.exists()) {
-      return thunkApi.rejectWithValue("User data not found."); // Handle case where user data does not exist
+      return thunkApi.rejectWithValue("User data not found.");
     }
 
     const userData = {
@@ -112,8 +114,8 @@ export const loginUser = createAsyncThunk<
       password: docSnap.data().password,
       userlogin: true,
       error: null,
+      role: docSnap.data().role === "admin" ? "admin" : "user",
     };
-    console.log(userData);
 
     return userData;
   } catch (error) {
@@ -141,50 +143,50 @@ export const logoutUser = createAsyncThunk(
 // End of Logout User.
 
 // Start of Load User:
-export const loadUser = createAsyncThunk<
-  {
-    id: string;
-    email: string;
-    password: string;
-    // userlogin: boolean;
-    error: string | null;
-  },
-  { id: string; emailVerified: boolean }
->("user/loadUser", async (payload, thunkApi) => {
-  try {
-    if (payload.emailVerified === false) {
-      return thunkApi.rejectWithValue("Email is not verified");
-    }
-    console.log("payload", payload);
-    // console.log(payload);
-    // if (typeof payload.id !== "string") {
-    //   return thunkApi.rejectWithValue("Some error");
-    // }
-    const docRef = doc(db, "users", payload.id);
-    const docSnap = await getDoc(docRef);
-    console.log(docSnap.data());
-    console.log(docSnap);
-    if (!docSnap.exists()) {
-      return thunkApi.rejectWithValue("User data not found.");
-    }
+// export const loadUser = createAsyncThunk<
+//   {
+//     id: string;
+//     email: string;
+//     password: string;
+//     // userlogin: boolean;
+//     error: string | null;
+//   },
+//   { id: string; emailVerified: boolean }
+// >("user/loadUser", async (payload, thunkApi) => {
+//   try {
+//     if (payload.emailVerified === false) {
+//       return thunkApi.rejectWithValue("Email is not verified");
+//     }
+//     console.log("payload", payload);
+//     // console.log(payload);
+//     // if (typeof payload.id !== "string") {
+//     //   return thunkApi.rejectWithValue("Some error");
+//     // }
+//     const docRef = doc(db, "users", payload.id);
+//     const docSnap = await getDoc(docRef);
+//     console.log(docSnap.data());
+//     console.log(docSnap);
+//     if (!docSnap.exists()) {
+//       return thunkApi.rejectWithValue("User data not found.");
+//     }
 
-    const userData = {
-      id: docSnap.data().id,
-      email: docSnap.data().email,
-      password: docSnap.data().password,
-      userlogin: true,
-      error: null,
-    };
+//     const userData = {
+//       id: docSnap.data().id,
+//       email: docSnap.data().email,
+//       password: docSnap.data().password,
+//       userlogin: true,
+//       error: null,
+//     };
 
-    return userData;
-  } catch (error) {
-    if (error instanceof FirebaseError) {
-      return thunkApi.rejectWithValue(error.message);
-    } else {
-      return thunkApi.rejectWithValue("An error occurred during Login.");
-    }
-  }
-});
+//     return userData;
+//   } catch (error) {
+//     if (error instanceof FirebaseError) {
+//       return thunkApi.rejectWithValue(error.message);
+//     } else {
+//       return thunkApi.rejectWithValue("An error occurred during Login.");
+//     }
+//   }
+// });
 // End of of Load User.
 
 const usersSlice = createSlice({
@@ -206,6 +208,7 @@ const usersSlice = createSlice({
         id: action.payload.id,
         email: action.payload.email,
         password: action.meta.arg.password,
+        role: "user",
       };
       // state.error = false;
     });
@@ -224,6 +227,8 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
+      console.log(action.payload.role);
+      state.loading = false;
       if (action.payload.error) {
         state.user = {} as User;
         state.userlogin = false;
@@ -233,6 +238,7 @@ const usersSlice = createSlice({
           id: "",
           email: action.payload.email,
           password: action.meta.arg.password,
+          role: "user",
         };
         state.userlogin = true;
         state.error = null;
@@ -269,33 +275,34 @@ const usersSlice = createSlice({
     });
 
     // Load User Cases:
-    builder.addCase(loadUser.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(loadUser.fulfilled, (state, action) => {
-      state.loading = false;
-      if (action.payload && action.payload.error) {
-        state.user = {} as User;
-        state.userlogin = false;
-        state.error = action.payload.error;
-      } else {
-        state.user = {
-          id: action.meta.arg.id,
-          email: action.payload.email,
-          // password: action.meta.arg.password,
-          password: "",
-        };
-        state.userlogin = true;
-        state.error = null;
-      }
-    });
-    builder.addCase(loadUser.rejected, (state, action) => {
-      state.loading = false;
-      state.user = {} as User;
-      if (action.payload && typeof action.payload === "string") {
-        state.error = action.payload;
-      }
-    });
+    // builder.addCase(loadUser.pending, (state) => {
+    //   state.loading = true;
+    // });
+    // builder.addCase(loadUser.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   if (action.payload && action.payload.error) {
+    //     state.user = {} as User;
+    //     state.userlogin = false;
+    //     state.error = action.payload.error;
+    //   } else {
+    //     state.user = {
+    //       id: action.meta.arg.id,
+    //       email: action.payload.email,
+    //       // password: action.meta.arg.password,
+    //       password: "",
+    //       role: "user",
+    //     };
+    //     state.userlogin = true;
+    //     state.error = null;
+    //   }
+    // });
+    // builder.addCase(loadUser.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.user = {} as User;
+    //   if (action.payload && typeof action.payload === "string") {
+    //     state.error = action.payload;
+    //   }
+    // });
   },
 });
 
