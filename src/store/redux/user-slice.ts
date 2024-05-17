@@ -19,7 +19,7 @@ export type User = {
   email: string;
   emailVerified?: boolean;
   password: string;
-  role: "user";
+  role: string;
 };
 
 type UserState = {
@@ -227,7 +227,6 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      console.log(action.payload.role);
       state.loading = false;
       if (action.payload.error) {
         state.user = {} as User;

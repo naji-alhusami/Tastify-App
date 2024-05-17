@@ -41,15 +41,19 @@ const Signup = ({
     setIsSignupForm(false);
   };
 
-  const onSubmit: SubmitHandler<TAuthValidator & { id: string }> = async (
-    data: User,
-    event
-  ) => {
+  const onSubmit: SubmitHandler<
+    TAuthValidator & { id: string } & { role: string }
+  > = async (data: User, event) => {
     event?.preventDefault();
 
     try {
       await dispatch(
-        signupUser({ id: data.id, email: data.email, password: data.password })
+        signupUser({
+          id: data.id,
+          email: data.email,
+          password: data.password,
+          role: data.role,
+        })
       ).unwrap();
       // console.log(user);
       setAuthIsVisible(false);
@@ -67,7 +71,9 @@ const Signup = ({
 
   return (
     <form
-      onSubmit={handleSubmit((data) => onSubmit({ id: uuidv4(), ...data }))}
+      onSubmit={handleSubmit((data) =>
+        onSubmit({ id: uuidv4(), role: "user", ...data })
+      )}
     >
       <div className="grid gap-2">
         <div className="grid gap-1 py-2">

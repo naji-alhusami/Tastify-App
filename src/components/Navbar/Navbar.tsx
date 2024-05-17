@@ -53,7 +53,9 @@ const Navbar = () => {
 
   // Check if user state exists in local storage
   const storedUserLogin = localStorage.getItem("userLogin");
-  // console.log("storedUserLogin:", storedUserLogin);
+  const storedAddress = localStorage.getItem("address");
+  // const storedLon = localStorage.getItem("lon");
+  console.log("storedAddress:", storedAddress);
   if (storedUserLogin) {
     // Parse stored user state and set Redux state
     dispatch(setUserLogin(JSON.parse(storedUserLogin)));
@@ -70,11 +72,13 @@ const Navbar = () => {
     dispatch(logoutUser());
     navigate("/");
     localStorage.removeItem("userLogin");
+    localStorage.removeItem("lat");
+    localStorage.removeItem("lon");
   };
 
   const contextValue = useContext(StateContext) as { address: string };
   const { address } = contextValue;
-
+  console.log(address);
   const heightClass = params.size > 0 ? " lg:h-16" : "h-16";
 
   return (
@@ -104,21 +108,15 @@ const Navbar = () => {
         <BasketAndCheckoutModal
           isCheckoutForm={isCheckoutForm}
           isBasketForm={isBasketForm}
-          // openBasketAndCheckout={openBasketAndCheckoutModalHandler}
           closeBasketAndCheckout={closeBasketAndCheckoutModalHandler}
         >
           {isCheckoutForm ? (
             <Checkout
-              // setThanksIsVisible={setThanksIsVisible}
               setIsBasketForm={setIsBasketForm}
               setIsCheckoutForm={setIsCheckoutForm}
             />
           ) : (
-            <BasketItems
-              setIsCheckoutForm={setIsCheckoutForm}
-
-              // setIsAuthModal={setAuthIsVisible}
-            />
+            <BasketItems setIsCheckoutForm={setIsCheckoutForm} />
           )}
         </BasketAndCheckoutModal>
       )}
@@ -150,18 +148,16 @@ const Navbar = () => {
               Tastify
             </h1>
           </div>
-          {params.size > 0 && (
-            <div className="hidden text-center  lg:flex lg:flex-row lg:items-center lg:justify-center  lg:px-12">
-              <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
-              {address ? (
-                <p className="text-rose-500 xl:max-w-xl lg:max-w-lg lg:overflow-hidden lg:whitespace-nowrap lg:overflow-ellipsis">
-                  {address}
-                </p>
-              ) : (
-                <p>Loading...</p>
-              )}
-            </div>
-          )}
+          <div className="hidden text-center  lg:flex lg:flex-row lg:items-center lg:justify-center  lg:px-12">
+            <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
+            {storedAddress ? (
+              <p className="text-rose-500 xl:max-w-xl lg:max-w-lg lg:overflow-hidden lg:whitespace-nowrap lg:overflow-ellipsis">
+                {storedAddress}
+              </p>
+            ) : (
+              <p>Loading...</p>
+            )}
+          </div>
           <div className="lg:flex lg:flex-row">
             {!userLogin ? (
               <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-10">

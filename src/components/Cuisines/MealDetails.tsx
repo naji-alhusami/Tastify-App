@@ -7,7 +7,7 @@ import { addToBasket } from "../../store/redux/basket-slice";
 
 const MealDetails = () => {
   const params = useParams();
-
+  console.log(params);
   const dispatch = useAppDispatch();
 
   const {
@@ -67,7 +67,7 @@ const MealDetails = () => {
               <div>
                 <p>Meal: {mealData.name}</p>
                 <p className="pb-4">Meal Content: {mealData.description}</p>
-                  <p className="">Price: {mealData.price}$</p>
+                <p className="">Price: {mealData.price}$</p>
               </div>
               <div>
                 <button

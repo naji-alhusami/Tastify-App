@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface LoginProps {
   setIsSignupForm: (open: boolean) => void;
@@ -28,7 +29,7 @@ const Login = ({ setIsSignupForm, setIsLoginForm }: LoginProps) => {
 
   const [error, setError] = useState<string>("");
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.users);
 
@@ -43,11 +44,17 @@ const Login = ({ setIsSignupForm, setIsLoginForm }: LoginProps) => {
     try {
       const response = await dispatch(loginUser({ email, password })).unwrap();
       console.log("response:", response.role);
-      if (response.userlogin && response.role) {
+
+      if (response.userlogin) {
         dispatch(setUserLogin(true));
         localStorage.setItem("userLogin", JSON.stringify(response.userlogin));
         setIsLoginForm(false);
-        // navigate("/cuisines");
+
+        if (response.role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/cuisines");
+        }
       }
     } catch (error) {
       console.log(error);
