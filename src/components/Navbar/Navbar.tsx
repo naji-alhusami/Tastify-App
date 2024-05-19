@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
 
-import StateContext from "../../store/context/state-context";
-import { useNavigate, useSearchParams } from "react-router-dom";
+// import StateContext from "../../store/context/state-context";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import AuthModal from "../Auth/AuthModal";
 import Signup from "../Auth/Signup";
@@ -54,16 +54,16 @@ const Navbar = () => {
   // Check if user state exists in local storage
   const storedUserLogin = localStorage.getItem("userLogin");
   const storedAddress = localStorage.getItem("address");
-  // const storedLon = localStorage.getItem("lon");
-  console.log("storedAddress:", storedAddress);
+  if (storedAddress) {
+    console.log("storedAddress:", JSON.parse(storedAddress));
+  }
   if (storedUserLogin) {
     // Parse stored user state and set Redux state
     dispatch(setUserLogin(JSON.parse(storedUserLogin)));
   }
 
   const navigate = useNavigate();
-  const [params] = useSearchParams();
-
+  const path = useLocation();
   const basketQuantity = useAppSelector((state) =>
     state.basket.items.reduce((val, item) => val + item.quantity, 0)
   );
@@ -72,14 +72,13 @@ const Navbar = () => {
     dispatch(logoutUser());
     navigate("/");
     localStorage.removeItem("userLogin");
-    localStorage.removeItem("lat");
-    localStorage.removeItem("lon");
+    localStorage.removeItem("address");
   };
 
-  const contextValue = useContext(StateContext) as { address: string };
-  const { address } = contextValue;
-  console.log(address);
-  const heightClass = params.size > 0 ? " lg:h-16" : "h-16";
+  // const contextValue = useContext(StateContext) as { address: string };
+  // const { address } = contextValue;
+
+  const heightClass = path.pathname !== "/" ? "lg:h-16" : "h-16";
 
   return (
     <>
@@ -148,16 +147,18 @@ const Navbar = () => {
               Tastify
             </h1>
           </div>
-          <div className="hidden text-center  lg:flex lg:flex-row lg:items-center lg:justify-center  lg:px-12">
-            <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
-            {storedAddress ? (
-              <p className="text-rose-500 xl:max-w-xl lg:max-w-lg lg:overflow-hidden lg:whitespace-nowrap lg:overflow-ellipsis">
-                {storedAddress}
-              </p>
-            ) : (
-              <p>Loading...</p>
-            )}
-          </div>
+          {path.pathname !== "/" && (
+            <div className="hidden text-center  lg:flex lg:flex-row lg:items-center lg:justify-center lg:px-12">
+              <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
+              {storedAddress ? (
+                <p className="text-rose-500 xl:max-w-xl lg:max-w-lg lg:overflow-hidden lg:whitespace-nowrap lg:overflow-ellipsis">
+                  {JSON.parse(storedAddress)}
+                </p>
+              ) : (
+                <p>Loading...</p>
+              )}
+            </div>
+          )}
           <div className="lg:flex lg:flex-row">
             {!userLogin ? (
               <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-10">
@@ -193,12 +194,12 @@ const Navbar = () => {
             </div>
           </div>
         </header>
-        {params.size > 0 && (
+        {path.pathname !== "/" && (
           <div className="mx-4 text-center flex flex-row items-center justify-center py-4 h-16 lg:hidden">
             <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
-            {address ? (
+            {storedAddress ? (
               <p className="text-rose-500 font-bold overflow-hidden whitespace-nowrap overflow-ellipsis">
-                {address}
+                {JSON.parse(storedAddress)}
               </p>
             ) : (
               <p>Loading...</p>
