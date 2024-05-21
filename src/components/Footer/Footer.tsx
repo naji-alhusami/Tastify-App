@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="w-full  bg-white h-16 relative z-50">
+    <footer className="w-full bg-white h-16 mt-72">
       <div className="border-t border-gray-200" />
 
-      <div className="h-full px-8 flex flex-col md:flex-row md:justify-between justify-center items-center">
+      <div className="h-full px-8 flex flex-col md:flex-row md:justify-between justify-center items-center ">
         <div className="text-center md:text-left pb-2 md:pb-0">
           <p className="text-sm text-muted-foreground">
             Tastify &copy; {new Date().getFullYear()} All rights reserved

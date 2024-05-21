@@ -11,7 +11,7 @@ function App() {
   const queryClient = new QueryClient();
 
   return (
-    <>
+    <div className="relative">
       <QueryClientProvider client={queryClient}>
         <Navbar />
         <Routes>
@@ -22,7 +22,7 @@ function App() {
         </Routes>
         <Footer />
       </QueryClientProvider>
-    </>
+    </div>
   );
 }
 

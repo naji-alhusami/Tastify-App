@@ -7,7 +7,6 @@ import { addToBasket } from "../../store/redux/basket-slice";
 
 const MealDetails = () => {
   const params = useParams();
-  console.log(params);
   const dispatch = useAppDispatch();
 
   const {
@@ -19,8 +18,6 @@ const MealDetails = () => {
     queryKey: ["meals", params.id],
     queryFn: ({ signal }) => fetchMealDetails({ signal, id: params.id }),
   });
-
-  console.log(mealData);
 
   function addToBasketHandler() {
     if (mealData) {

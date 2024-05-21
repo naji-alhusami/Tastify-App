@@ -6,6 +6,7 @@ import { FetchError, fetchMeals } from "../../lib/http";
 import Loading from "../ui/Loading";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
+import DashboardImage from "/Images/dashboard.png";
 
 export type Meal = {
   id: string;
@@ -89,15 +90,20 @@ const MealsPage = () => {
   }
 
   return (
-    <div className="mx-4 mt-4">
+    <>
       <div>
-        <h1 className="text-4xl">Choose Cuisines:</h1>
+        <img src={DashboardImage} alt="dashboard-image" />
       </div>
-      <div className="flex justify-center items-center m-4">
-        <SwiperCuisines />
+      <div className="mx-4 mt-4">
+        <div>
+          <h1 className="text-4xl">Choose Cuisines:</h1>
+        </div>
+        <div className="flex justify-center items-center m-4">
+          <SwiperCuisines />
+        </div>
+        <div>{content}</div>
       </div>
-      <div>{content}</div>
-    </div>
+    </>
   );
 };
 

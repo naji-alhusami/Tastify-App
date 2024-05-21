@@ -54,9 +54,7 @@ const Navbar = () => {
   // Check if user state exists in local storage
   const storedUserLogin = localStorage.getItem("userLogin");
   const storedAddress = localStorage.getItem("address");
-  if (storedAddress) {
-    console.log("storedAddress:", JSON.parse(storedAddress));
-  }
+
   if (storedUserLogin) {
     // Parse stored user state and set Redux state
     dispatch(setUserLogin(JSON.parse(storedUserLogin)));
@@ -137,7 +135,16 @@ const Navbar = () => {
             className="p-3 hover:rounded-full hover:bg-rose-100 cursor-pointer lg:hidden"
             onClick={openLoginModalHandler}
           >
-            <CircleUserRound className="text-rose-500 h-6 w-6 lg:hidden" />
+            {!userLogin ? (
+              <CircleUserRound className="text-rose-500 h-6 w-6 lg:hidden" />
+            ) : (
+              <button
+                onClick={logoutHandler}
+                className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
+              >
+                Logout
+              </button>
+            )}
           </div>
           <div className="ml-0 md:ml-4">
             <h1
