@@ -1,18 +1,34 @@
 import { z } from "zod";
 
+// const ImageSchema = z
+//   .string()
+//   .refine((value) => value.startsWith("data:image/"), {
+//     message: "Image must be of type data:image",
+//   });
+
 export const MealValidator = z.object({
   name: z.string().min(6, { message: "name must be at least 6 characters." }),
-  category: z.string().min(4, { message: "category must be at least 6 characters." }),
-  description: z.string().min(4, { message: "description must be at least 6 characters." }),
-  price: z.string().min(4, { message: "price must be at least 6 characters." }),
-//   zip: z.string().max(5, { message: "zip must be at max 6 numbers." }),
-//   street: z
-//     .string()
-//     .min(6, { message: "street must be at least 6 characters." }),
-//   house: z.string().min(1, { message: "house must be at max 6 numbers." }),
+  category: z
+    .string()
+    .min(4, { message: "category must be at least 6 characters." }),
+  description: z
+    .string()
+    .min(6, { message: "description must be at least 6 characters." }),
+  price: z.string().min(3, { message: "price must be at least 3 numbers." }),
+  // price: z.number(),
+  // image: z.object({
+  //   file: z.string().min(1, { message: "Please upload an image." }),
+  // }),
+  image: z.string().min(3, { message: "price must be at least 3 numbers." }),
 });
 
 export type TMealValidator = z.infer<typeof MealValidator>;
-// id: string;
-// price: number;
-// image: string;
+
+// export type Meal = {
+//   id: string;
+//   category: string;
+//   name: string;
+//   price: string;
+//   image: TMealValidator["image"]; // Use the validated image type
+//   description: string;
+// };

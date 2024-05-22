@@ -12,7 +12,7 @@ export type Meal = {
   id: string;
   category: string;
   name: string;
-  price: number;
+  price: string;
   image: string;
   description: string;
 };
