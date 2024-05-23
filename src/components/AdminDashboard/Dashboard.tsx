@@ -7,28 +7,28 @@ import {
   MealValidator,
   TMealValidator,
 } from "../../lib/validators/meal-validator";
-import { Loader2 } from "lucide-react";
-import { useAppSelector } from "../../store/redux/hooks";
+// import { Loader2 } from "lucide-react";
+// import { useAppSelector } from "../../store/redux/hooks";
 import { useMutation } from "@tanstack/react-query";
 import { AddNewMeal } from "../../lib/http";
-import { Meal } from "../Cuisines/MealsPage";
 import { v4 as uuidv4 } from "uuid";
+import { Loader2 } from "lucide-react";
+// import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 const Dashboard = () => {
-  const { loading } = useAppSelector((state) => state.users);
+  // const { loading } = useAppSelector((state) => state.users);
+  // const [selectedImage, setSelectedImage] = useState<File | null>(null);
   // const [error, setError] = useState<string>("");
 
-  const {
-    mutate,
-    //  isPending, isError, error
-  } = useMutation({
+  const { mutate, isPending, isError, error } = useMutation({
+    // mutationKey: ["meals"],
     mutationFn: AddNewMeal,
-    // onSuccess: () => {
-    //   setIsCheckoutForm(false);
-    //   setIsBasketForm(false);
-    //   navigate("/");
-    //   dispatch(clearBasket());
-    // },
+    //   // onSuccess: () => {
+    //   //   setIsCheckoutForm(false);
+    //   //   setIsBasketForm(false);
+    //   //   navigate("/");
+    //   //   dispatch(clearBasket());
+    //   // },
   });
 
   const {
@@ -40,11 +40,27 @@ const Dashboard = () => {
   });
 
   const onSubmit: SubmitHandler<TMealValidator & { id: string }> = async (
-    data: Meal
+    data: TMealValidator
   ) => {
-    console.log(data)
+    // const { id, ...formDataWithoutId } = data;
+    console.log(data);
+    console.log(data.image[0]);
     mutate(data);
   };
+
+  // const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     setSelectedImage(event.target.files[0]);
+  //   }
+  // };
+
+  // const uploadImage = async (file: File): Promise<string> => {
+  //   const storage = getStorage();
+  //   const storageRef = ref(storage, `images/${file.name}-${uuidv4()}`);
+  //   await uploadBytes(storageRef, file);
+  //   const downloadURL = await getDownloadURL(storageRef);
+  //   return downloadURL;
+  // };
 
   return (
     <div className="relative">
@@ -139,9 +155,9 @@ const Dashboard = () => {
                   type="file"
                   accept="image/*"
                 />
-                {errors?.image && (
+                {/* {errors?.image && (
                   <p className="text-sm text-red-500">{errors.image.message}</p>
-                )}
+                )} */}
                 {/* {error && <p className="text-sm text-red-500">{error}</p>} */}
               </div>
               <div>
@@ -149,12 +165,13 @@ const Dashboard = () => {
                   type="submit"
                   className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
                 >
-                  {loading ? (
+                  {isPending ? (
                     <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
                   ) : (
-                    "Add Meal"
+                    " Add Meal"
                   )}
                 </button>
+                {isError && <p>{error.message || "error"}</p>}
               </div>
             </div>
           </form>

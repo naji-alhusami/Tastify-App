@@ -7,15 +7,16 @@ import Loading from "../ui/Loading";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
 import DashboardImage from "/Images/dashboard.png";
+import { TMealValidator } from "../../lib/validators/meal-validator";
 
-export type Meal = {
-  id: string;
-  category: string;
-  name: string;
-  price: string;
-  image: string;
-  description: string;
-};
+// export type Meal = {
+//   id: string;
+//   category: string;
+//   name: string;
+//   price: string;
+//   image: 
+//   description: string;
+// };
 
 const MealsPage = () => {
   // const [params] = useSearchParams();
@@ -70,8 +71,8 @@ const MealsPage = () => {
   } else if (filteredMealsData) {
     content = (
       <div className="flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
-        {filteredMealsData.map((meal: Meal) => (
-          <div key={meal.id}>
+        {filteredMealsData.map((meal: TMealValidator) => (
+          <div key={meal.name}>
             <Meals {...meal} />
           </div>
         ))}
@@ -80,8 +81,8 @@ const MealsPage = () => {
   } else if (allMealsData) {
     content = (
       <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
-        {allMealsData.map((meal: Meal) => (
-          <div key={meal.id}>
+        {allMealsData.map((meal: TMealValidator) => (
+          <div key={meal.name}>
             <Meals {...meal} />
           </div>
         ))}
