@@ -1,4 +1,6 @@
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Order } from "../components/BasketAndCheckout/Checkout";
+import { storage } from "../firebase-config";
 // import { Meal } from "../components/Cuisines/MealsPage";
 import { TMealValidator } from "./validators/meal-validator";
 
@@ -30,7 +32,6 @@ export async function fetchMeals({
     "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json",
     { signal: signal }
   );
-
   if (!response.ok) {
     console.log("res not ok");
     const info = await response.json();
@@ -38,6 +39,7 @@ export async function fetchMeals({
   }
 
   const data = await response.json();
+  console.log("response:",data)
 
   if (isRestaurant) {
     const filteredMeals = data.filter(
@@ -55,6 +57,8 @@ export async function fetchMeals({
     console.log(mealDetails);
     return mealDetails;
   }
+
+  console.log(data);
   return data;
 }
 
@@ -115,6 +119,22 @@ export async function AddNewMeal(meal: TMealValidator) {
   const { name, category, price, image, description } = meal;
   console.log(name, category, price, image, description);
 
+  const metadata = {
+    contentType: image.type,
+  };
+
+  const storageRef = ref(storage, `${image.name}/${image.name}`);
+  const snapshot = await uploadBytes(storageRef, image, metadata);
+  const downloadUrl = await getDownloadURL(snapshot.ref);
+
+  const newMeal = {
+    name,
+    category,
+    price,
+    description,
+    imageUrl: downloadUrl,
+  };
+
   const response = await fetch(
     "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json",
     {
@@ -122,7 +142,7 @@ export async function AddNewMeal(meal: TMealValidator) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(meal),
+      body: JSON.stringify(newMeal),
     }
   );
 
@@ -132,8 +152,8 @@ export async function AddNewMeal(meal: TMealValidator) {
     throw new FetchError("Error occurred", response.status, info);
   }
 
-  const { mealss } = await response.json();
-  console.log(mealss)
+  const mealss = await response.json();
+  console.log(mealss);
 
   return mealss;
 }
