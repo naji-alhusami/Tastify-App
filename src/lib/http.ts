@@ -3,6 +3,10 @@ import { Order } from "../components/BasketAndCheckout/Checkout";
 import { storage } from "../firebase-config";
 // import { Meal } from "../components/Cuisines/MealsPage";
 import { TMealValidator } from "./validators/meal-validator";
+import { QueryClient } from "@tanstack/react-query";
+// import { Meal } from "../components/Cuisines/MealsPage";
+
+export const queryClient = new QueryClient();
 
 export class FetchError extends Error {
   code: number;
@@ -39,10 +43,15 @@ export async function fetchMeals({
   }
 
   const data = await response.json();
-  console.log("response:",data)
+  console.log("response:", data);
+
+  const convertedMeals = Object.keys(data).map((key) => ({
+    id: key,
+    ...data[key],
+  }));
 
   if (isRestaurant) {
-    const filteredMeals = data.filter(
+    const filteredMeals = convertedMeals.filter(
       (meal: TMealValidator) => meal.category === isRestaurant
     );
 
@@ -52,14 +61,16 @@ export async function fetchMeals({
 
   if (id) {
     console.log(id);
-    const mealDetails = data.filter((meal: TMealValidator) => meal.id === id);
+    const mealDetails = convertedMeals.filter(
+      (meal: TMealValidator) => meal.id === id
+    );
 
     console.log(mealDetails);
     return mealDetails;
   }
 
-  console.log(data);
-  return data;
+  console.log(convertedMeals);
+  return convertedMeals;
 }
 
 export async function fetchMealDetails({
@@ -115,16 +126,22 @@ export async function sendOrders(orders: Order) {
   return order;
 }
 
-export async function AddNewMeal(meal: TMealValidator) {
-  const { name, category, price, image, description } = meal;
+export async function AddNewMeal(newMealInfo: TMealValidator) {
+  const { name, category, price, image, description } = newMealInfo;
   console.log(name, category, price, image, description);
+
+  const imageFile = image[0];
+
+  if (!imageFile) {
+    throw new Error("No file selected");
+  }
 
   const metadata = {
     contentType: image.type,
   };
 
-  const storageRef = ref(storage, `${image.name}/${image.name}`);
-  const snapshot = await uploadBytes(storageRef, image, metadata);
+  const storageRef = ref(storage, `${name}`);
+  const snapshot = await uploadBytes(storageRef, imageFile, metadata);
   const downloadUrl = await getDownloadURL(snapshot.ref);
 
   const newMeal = {
@@ -149,11 +166,10 @@ export async function AddNewMeal(meal: TMealValidator) {
   if (!response.ok) {
     console.log("res not ok");
     const info = await response.json();
-    throw new FetchError("Error occurred", response.status, info);
+    throw new FetchError("Error occurred", response.status, info); // to check
   }
 
-  const mealss = await response.json();
-  console.log(mealss);
+  const meal = await response.json();
 
-  return mealss;
+  return meal;
 }

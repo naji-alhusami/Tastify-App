@@ -1,14 +1,22 @@
 import { Bike } from "lucide-react";
 import { addToBasket } from "../../store/redux/basket-slice";
 import { useAppDispatch } from "../../store/redux/hooks";
-import { Meal } from "./MealsPage";
+// import { Meal } from "./MealsPage";
 import { Link } from "react-router-dom";
+import { TMealValidator } from "../../lib/validators/meal-validator";
 
-export default function Meals({ id, category, name, price, image }: Meal) {
+export default function Meals({
+  id,
+  category,
+  name,
+  price,
+  image,
+}: TMealValidator) {
   const dispatch = useAppDispatch();
 
   function addToBasketHandler() {
-    dispatch(addToBasket({ id, name, price }));
+    const numericPrice = parseFloat(price);
+    dispatch(addToBasket({ id, name, price: numericPrice }));
   }
 
   return (

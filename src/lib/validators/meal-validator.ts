@@ -10,6 +10,7 @@ import { z } from "zod";
 
 export const MealValidator = z.object({
   id: z.string().optional(),
+  // id: z.string().min(1, { message: "name must be at least 6 characters." }),
   name: z.string().min(6, { message: "name must be at least 6 characters." }),
   category: z
     .string()
@@ -17,6 +18,9 @@ export const MealValidator = z.object({
   description: z
     .string()
     .min(6, { message: "description must be at least 6 characters." }),
+  // price: z.union([z.string(), z.number()]),
+
+  // price: z.number().positive({ message: "Price must be a positive number." }),
   price: z.string().min(3, { message: "price must be at least 3 numbers." }),
   image: z.any().refine((files) => files?.length == 1, "Image is required."),
   // .refine(

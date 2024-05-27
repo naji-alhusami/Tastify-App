@@ -43,7 +43,7 @@ const Login = ({ setIsSignupForm, setIsLoginForm }: LoginProps) => {
 
     try {
       const response = await dispatch(loginUser({ email, password })).unwrap();
-      console.log("response:", response.role);
+      // console.log("response:", response.role);
 
       if (response.userlogin) {
         dispatch(setUserLogin(true));

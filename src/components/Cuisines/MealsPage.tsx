@@ -14,7 +14,7 @@ import { TMealValidator } from "../../lib/validators/meal-validator";
 //   category: string;
 //   name: string;
 //   price: string;
-//   image: 
+//   image: string;
 //   description: string;
 // };
 
@@ -33,7 +33,7 @@ const MealsPage = () => {
     staleTime: 5000, // this ensure that the data will not be fetched from cache always, but in every 5 sec
     // gcTime:1000 this is the time that talk about how much the data will kept around
   });
-
+  
   const contextValue = useContext(StateContext) as { isRestaurant: string };
 
   const { isRestaurant } = contextValue;
@@ -72,7 +72,7 @@ const MealsPage = () => {
     content = (
       <div className="flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
         {filteredMealsData.map((meal: TMealValidator) => (
-          <div key={meal.name}>
+          <div key={meal.id}>
             <Meals {...meal} />
           </div>
         ))}
@@ -82,7 +82,7 @@ const MealsPage = () => {
     content = (
       <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
         {allMealsData.map((meal: TMealValidator) => (
-          <div key={meal.name}>
+          <div key={meal.id}>
             <Meals {...meal} />
           </div>
         ))}
