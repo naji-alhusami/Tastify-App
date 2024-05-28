@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { FetchError, fetchMealDetails } from "../../lib/http";
+import { fetchMealDetails } from "../../lib/http";
+import { FetchError } from "../../lib/http/error";
 import Loading from "../ui/Loading";
 import { useAppDispatch } from "../../store/redux/hooks";
 import { addToBasket } from "../../store/redux/basket-slice";

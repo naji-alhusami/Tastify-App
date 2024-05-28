@@ -7,16 +7,15 @@ import {
   TMealValidator,
 } from "../../lib/validators/meal-validator";
 import { useMutation } from "@tanstack/react-query";
-import { AddNewMeal, queryClient } from "../../lib/http";
+import { queryClient } from "../../lib/http";
+import { AddNewMeal } from "../../lib/http/AddNewMeal";
 // import { v4 as uuidv4 } from "uuid";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Meal } from "../Cuisines/MealsPage";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  // const { loading } = useAppSelector((state) => state.users);
-  // const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  // const [error, setError] = useState<string>("");
 
   const { mutate, isPending, isError, error } = useMutation({
     // mutationKey: ["meals"],
@@ -35,9 +34,7 @@ const Dashboard = () => {
     resolver: zodResolver(MealValidator),
   });
 
-  const onSubmit: SubmitHandler<TMealValidator & { id: string }> = async (
-    data: TMealValidator
-  ) => {
+  const onSubmit: SubmitHandler<TMealValidator> = async (data: Meal) => {
     console.log(data);
     mutate(data);
   };
@@ -53,11 +50,11 @@ const Dashboard = () => {
       >
         <div className=" w-full bg-slate-200 bg-opacity-80 p-14 pb-6">
           <form
-            // onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
             // onSubmit={handleSubmit((data) =>
             //   onSubmit({ id: uuidv4(), ...data })
             // )}
-            onSubmit={handleSubmit((data) => onSubmit(data))}
+            // onSubmit={handleSubmit((data) => onSubmit(data))}
           >
             <div className="grid gap-2 w-full">
               <div className="flex flex-col md:flex-row md:justify-between md:w-full">
@@ -73,9 +70,7 @@ const Dashboard = () => {
                       {errors.name.message}
                     </p>
                   )}
-                  {/* {error && <p className="text-sm text-red-500">{error}</p>} */}
                 </div>
-
                 <div className="grid gap-1 py-2 w-full md:mr-6">
                   <label htmlFor="password">Category</label>
                   <select
@@ -83,22 +78,16 @@ const Dashboard = () => {
                     className={`
               focus-visible:ring-red-500 h-8 ${errors.category}
            `}
-                    // placeholder="Category"
                   >
                     <option value="">Select a category</option>
                     <option value="BURGERS">BURGERS</option>
                     <option value="DESERTS">DESERTS</option>
                   </select>
-                  {/* {errors?.password && (
-                <p className="text-sm text-red-500">
-                  {errors.password.message}
-                </p>
-              )} */}
                 </div>
                 <div className="grid gap-1 py-2 w-full">
                   <label htmlFor="name">Price</label>
                   <Input
-                    {...register("price")}
+                    {...register("price", { valueAsNumber: true })}
                     className={`focus-visible:ring-red-500 ${errors.price}`}
                     placeholder="Price"
                     type="number"
@@ -109,7 +98,6 @@ const Dashboard = () => {
                       {errors.price.message}
                     </p>
                   )}
-                  {/* {error && <p className="text-sm text-red-500">{error}</p>} */}
                 </div>
               </div>
               <div className="grid gap-1 py-2">
@@ -137,10 +125,9 @@ const Dashboard = () => {
                   type="file"
                   accept="image/*"
                 />
-                {/* {errors?.image && (
+                {errors?.image && (
                   <p className="text-sm text-red-500">{errors.image.message}</p>
-                )} */}
-                {/* {error && <p className="text-sm text-red-500">{error}</p>} */}
+                )}
               </div>
               <div>
                 <button

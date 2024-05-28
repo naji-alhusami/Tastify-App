@@ -1,22 +1,21 @@
-// import { useSearchParams } from "react-router-dom";
 import Meals from "./Meals";
 import SwiperCuisines from "./SwiperCuisines";
 import { useQuery } from "@tanstack/react-query";
-import { FetchError, fetchMeals } from "../../lib/http";
+import { fetchMeals } from "../../lib/http";
 import Loading from "../ui/Loading";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
 import DashboardImage from "/Images/dashboard.png";
-import { TMealValidator } from "../../lib/validators/meal-validator";
+import { FetchError } from "../../lib/http/error";
 
-// export type Meal = {
-//   id: string;
-//   category: string;
-//   name: string;
-//   price: string;
-//   image: string;
-//   description: string;
-// };
+export type Meal = {
+  id?: string;
+  category: string;
+  name: string;
+  price: number;
+  image: FileList;
+  description: string;
+};
 
 const MealsPage = () => {
   // const [params] = useSearchParams();
@@ -33,7 +32,7 @@ const MealsPage = () => {
     staleTime: 5000, // this ensure that the data will not be fetched from cache always, but in every 5 sec
     // gcTime:1000 this is the time that talk about how much the data will kept around
   });
-  
+  console.log(allMealsPending);
   const contextValue = useContext(StateContext) as { isRestaurant: string };
 
   const { isRestaurant } = contextValue;
@@ -57,21 +56,22 @@ const MealsPage = () => {
       allMealsError instanceof FetchError ||
       filteredMealsError instanceof FetchError
     ) {
+      const error =
+        allMealsError instanceof FetchError
+          ? allMealsError
+          : (filteredMealsError as FetchError);
       content = (
-        <div>
+        <div className="text-center text-xl h-[350px] text-rose-500">
           <h1>
-            Error occurred:
-            {allMealsError?.message || filteredMealsError?.message}
+            {error.message} - {error.info}
           </h1>
-          {/* <p>Error code: {allMealsError?.code || filteredMealsError?.code}</p>
-          <p>Error info: {allMealsError?.info || filteredMealsError?.info}</p> */}
         </div>
       );
     }
   } else if (filteredMealsData) {
     content = (
       <div className="flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
-        {filteredMealsData.map((meal: TMealValidator) => (
+        {filteredMealsData.map((meal: Meal) => (
           <div key={meal.id}>
             <Meals {...meal} />
           </div>
@@ -81,7 +81,7 @@ const MealsPage = () => {
   } else if (allMealsData) {
     content = (
       <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
-        {allMealsData.map((meal: TMealValidator) => (
+        {allMealsData.map((meal: Meal) => (
           <div key={meal.id}>
             <Meals {...meal} />
           </div>

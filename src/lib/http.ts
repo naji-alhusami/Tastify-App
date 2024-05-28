@@ -1,23 +1,12 @@
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Order } from "../components/BasketAndCheckout/Checkout";
-import { storage } from "../firebase-config";
+import { Meal } from "../components/Cuisines/MealsPage";
+import { FetchError } from "./http/error";
 // import { Meal } from "../components/Cuisines/MealsPage";
 import { TMealValidator } from "./validators/meal-validator";
 import { QueryClient } from "@tanstack/react-query";
 // import { Meal } from "../components/Cuisines/MealsPage";
 
 export const queryClient = new QueryClient();
-
-export class FetchError extends Error {
-  code: number;
-  info: string;
-
-  constructor(message: string, code: number, info: string) {
-    super(message);
-    this.code = code;
-    this.info = info;
-  }
-}
 
 interface FetchMealsOptions {
   signal?: AbortSignal; // Type for signal, assuming you're using AbortController
@@ -37,9 +26,9 @@ export async function fetchMeals({
     { signal: signal }
   );
   if (!response.ok) {
-    console.log("res not ok");
     const info = await response.json();
-    throw new FetchError("Error occurred", response.status, info);
+
+    throw new FetchError("Error occurred", info.error);
   }
 
   const data = await response.json();
@@ -55,15 +44,12 @@ export async function fetchMeals({
       (meal: TMealValidator) => meal.category === isRestaurant
     );
 
-    // console.log(filteredMeals);
     return filteredMeals;
   }
 
   if (id) {
     console.log(id);
-    const mealDetails = convertedMeals.filter(
-      (meal: TMealValidator) => meal.id === id
-    );
+    const mealDetails = convertedMeals.filter((meal: Meal) => meal.id === id);
 
     console.log(mealDetails);
     return mealDetails;
@@ -76,7 +62,7 @@ export async function fetchMeals({
 export async function fetchMealDetails({
   signal,
   id,
-}: FetchMealsOptions): Promise<TMealValidator> {
+}: FetchMealsOptions): Promise<Meal> {
   console.log(id);
   const response = await fetch(
     `https://food-order-e25e0-default-rtdb.firebaseio.com/meals/${id}.json`,
@@ -86,7 +72,7 @@ export async function fetchMealDetails({
   if (!response.ok) {
     console.log("res not ok");
     const info = await response.json();
-    throw new FetchError("Error occurred", response.status, info);
+    throw new FetchError("Error occurred", info);
   }
 
   const data = await response.json();
@@ -118,7 +104,7 @@ export async function sendOrders(orders: Order) {
   if (!response.ok) {
     console.log("res not ok");
     const info = await response.json();
-    throw new FetchError("Error occurred", response.status, info);
+    throw new FetchError("Error occurred", info);
   }
 
   const { order } = await response.json();
@@ -126,50 +112,50 @@ export async function sendOrders(orders: Order) {
   return order;
 }
 
-export async function AddNewMeal(newMealInfo: TMealValidator) {
-  const { name, category, price, image, description } = newMealInfo;
-  console.log(name, category, price, image, description);
+// export async function AddNewMeal(newMealInfo: TMealValidator) {
+//   const { name, category, price, image, description } = newMealInfo;
+//   console.log(name, category, price, image, description);
 
-  const imageFile = image[0];
+//   const imageFile = image[0];
 
-  if (!imageFile) {
-    throw new Error("No file selected");
-  }
+//   if (!imageFile) {
+//     throw new Error("No file selected");
+//   }
 
-  const metadata = {
-    contentType: image.type,
-  };
+//   const metadata = {
+//     contentType: image.type,
+//   };
 
-  const storageRef = ref(storage, `${name}`);
-  const snapshot = await uploadBytes(storageRef, imageFile, metadata);
-  const downloadUrl = await getDownloadURL(snapshot.ref);
+//   const storageRef = ref(storage, `${name}`);
+//   const snapshot = await uploadBytes(storageRef, imageFile, metadata);
+//   const downloadUrl = await getDownloadURL(snapshot.ref);
 
-  const newMeal = {
-    name,
-    category,
-    price,
-    description,
-    imageUrl: downloadUrl,
-  };
+//   const newMeal = {
+//     name,
+//     category,
+//     price,
+//     description,
+//     imageUrl: downloadUrl,
+//   };
 
-  const response = await fetch(
-    "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newMeal),
-    }
-  );
+//   const response = await fetch(
+//     "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json",
+//     {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(newMeal),
+//     }
+//   );
 
-  if (!response.ok) {
-    console.log("res not ok");
-    const info = await response.json();
-    throw new FetchError("Error occurred", response.status, info); // to check
-  }
+//   if (!response.ok) {
+//     console.log("res not ok");
+//     const info = await response.json();
+//     throw new FetchError("Error occurred", response.status, info); // to check
+//   }
 
-  const meal = await response.json();
+//   const meal = await response.json();
 
-  return meal;
-}
+//   return meal;
+// }
