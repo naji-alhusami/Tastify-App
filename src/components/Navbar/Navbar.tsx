@@ -16,23 +16,30 @@ import BasketItems from "../BasketAndCheckout/Basket";
 
 const Navbar = () => {
   // Authentication (Signup and Login)
+  const [isAuth, setIsAuth] = useState<boolean>(false);
   const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
-  const [isSignupForm, setIsSignupForm] = useState<boolean>(false);
+  const [isSignupBuyerForm, setIsSignupBuyerForm] = useState<boolean>(false);
+  const [isSignupSellerForm, setIsSignupSellerForm] = useState<boolean>(false);
   const [isThanks, setIsThanks] = useState<boolean>(false);
 
   const openSignupModalHandler = () => {
-    setIsSignupForm(true);
+    setIsSignupBuyerForm(true);
     setIsLoginForm(true);
   };
 
   const openLoginModalHandler = () => {
+    setIsAuth(true);
     setIsLoginForm(true);
-    setIsSignupForm(false);
+    setIsSignupBuyerForm(false);
+    setIsSignupSellerForm(false);
     setIsThanks(false);
   };
 
   const closeAuthModalHandler = () => {
+    setIsAuth(false);
     setIsLoginForm(false);
+    setIsSignupBuyerForm(false);
+    setIsSignupSellerForm(false);
     setIsThanks(false);
   };
 
@@ -80,21 +87,28 @@ const Navbar = () => {
 
   return (
     <>
-      {isLoginForm && (
+      {isAuth && (
         <AuthModal
+          openAuth={isAuth}
           closeAuth={closeAuthModalHandler}
-          isSignupForm={isSignupForm}
-          openAuth={isLoginForm}
+          isLoginForm={isLoginForm}
+          isSignupBuyerForm={isSignupBuyerForm}
+          setIsSignupBuyerForm={setIsSignupBuyerForm}
+          isSignupSellerForm={isSignupSellerForm}
         >
-          {isSignupForm ? (
+          {isSignupBuyerForm || isSignupSellerForm ? (
             <Signup
+              isSignupBuyerForm={isSignupBuyerForm}
+              isSignupSellerForm={isSignupSellerForm}
               setAuthIsVisible={setIsLoginForm}
-              setIsSignupForm={setIsSignupForm}
+              setIsSignupBuyerForm={setIsSignupBuyerForm}
+              setIsLoginForm={setIsLoginForm}
               setIsThanks={setIsThanks}
+              setIsSignupSellerForm={setIsSignupSellerForm}
             />
           ) : (
             <Login
-              setIsSignupForm={setIsSignupForm}
+              setIsSignupBuyerForm={setIsSignupBuyerForm}
               setIsLoginForm={setIsLoginForm}
             />
           )}

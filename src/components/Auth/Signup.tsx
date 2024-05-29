@@ -16,13 +16,21 @@ import { Loader2 } from "lucide-react";
 interface SignupProps {
   setIsThanks: (open: boolean) => void;
   setAuthIsVisible: (open: boolean) => void;
-  setIsSignupForm: (open: boolean) => void;
+  setIsSignupBuyerForm: (open: boolean) => void;
+  setIsLoginForm: (open: boolean) => void;
+  setIsSignupSellerForm: (open: boolean) => void;
+  isSignupBuyerForm: boolean;
+  isSignupSellerForm: boolean;
 }
 
 const Signup = ({
   setIsThanks,
   setAuthIsVisible,
-  setIsSignupForm,
+  setIsSignupBuyerForm,
+  isSignupBuyerForm,
+  isSignupSellerForm,
+  setIsSignupSellerForm,
+  setIsLoginForm,
 }: SignupProps) => {
   const [error, setError] = useState<string>("");
 
@@ -38,8 +46,21 @@ const Signup = ({
   });
 
   const loginFormHandler = () => {
-    setIsSignupForm(false);
+    setIsLoginForm(true);
+    setIsSignupBuyerForm(false);
+    setIsSignupSellerForm(false);
   };
+
+  function SignupSellerHandler() {
+    setIsLoginForm(false);
+    setIsSignupSellerForm(true);
+    setIsSignupBuyerForm(false);
+  }
+
+  function SignupBuyerHandler() {
+    setIsSignupBuyerForm(true);
+    setIsSignupSellerForm(false);
+  }
 
   const onSubmit: SubmitHandler<
     TAuthValidator & { id: string } & { role: string }
@@ -76,6 +97,23 @@ const Signup = ({
       )}
     >
       <div className="grid gap-2">
+        {isSignupSellerForm && (
+          <div className="grid gap-1 py-2">
+            <label htmlFor="email">Restaurant Name</label>
+            <Input
+              {...register("restaurant")}
+              className={`focus-visible:ring-red-500 ${errors.restaurant}
+          `}
+              placeholder="you@example.com"
+            />
+            {errors?.restaurant && (
+              <p className="text-sm text-red-500">
+                {errors.restaurant.message}
+              </p>
+            )}
+            {error && <p className="text-sm text-red-500">{error}</p>}
+          </div>
+        )}
         <div className="grid gap-1 py-2">
           <label htmlFor="email">Email</label>
           <Input
@@ -90,7 +128,7 @@ const Signup = ({
           {error && <p className="text-sm text-red-500">{error}</p>}
         </div>
 
-        <div className="grid gap-1 py-2 pb-8">
+        <div className="grid gap-1 py-2 ">
           <label htmlFor="password">Password</label>
           <Input
             {...register("password")}
@@ -104,10 +142,10 @@ const Signup = ({
             <p className="text-sm text-red-500">{errors.password.message}</p>
           )}
         </div>
-        <div>
+        <div className="flex flex-row justify-center items-center">
           <button
             type="submit"
-            className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
+            className="flex flex-row items-center justify-center px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
           >
             {loading ? (
               <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
@@ -123,8 +161,8 @@ const Signup = ({
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-6 text-muted-foreground">
-                Already A Member?
+              <span className="bg-white px-6 text-muted-foreground text-center">
+                Already Member?
               </span>
             </div>
           </div>
@@ -135,6 +173,41 @@ const Signup = ({
             Log in
           </button>
         </div>
+
+        <div className="relative py-4">
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center"
+          >
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white px-2 text-muted-foreground">or</span>
+          </div>
+        </div>
+        {isSignupBuyerForm ? (
+          <div className="w-full">
+            <button
+              type="button"
+              onClick={SignupSellerHandler}
+              className="w-full bg-gray-300 hover:bg-gray-500 rounded-md px-4 py-2"
+            >
+              Signup as Seller
+            </button>
+          </div>
+        ) : (
+          isSignupSellerForm && (
+            <div className="w-full">
+              <button
+                type="button"
+                onClick={SignupBuyerHandler}
+                className="w-full bg-gray-300 hover:bg-gray-500 rounded-md px-4 py-2"
+              >
+                Signup as Buyer
+              </button>
+            </div>
+          )
+        )}
       </div>
     </form>
   );

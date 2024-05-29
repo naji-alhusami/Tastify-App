@@ -7,18 +7,27 @@ import { type ReactNode } from "react";
 import Modal from "../ui/Modal.tsx";
 
 interface AuthModalProps {
-  closeAuth: () => void; //finish
-  isSignupForm: boolean;
-  children: ReactNode;
   openAuth: boolean;
+  closeAuth: () => void;
+  isLoginForm: boolean;
+  isSignupBuyerForm: boolean;
+  setIsSignupBuyerForm: (open: boolean) => void;
+  isSignupSellerForm: boolean;
+  children: ReactNode;
 }
 
 export default function AuthModal({
-  closeAuth,
   openAuth,
-  isSignupForm,
+  closeAuth,
+  isLoginForm,
+  isSignupBuyerForm,
+  isSignupSellerForm,
   children,
 }: AuthModalProps) {
+  console.log("isSignupBuyerForm", isSignupBuyerForm);
+  console.log("isSignupSellerForm", isSignupSellerForm);
+  console.log("isLoginForm", isLoginForm);
+
   return createPortal(
     <Modal>
       {openAuth && <Backdrop onClick={closeAuth} />}
@@ -28,10 +37,25 @@ export default function AuthModal({
         className="text-rose-500 h-8 w-8 self-end hover:bg-rose-200 hover:rounded-full cursor-pointer"
       />
 
-      <h1 className="font-bold text-2xl pb-4 text-center">Welcome</h1>
-      <h1 className="text-md pb-6 text-center">
-        {isSignupForm ? "Sign-up to continue" : "Login to continue"}
-      </h1>
+      <h1 className="font-bold text-2xl pb-4 text-center">Welcome!</h1>
+      <div className="flex flex-row justify-center items-center pb-6">
+        <h1 className="text-md text-center pr-2">
+          {isSignupSellerForm
+            ? "Signup to continue"
+            : isSignupBuyerForm
+            ? "Signup to continue"
+            : isLoginForm
+            ? "Login to continue"
+            : null}
+        </h1>
+        <h1 className="text-center font-bold text-rose-500">
+          {isSignupSellerForm
+            ? "(As Seller)"
+            : isSignupBuyerForm
+            ? "(As Buyer)"
+            : null}
+        </h1>
+      </div>
       {children}
     </Modal>,
     document.getElementById("modal")!

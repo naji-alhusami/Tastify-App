@@ -14,11 +14,11 @@ import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface LoginProps {
-  setIsSignupForm: (open: boolean) => void;
+  setIsSignupBuyerForm: (open: boolean) => void;
   setIsLoginForm: (open: boolean) => void;
 }
 
-const Login = ({ setIsSignupForm, setIsLoginForm }: LoginProps) => {
+const Login = ({ setIsSignupBuyerForm, setIsLoginForm }: LoginProps) => {
   const {
     register,
     handleSubmit,
@@ -34,7 +34,8 @@ const Login = ({ setIsSignupForm, setIsLoginForm }: LoginProps) => {
   const { loading } = useAppSelector((state) => state.users);
 
   const SignupFormHandler = () => {
-    setIsSignupForm(true);
+    setIsSignupBuyerForm(true);
+    setIsLoginForm(false);
   };
 
   const onSubmit: SubmitHandler<TAuthValidator> = async (data) => {
@@ -110,10 +111,10 @@ const Login = ({ setIsSignupForm, setIsLoginForm }: LoginProps) => {
               {error}
             </p>
           )}
-          <div>
+          <div className="flex flex-row justify-center items-center">
             <button
               type="submit"
-              className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
+              className="flex flex-row items-center justify-center px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
             >
               {loading ? (
                 <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
@@ -128,7 +129,7 @@ const Login = ({ setIsSignupForm, setIsLoginForm }: LoginProps) => {
               >
                 <span className="w-full border-t" />
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
+              <div className="relative flex justify-center text-xs uppercase text-center">
                 <span className="bg-white px-6 text-muted-foreground">
                   Not A Member?
                 </span>
