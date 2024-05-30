@@ -21,10 +21,10 @@ const Navbar = () => {
   const [isSignupBuyerForm, setIsSignupBuyerForm] = useState<boolean>(false);
   const [isSignupSellerForm, setIsSignupSellerForm] = useState<boolean>(false);
   const [isThanks, setIsThanks] = useState<boolean>(false);
-
+  
   const openSignupModalHandler = () => {
+    setIsAuth(true);
     setIsSignupBuyerForm(true);
-    setIsLoginForm(true);
   };
 
   const openLoginModalHandler = () => {
@@ -100,7 +100,7 @@ const Navbar = () => {
             <Signup
               isSignupBuyerForm={isSignupBuyerForm}
               isSignupSellerForm={isSignupSellerForm}
-              setAuthIsVisible={setIsLoginForm}
+              setIsAuth={setIsAuth}
               setIsSignupBuyerForm={setIsSignupBuyerForm}
               setIsLoginForm={setIsLoginForm}
               setIsThanks={setIsThanks}

@@ -24,9 +24,9 @@ export default function AuthModal({
   isSignupSellerForm,
   children,
 }: AuthModalProps) {
-  console.log("isSignupBuyerForm", isSignupBuyerForm);
-  console.log("isSignupSellerForm", isSignupSellerForm);
-  console.log("isLoginForm", isLoginForm);
+  // console.log("isSignupBuyerForm", isSignupBuyerForm);
+  // console.log("isSignupSellerForm", isSignupSellerForm);
+  // console.log("isLoginForm", isLoginForm);
 
   return createPortal(
     <Modal>

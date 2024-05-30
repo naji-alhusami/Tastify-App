@@ -92,7 +92,7 @@ const Login = ({ setIsSignupBuyerForm, setIsLoginForm }: LoginProps) => {
             )}
           </div>
 
-          <div className="grid gap-1 py-2 pb-8">
+          <div className="grid gap-1 py-2">
             <label htmlFor="password">Password</label>
             <Input
               {...register("password")}

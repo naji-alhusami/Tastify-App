@@ -20,6 +20,7 @@ export type User = {
   emailVerified?: boolean;
   password: string;
   role: string;
+  restaurant?: string;
 };
 
 type UserState = {
@@ -41,10 +42,13 @@ export const signupUser = createAsyncThunk<
   {
     id: string;
     email: string;
+    role: string;
+    restaurant?: string;
   },
   User
 >("user/signupUser", async (payload, thunkApi) => {
-  const { id, email, password } = payload;
+  const { id, email, password, role, restaurant } = payload;
+  
   try {
     const { user } = await createUserWithEmailAndPassword(
       auth,
@@ -61,14 +65,17 @@ export const signupUser = createAsyncThunk<
       id,
       email,
       password,
-      role: "user",
+      role,
+      ...(role === "seller" && { restaurant }),
     });
 
     const userData = {
       id: id,
       email: email,
-      role: "user",
+      role,
+      ...(role === "seller" && { restaurant }),
     };
+    console.log("userData:", userData);
 
     return userData;
   } catch (error) {
@@ -208,7 +215,10 @@ const usersSlice = createSlice({
         id: action.payload.id,
         email: action.payload.email,
         password: action.meta.arg.password,
-        role: "user",
+        role: action.payload.role,
+        ...(action.payload.role === "seller" && {
+          restaurant: action.payload.restaurant,
+        }),
       };
       // state.error = false;
     });

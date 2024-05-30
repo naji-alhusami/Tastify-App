@@ -2,7 +2,9 @@ import { Input } from "../ui/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  AuthValidator,
+  // AuthValidator,
+  BuyerAuthValidator,
+  SellerAuthValidator,
   type TAuthValidator,
 } from "../../lib/validators/account-validator";
 import { User, signupUser } from "../../store/redux/user-slice";
@@ -15,7 +17,7 @@ import { Loader2 } from "lucide-react";
 
 interface SignupProps {
   setIsThanks: (open: boolean) => void;
-  setAuthIsVisible: (open: boolean) => void;
+  setIsAuth: (open: boolean) => void;
   setIsSignupBuyerForm: (open: boolean) => void;
   setIsLoginForm: (open: boolean) => void;
   setIsSignupSellerForm: (open: boolean) => void;
@@ -25,7 +27,7 @@ interface SignupProps {
 
 const Signup = ({
   setIsThanks,
-  setAuthIsVisible,
+  setIsAuth,
   setIsSignupBuyerForm,
   isSignupBuyerForm,
   isSignupSellerForm,
@@ -37,12 +39,16 @@ const Signup = ({
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.users);
 
+  const currentValidator = isSignupSellerForm
+    ? SellerAuthValidator
+    : BuyerAuthValidator;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<TAuthValidator>({
-    resolver: zodResolver(AuthValidator),
+    resolver: zodResolver(currentValidator),
   });
 
   const loginFormHandler = () => {
@@ -63,21 +69,26 @@ const Signup = ({
   }
 
   const onSubmit: SubmitHandler<
-    TAuthValidator & { id: string } & { role: string }
+    TAuthValidator & { id: string; role: string }
   > = async (data: User, event) => {
     event?.preventDefault();
 
     try {
+      // // Include restaurant only if the form is for a seller
+      // if (isSignupSellerForm && "restaurant" in data) {
+      //   userData.restaurant = data.restaurant;
+      // }
+
       await dispatch(
         signupUser({
           id: data.id,
           email: data.email,
           password: data.password,
-          role: data.role,
+          role: isSignupSellerForm ? "seller" : "buyer",
+          restaurant: data.restaurant,
         })
       ).unwrap();
-      // console.log(user);
-      setAuthIsVisible(false);
+      setIsAuth(false);
       setIsThanks(true);
     } catch (error) {
       if (error && typeof error === "string") {
@@ -93,55 +104,63 @@ const Signup = ({
   return (
     <form
       onSubmit={handleSubmit((data) =>
-        onSubmit({ id: uuidv4(), role: "user", ...data })
+        onSubmit({
+          id: uuidv4(),
+          role: isSignupSellerForm ? "seller" : "buyer",
+          ...data,
+        })
       )}
     >
       <div className="grid gap-2">
-        {isSignupSellerForm && (
+        <div className="flex flex-row justify-between items-center">
           <div className="grid gap-1 py-2">
-            <label htmlFor="email">Restaurant Name</label>
+            <label htmlFor="email">Email</label>
             <Input
-              {...register("restaurant")}
-              className={`focus-visible:ring-red-500 ${errors.restaurant}
+              {...register("email")}
+              className={`focus-visible:ring-red-500 ${errors.email}
           `}
               placeholder="you@example.com"
             />
-            {errors?.restaurant && (
+            {errors?.email && (
+              <p className="text-sm text-red-500">{errors.email.message}</p>
+            )}
+            {error && <p className="text-sm text-red-500">{error}</p>}
+          </div>
+
+          <div className="grid gap-1 py-2 ">
+            <label htmlFor="password">Password</label>
+            <Input
+              {...register("password")}
+              type="password"
+              className={`
+              focus-visible:ring-red-500 ${errors.password}
+           `}
+              placeholder="Password"
+            />
+            {errors?.password && (
+              <p className="text-sm text-red-500">{errors.password.message}</p>
+            )}
+          </div>
+        </div>
+        {isSignupSellerForm && (
+          <div className="grid gap-1 py-2">
+            <label htmlFor="restaurant">Restaurant Name</label>
+            <Input
+              {...register("restaurant")}
+              className={`focus-visible:ring-red-500 ${
+                "restaurant" in errors && errors.restaurant
+                  ? "border-red-500"
+                  : ""
+              }`}
+              placeholder="Restaurant Name"
+            />
+            {"restaurant" in errors && errors.restaurant && (
               <p className="text-sm text-red-500">
                 {errors.restaurant.message}
               </p>
             )}
-            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
         )}
-        <div className="grid gap-1 py-2">
-          <label htmlFor="email">Email</label>
-          <Input
-            {...register("email")}
-            className={`focus-visible:ring-red-500 ${errors.email}
-          `}
-            placeholder="you@example.com"
-          />
-          {errors?.email && (
-            <p className="text-sm text-red-500">{errors.email.message}</p>
-          )}
-          {error && <p className="text-sm text-red-500">{error}</p>}
-        </div>
-
-        <div className="grid gap-1 py-2 ">
-          <label htmlFor="password">Password</label>
-          <Input
-            {...register("password")}
-            type="password"
-            className={`
-              focus-visible:ring-red-500 ${errors.password}
-           `}
-            placeholder="Password"
-          />
-          {errors?.password && (
-            <p className="text-sm text-red-500">{errors.password.message}</p>
-          )}
-        </div>
         <div className="flex flex-row justify-center items-center">
           <button
             type="submit"
