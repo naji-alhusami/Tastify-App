@@ -23,6 +23,7 @@ export async function AddNewMeal(meal: Meal) {
   const downloadUrl = await getDownloadURL(snapshot.ref);
 
   const newMealInfo = {
+    restaurant,
     name,
     category,
     price,
@@ -31,7 +32,7 @@ export async function AddNewMeal(meal: Meal) {
   };
 
   const response = await fetch(
-    `https://food-order-e25e0-default-rtdb.firebaseio.com/restaurants/${restaurant}.json`,
+    `https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json`,
     {
       method: "POST",
       headers: {

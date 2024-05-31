@@ -11,15 +11,16 @@ export const queryClient = new QueryClient();
 interface FetchMealsOptions {
   signal?: AbortSignal; // Type for signal, assuming you're using AbortController
   isRestaurant?: string; // Type for cuisine, assuming it's a string
+  restaurant?: string;
   id?: string;
 }
 
 export async function fetchMeals({
   signal,
   isRestaurant,
+  restaurant,
   id,
-}: FetchMealsOptions): Promise<TMealValidator[]> {
-  // console.log(isRestaurant);
+}: FetchMealsOptions): Promise<Meal[]> {
 
   const response = await fetch(
     "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json",
@@ -32,31 +33,39 @@ export async function fetchMeals({
   }
 
   const data = await response.json();
-  console.log("response:", data);
 
-  const convertedMeals = Object.keys(data).map((key) => ({
+  const allConvertedMeals = Object.keys(data).map((key) => ({
     id: key,
     ...data[key],
   }));
 
+  // To filter meals for buyer users:
   if (isRestaurant) {
-    const filteredMeals = convertedMeals.filter(
+    const filteredMeals = allConvertedMeals.filter(
       (meal: TMealValidator) => meal.category === isRestaurant
     );
 
     return filteredMeals;
   }
 
+  // To check the details of any meal:
   if (id) {
     console.log(id);
-    const mealDetails = convertedMeals.filter((meal: Meal) => meal.id === id);
+    const mealDetails = allConvertedMeals.filter((meal: Meal) => meal.id === id);
 
     console.log(mealDetails);
     return mealDetails;
   }
 
-  // console.log(convertedMeals);
-  return convertedMeals;
+  // To get all the meals for speceific restaurant:
+  if (restaurant) {
+    const restaurantMeals = allConvertedMeals.filter((meal: Meal) => meal.restaurant === restaurant);
+
+    console.log(restaurantMeals);
+    return restaurantMeals;
+  }
+
+  return allConvertedMeals;
 }
 
 export async function fetchMealDetails({
