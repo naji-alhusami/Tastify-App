@@ -3,9 +3,6 @@ import { z } from "zod";
 // Schema for sellers
 export const SellerAuthValidator = z.object({
   restaurant: z.string().optional(),
-  // restaurant: z
-  //   .string()
-  //   .min(6, { message: "Restaurant name must be at least 6 characters." }),
   email: z.string().email(),
   password: z
     .string()

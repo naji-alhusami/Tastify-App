@@ -55,7 +55,7 @@ export async function fetchMeals({
     return mealDetails;
   }
 
-  console.log(convertedMeals);
+  // console.log(convertedMeals);
   return convertedMeals;
 }
 

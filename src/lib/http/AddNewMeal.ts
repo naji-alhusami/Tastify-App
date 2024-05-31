@@ -5,7 +5,7 @@ import { FetchError } from "./error";
 import { type Meal } from "../../components/Cuisines/MealsPage";
 
 export async function AddNewMeal(meal: Meal) {
-  const { name, category, price, image, description } = meal;
+  const { name, category, price, image, description, restaurant } = meal;
   console.log(name, category, price, image, description);
 
   const imageFile = image[0];
@@ -31,7 +31,7 @@ export async function AddNewMeal(meal: Meal) {
   };
 
   const response = await fetch(
-    "https://food-order-e25e0-default-rtdb.firebaseio.co/meals.json",
+    `https://food-order-e25e0-default-rtdb.firebaseio.com/restaurants/${restaurant}.json`,
     {
       method: "POST",
       headers: {

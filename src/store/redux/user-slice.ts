@@ -48,7 +48,7 @@ export const signupUser = createAsyncThunk<
   User
 >("user/signupUser", async (payload, thunkApi) => {
   const { id, email, password, role, restaurant } = payload;
-  
+
   try {
     const { user } = await createUserWithEmailAndPassword(
       auth,
@@ -91,12 +91,13 @@ export const signupUser = createAsyncThunk<
 // Start of Login:
 export const loginUser = createAsyncThunk<
   {
-    // id: string;
+    id: string;
     email: string;
     password: string;
     userlogin: boolean;
     error: string | null;
     role: string;
+    restaurant?: string;
   },
   { email: string; password: string }
 >("user/loginUser", async (payload, thunkApi) => {
@@ -114,14 +115,17 @@ export const loginUser = createAsyncThunk<
     if (!docSnap.exists()) {
       return thunkApi.rejectWithValue("User data not found.");
     }
-
+    console.log(docSnap.data());
     const userData = {
       id: docSnap.id,
       email: docSnap.data().email,
       password: docSnap.data().password,
       userlogin: true,
       error: null,
-      role: docSnap.data().role === "admin" ? "admin" : "user",
+      role: docSnap.data().role,
+      ...(docSnap.data().role === "seller" && {
+        restaurant: docSnap.data().restaurant,
+      }),
     };
 
     return userData;
@@ -237,6 +241,7 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
+      console.log("action:", action);
       state.loading = false;
       if (action.payload.error) {
         state.user = {} as User;
@@ -244,10 +249,13 @@ const usersSlice = createSlice({
         state.error = action.payload.error;
       } else {
         state.user = {
-          id: "",
+          id: action.payload.id,
           email: action.payload.email,
           password: action.meta.arg.password,
-          role: "user",
+          role: action.payload.role,
+          ...(action.payload.role === "seller" && {
+            restaurant: action.payload.restaurant,
+          }),
         };
         state.userlogin = true;
         state.error = null;

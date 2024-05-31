@@ -16,9 +16,14 @@ import { useNavigate } from "react-router-dom";
 interface LoginProps {
   setIsSignupBuyerForm: (open: boolean) => void;
   setIsLoginForm: (open: boolean) => void;
+  setIsAuth: (open: boolean) => void;
 }
 
-const Login = ({ setIsSignupBuyerForm, setIsLoginForm }: LoginProps) => {
+const Login = ({
+  setIsSignupBuyerForm,
+  setIsLoginForm,
+  setIsAuth,
+}: LoginProps) => {
   const {
     register,
     handleSubmit,
@@ -44,15 +49,17 @@ const Login = ({ setIsSignupBuyerForm, setIsLoginForm }: LoginProps) => {
 
     try {
       const response = await dispatch(loginUser({ email, password })).unwrap();
-      // console.log("response:", response.role);
+      console.log("response:", response);
 
       if (response.userlogin) {
         dispatch(setUserLogin(true));
         localStorage.setItem("userLogin", JSON.stringify(response.userlogin));
         setIsLoginForm(false);
-
+        setIsAuth(false);
         if (response.role === "admin") {
-          navigate("/dashboard");
+          navigate("/admin");
+        } else if (response.role === "seller") {
+          navigate(`/dashboard/${response.restaurant}`);
         } else {
           navigate("/cuisines");
         }
@@ -85,7 +92,7 @@ const Login = ({ setIsSignupBuyerForm, setIsLoginForm }: LoginProps) => {
             <Input
               {...register("email")}
               className={`focus-visible:ring-red-500${errors.email}`}
-              placeholder="you@example.com"
+              placeholder="Restaurant"
             />
             {errors?.email && (
               <p className="text-sm text-red-500">{errors.email.message}</p>

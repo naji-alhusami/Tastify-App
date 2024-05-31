@@ -110,6 +110,7 @@ const Navbar = () => {
             <Login
               setIsSignupBuyerForm={setIsSignupBuyerForm}
               setIsLoginForm={setIsLoginForm}
+              setIsAuth={setIsAuth}
             />
           )}
         </AuthModal>
