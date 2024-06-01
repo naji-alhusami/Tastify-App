@@ -13,7 +13,8 @@ export type Meal = {
   category: string;
   name: string;
   price: number;
-  image: FileList;
+  image?: FileList;
+  imageUrl?: string;
   description: string;
   restaurant: string;
 };
@@ -33,7 +34,7 @@ const MealsPage = () => {
     staleTime: 5000, // this ensure that the data will not be fetched from cache always, but in every 5 sec
     // gcTime:1000 this is the time that talk about how much the data will kept around
   });
-  // console.log(allMealsPending);
+  console.log("allMealsData:", allMealsData);
   const contextValue = useContext(StateContext) as { isRestaurant: string };
 
   const { isRestaurant } = contextValue;

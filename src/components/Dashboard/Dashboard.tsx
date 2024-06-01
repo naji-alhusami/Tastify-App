@@ -1,22 +1,14 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Input } from "../ui/Input";
-import DashboardImage from "/Images/dashboard.png";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  MealValidator,
-  TMealValidator,
-} from "../../lib/validators/meal-validator";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { fetchMeals, queryClient } from "../../lib/http";
-import { AddNewMeal } from "../../lib/http/AddNewMeal";
+import { useQuery } from "@tanstack/react-query";
+import { fetchMeals } from "../../lib/http";
 // import { v4 as uuidv4 } from "uuid";
-import { Loader2 } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Meal } from "../Cuisines/MealsPage";
 import Meals from "../Cuisines/Meals";
+import { useEffect, useRef, useState } from "react";
+import AddNewMealForm from "./AddNewMealForm";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
+  const [isNewMealForm, setIsNewMealForm] = useState<boolean>(false);
   const { restaurant } = useParams();
   console.log(restaurant);
   const {
@@ -30,162 +22,59 @@ const Dashboard = () => {
     staleTime: 5000, // this ensure that the data will not be fetched from cache always, but in every 5 sec
     // gcTime:1000 this is the time that talk about how much the data will kept around
   });
+
+  const NewMealFormRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (isNewMealForm && NewMealFormRef.current) {
+      NewMealFormRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isNewMealForm]);
+
   console.log("all meals:", allMealsData);
 
-  const { mutate, isPending, isError, error } = useMutation({
-    // mutationKey: ["meals"],
-    mutationFn: AddNewMeal,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      navigate("/cuisines");
-    },
-  });
+  console.log("restaurant:", restaurant);
+  console.log("allMealsData:", allMealsData);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TMealValidator>({
-    resolver: zodResolver(MealValidator),
-  });
-
-  const onSubmit: SubmitHandler<
-    TMealValidator & { restaurant: string }
-  > = async (data: Meal) => {
-    if (restaurant) {
-      const mealData = { ...data, restaurant };
-      console.log(mealData);
-      mutate(mealData);
-    }
-  };
+  function addNewMealFormHandler() {
+    setIsNewMealForm(true);
+  }
 
   if (restaurant && allMealsData) {
     return (
       <>
-        <div>
-          <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
-            {allMealsData.map((meal: Meal) => (
-              <div key={meal.id}>
-                <Meals {...meal} />
+        <div className="flex flex-col items-center justify-center ">
+          {restaurant && allMealsData.length > 0 ? (
+            <div>
+              <h1 className="text-center font-bold my-6 text-4xl pacifico-regular">
+                {restaurant} Meals
+              </h1>
+              <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
+                {allMealsData.map((meal: Meal) => (
+                  <div key={meal.id}>
+                    <Meals {...meal} />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="relative">
-          <div className="text-center my-12">
-            <h1 className="text-4xl pacifico-regular">Add New Meal</h1>
-          </div>
-          <div
-            className="w-full h-full bg-cover"
-            style={{ backgroundImage: `url(${DashboardImage})` }}
-          >
-            <div className=" w-full bg-slate-200 bg-opacity-80 p-14 pb-6">
-              <form
-                onSubmit={handleSubmit((data) =>
-                  onSubmit({
-                    restaurant: restaurant,
-                    ...data,
-                  })
-                )}
-                // onSubmit={handleSubmit(onSubmit)}
-                // onSubmit={handleSubmit((data) =>
-                //   onSubmit({ id: uuidv4(), ...data })
-                // )}
-                // onSubmit={handleSubmit((data) => onSubmit(data))}
-              >
-                <div className="grid gap-2 w-full">
-                  <div className="flex flex-col md:flex-row md:justify-between md:w-full">
-                    <div className="grid gap-1 py-2 w-full md:mr-6">
-                      <label htmlFor="name">Name</label>
-                      <Input
-                        {...register("name")}
-                        className={`focus-visible:ring-red-500 ${errors.name}`}
-                        placeholder="Cheese Burger"
-                      />
-                      {errors?.name && (
-                        <p className="text-sm text-red-500">
-                          {errors.name.message}
-                        </p>
-                      )}
-                    </div>
-                    <div className="grid gap-1 py-2 w-full md:mr-6">
-                      <label htmlFor="password">Category</label>
-                      <select
-                        {...register("category")}
-                        className={`
-              focus-visible:ring-red-500 h-8 ${errors.category}
-           `}
-                      >
-                        <option value="">Select a category</option>
-                        <option value="BURGERS">BURGERS</option>
-                        <option value="DESERTS">DESERTS</option>
-                      </select>
-                    </div>
-                    <div className="grid gap-1 py-2 w-full">
-                      <label htmlFor="name">Price</label>
-                      <Input
-                        {...register("price", { valueAsNumber: true })}
-                        className={`focus-visible:ring-red-500 ${errors.price}`}
-                        placeholder="Price"
-                        type="number"
-                        step="0.01"
-                      />
-                      {errors?.price && (
-                        <p className="text-sm text-red-500">
-                          {errors.price.message}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="grid gap-1 py-2">
-                    <label htmlFor="description">Description</label>
-                    <textarea
-                      {...register("description")}
-                      rows={3}
-                      className={`focus-visible:ring-red-500 rounded-md ${
-                        errors.description ? "border-red-500" : ""
-                      }`}
-                      placeholder="Write your description here"
-                    />
-                    {errors?.description && (
-                      <p className="text-sm text-red-500">
-                        {errors.description.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="grid gap-1 py-2 w-full  pb-8">
-                    <label htmlFor="name">Upload Image</label>
-                    <input
-                      {...register("image")}
-                      className={`focus-visible:ring-red-500 ${errors.image}`}
-                      placeholder="Upload Meal Image"
-                      type="file"
-                      accept="image/*"
-                    />
-                    {errors?.image && (
-                      <p className="text-sm text-red-500">
-                        {errors.image.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <button
-                      type="submit"
-                      className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
-                    >
-                      {isPending ? (
-                        <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
-                      ) : (
-                        "Add Meal"
-                      )}
-                    </button>
-                    {isError && <p>{error.message || "error"}</p>}
-                  </div>
-                </div>
-              </form>
             </div>
-          </div>
+          ) : (
+            <div className="text-center text-xl font-bold my-6">
+              No meals added!
+            </div>
+          )}
+          <button
+            onClick={addNewMealFormHandler}
+            type="button"
+            className="flex flex-row items-center justify-center my-8 px-4 py-2  text-white rounded-md bg-rose-500 hover:bg-rose-600"
+          >
+            Add New Meal
+          </button>
         </div>
+        {isNewMealForm && (
+          <div className="relative" ref={NewMealFormRef}>
+            <AddNewMealForm restaurant={restaurant} setIsNewMealForm={setIsNewMealForm} />
+          </div>
+        )}
       </>
     );
   }
