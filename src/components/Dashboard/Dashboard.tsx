@@ -4,13 +4,12 @@ import { fetchMeals } from "../../lib/http";
 import { useParams } from "react-router-dom";
 import { Meal } from "../Cuisines/MealsPage";
 import Meals from "../Cuisines/Meals";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import AddNewMealForm from "./AddNewMealForm";
+import StateContext from "../../store/context/state-context";
 
 const Dashboard = () => {
-  const [isNewMealForm, setIsNewMealForm] = useState<boolean>(false);
   const { restaurant } = useParams();
-  console.log(restaurant);
   const {
     data: allMealsData,
     // isPending: allMealsPending,
@@ -25,19 +24,26 @@ const Dashboard = () => {
 
   const NewMealFormRef = useRef<HTMLDivElement>(null);
 
+  const contextValue = useContext(StateContext) as {
+    isMealForm: boolean;
+    setIsMealForm: (meal: boolean) => void;
+  };
+
+  const { isMealForm, setIsMealForm } = contextValue;
+
   useEffect(() => {
-    if (isNewMealForm && NewMealFormRef.current) {
+    if (isMealForm && NewMealFormRef.current) {
       NewMealFormRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [isNewMealForm]);
+  }, [isMealForm]);
 
-  console.log("all meals:", allMealsData);
+  // console.log("all meals:", allMealsData);
 
-  console.log("restaurant:", restaurant);
-  console.log("allMealsData:", allMealsData);
+  // console.log("restaurant:", restaurant);
+  // console.log("allMealsData:", allMealsData);
 
   function addNewMealFormHandler() {
-    setIsNewMealForm(true);
+    setIsMealForm(true);
   }
 
   if (restaurant && allMealsData) {
@@ -49,7 +55,7 @@ const Dashboard = () => {
               <h1 className="text-center font-bold my-6 text-4xl pacifico-regular">
                 {restaurant} Meals
               </h1>
-              <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:mx-4 md:flex-row">
+              <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:flex-row">
                 {allMealsData.map((meal: Meal) => (
                   <div key={meal.id}>
                     <Meals {...meal} />
@@ -70,9 +76,9 @@ const Dashboard = () => {
             Add New Meal
           </button>
         </div>
-        {isNewMealForm && (
+        {isMealForm && (
           <div className="relative" ref={NewMealFormRef}>
-            <AddNewMealForm restaurant={restaurant} setIsNewMealForm={setIsNewMealForm} />
+            <AddNewMealForm setIsMealForm={setIsMealForm} />
           </div>
         )}
       </>
