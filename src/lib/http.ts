@@ -50,10 +50,10 @@ export async function fetchMeals({
 
   // To check the details of any meal:
   if (id) {
-    console.log(id);
+    // console.log(id);
     const mealDetails = allConvertedMeals.filter((meal: Meal) => meal.id === id);
 
-    console.log(mealDetails);
+    // console.log(mealDetails);
     return mealDetails;
   }
 
@@ -61,7 +61,7 @@ export async function fetchMeals({
   if (restaurant) {
     const restaurantMeals = allConvertedMeals.filter((meal: Meal) => meal.restaurant === restaurant);
 
-    console.log(restaurantMeals);
+    // console.log(restaurantMeals);
     return restaurantMeals;
   }
 
@@ -72,20 +72,20 @@ export async function fetchMealDetails({
   signal,
   id,
 }: FetchMealsOptions): Promise<Meal> {
-  console.log(id);
+  // console.log(id);
   const response = await fetch(
     `https://food-order-e25e0-default-rtdb.firebaseio.com/meals/${id}.json`,
     { signal: signal }
   );
 
   if (!response.ok) {
-    console.log("res not ok");
+    // console.log("res not ok");
     const info = await response.json();
     throw new FetchError("Error occurred", info);
   }
 
   const data = await response.json();
-  console.log("data:", data);
+  // console.log("data:", data);
 
   return data;
 }
@@ -111,7 +111,7 @@ export async function sendOrders(orders: Order) {
   );
 
   if (!response.ok) {
-    console.log("res not ok");
+    // console.log("res not ok");
     const info = await response.json();
     throw new FetchError("Error occurred", info);
   }

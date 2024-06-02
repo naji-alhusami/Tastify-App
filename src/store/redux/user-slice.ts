@@ -241,7 +241,7 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      console.log("action:", action);
+      // console.log("action:", action);
       state.loading = false;
       if (action.payload.error) {
         state.user = {} as User;

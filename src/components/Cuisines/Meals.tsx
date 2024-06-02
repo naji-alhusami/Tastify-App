@@ -68,7 +68,7 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
 
   function editMealHandler() {
     // if (id) {
-    console.log("id in edit", id);
+    // console.log("id in edit", id);
     navigate(`/dashboard/${params.restaurant}/update/${id}`);
     // deleteMutation(id);
     // }

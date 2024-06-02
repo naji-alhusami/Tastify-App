@@ -13,12 +13,13 @@ import { fetchMealDetails, queryClient } from "../../lib/http";
 import { Meal } from "../Cuisines/MealsPage";
 import { Input } from "../ui/Input";
 import { Loader2 } from "lucide-react";
+import { UpdateMealHttp } from "../../lib/http/UpdateMealHttp";
 
 const MealForm = () => {
   const navigate = useNavigate();
   const { restaurant } = useParams();
   const params = useParams();
-  console.log("params:", params);
+  console.log("params:", params.mealform === "update");
   //   console.log("allMealsData in New Form", allMealsData);
 
   const {
@@ -40,7 +41,12 @@ const MealForm = () => {
   });
   console.log("mealData in form", mealData);
 
-  const { mutate, isPending, isError, error } = useMutation({
+  const {
+    mutate: AddMeal,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
     // mutationKey: ["meals"],
     mutationFn: AddMealHttp,
     onSuccess: () => {
@@ -50,13 +56,29 @@ const MealForm = () => {
     },
   });
 
+  const {
+    mutate: UpdateMealMutate,
+    // , isPending, isError, error
+  } = useMutation({
+    // mutationKey: ["meals"],
+    mutationFn: UpdateMealHttp,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
+      // setIsNewMealForm(false);
+      navigate(`/dashboard/${restaurant}`);
+    },
+  });
+
   const onSubmit: SubmitHandler<
     TMealValidator & { restaurant: string }
   > = async (data: Meal) => {
     if (restaurant) {
       const mealData = { ...data, restaurant };
-      console.log(mealData);
-      mutate(mealData);
+      if (params.mealform === "update") {
+        UpdateMealMutate(mealData);
+      } else {
+        AddMeal(mealData);
+      }
     }
   };
 
@@ -64,7 +86,9 @@ const MealForm = () => {
     return (
       <div>
         <div className="text-center my-12">
-          <h1 className="text-4xl pacifico-regular">Add New Meal</h1>
+          <h1 className="text-4xl pacifico-regular">
+            {params.mealform === "update" ? "Update Meal" : "Add New Meal"}
+          </h1>
         </div>
         <div
           className="w-full h-full bg-cover"
@@ -92,6 +116,7 @@ const MealForm = () => {
                       {...register("name")}
                       className={`focus-visible:ring-red-500 ${errors.name}`}
                       placeholder="Cheese Burger"
+                      defaultValue={params.mealform === "update" ? mealData?.name : ""}
                     />
                     {errors?.name && (
                       <p className="text-sm text-red-500">
@@ -106,6 +131,9 @@ const MealForm = () => {
                       className={`
               focus-visible:ring-red-500 h-8 ${errors.category}
            `}
+                      value={
+                        params.mealform === "update" ? mealData?.category : ""
+                      }
                     >
                       <option value="">Select a category</option>
                       <option value="BURGERS">BURGERS</option>
@@ -120,6 +148,9 @@ const MealForm = () => {
                       placeholder="Price"
                       type="number"
                       step="0.01"
+                      value={
+                        params.mealform === "update" ? mealData?.price : ""
+                      }
                     />
                     {errors?.price && (
                       <p className="text-sm text-red-500">
@@ -137,6 +168,9 @@ const MealForm = () => {
                       errors.description ? "border-red-500" : ""
                     }`}
                     placeholder="Write your description here"
+                    value={
+                      params.mealform === "update" ? mealData?.description : ""
+                    }
                   />
                   {errors?.description && (
                     <p className="text-sm text-red-500">
@@ -166,6 +200,8 @@ const MealForm = () => {
                   >
                     {isPending ? (
                       <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
+                    ) : params.mealform === "update" ? (
+                      "Update Meal"
                     ) : (
                       "Add Meal"
                     )}

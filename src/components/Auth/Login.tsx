@@ -49,7 +49,7 @@ const Login = ({
 
     try {
       const response = await dispatch(loginUser({ email, password })).unwrap();
-      console.log("response:", response);
+      // console.log("response:", response);
 
       if (response.userlogin) {
         dispatch(setUserLogin(true));
@@ -65,7 +65,7 @@ const Login = ({
         }
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error && typeof error === "string") {
         if (error.includes("invalid-credential")) {
           setError("Check your email or password");

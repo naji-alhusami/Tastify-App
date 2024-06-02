@@ -10,7 +10,7 @@ export async function DeleteMealHttp(mealId: string) {
   );
 
   if (!response.ok) {
-    console.log("res not ok");
+    // console.log("res not ok");
     const info = await response.json();
     throw new FetchError("Error occurred", info); // to check
   }
