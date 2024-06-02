@@ -59,7 +59,7 @@ const MealDetails = () => {
           </div>
           <div className="flex flex-col md:flex-row-reverse">
             <div className="md:w-[510px] md:h-full">
-              <img src={mealData.image} alt={mealData.name} />
+              <img src={mealData.imageUrl} alt={mealData.name} />
             </div>
             <div className="h-full w-full p-4 shadow-xl flex flex-col justify-between">
               <div>

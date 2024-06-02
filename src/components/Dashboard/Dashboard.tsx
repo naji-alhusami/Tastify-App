@@ -1,15 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchMeals } from "../../lib/http";
 // import { v4 as uuidv4 } from "uuid";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Meal } from "../Cuisines/MealsPage";
 import Meals from "../Cuisines/Meals";
-import { useContext, useEffect, useRef } from "react";
-import AddNewMealForm from "./AddNewMealForm";
-import StateContext from "../../store/context/state-context";
+// import { useContext, useEffect, useRef } from "react";
+// import AddNewMealForm from "./AddNewMealForm";
+// import StateContext from "../../store/context/state-context";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const { restaurant } = useParams();
+  const params = useParams();
+  console.log("params:", params);
   const {
     data: allMealsData,
     // isPending: allMealsPending,
@@ -22,20 +25,20 @@ const Dashboard = () => {
     // gcTime:1000 this is the time that talk about how much the data will kept around
   });
 
-  const NewMealFormRef = useRef<HTMLDivElement>(null);
+  // const NewMealFormRef = useRef<HTMLDivElement>(null);
 
-  const contextValue = useContext(StateContext) as {
-    isMealForm: boolean;
-    setIsMealForm: (meal: boolean) => void;
-  };
+  // const contextValue = useContext(StateContext) as {
+  //   isMealForm: boolean;
+  //   setIsMealForm: (meal: boolean) => void;
+  // };
 
-  const { isMealForm, setIsMealForm } = contextValue;
+  // const { isMealForm, setIsMealForm } = contextValue;
 
-  useEffect(() => {
-    if (isMealForm && NewMealFormRef.current) {
-      NewMealFormRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [isMealForm]);
+  // useEffect(() => {
+  //   if (isMealForm && NewMealFormRef.current) {
+  //     NewMealFormRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [isMealForm]);
 
   // console.log("all meals:", allMealsData);
 
@@ -43,7 +46,8 @@ const Dashboard = () => {
   // console.log("allMealsData:", allMealsData);
 
   function addNewMealFormHandler() {
-    setIsMealForm(true);
+    // setIsMealForm(true);
+    navigate(`/dashboard/${restaurant}/add`);
   }
 
   if (restaurant && allMealsData) {
@@ -58,7 +62,7 @@ const Dashboard = () => {
               <div className=" flex flex-col justify-center items-center flex-wrap w-full my-4 md:flex-row">
                 {allMealsData.map((meal: Meal) => (
                   <div key={meal.id}>
-                    <Meals {...meal} />
+                    <Meals {...meal} restaurant={restaurant} />
                   </div>
                 ))}
               </div>
@@ -76,11 +80,13 @@ const Dashboard = () => {
             Add New Meal
           </button>
         </div>
-        {isMealForm && (
+        {/* {path.pathname !== "/Cuisines" && ( */}
+        {/* )} */}
+        {/* {isMealForm && (
           <div className="relative" ref={NewMealFormRef}>
-            <AddNewMealForm setIsMealForm={setIsMealForm} />
+            <AddNewMealForm setIsMealForm={setIsMealForm} allMealsData={allMealsData} />
           </div>
-        )}
+        )} */}
       </>
     );
   }

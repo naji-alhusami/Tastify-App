@@ -2,21 +2,23 @@ import { Bike } from "lucide-react";
 import { addToBasket } from "../../store/redux/basket-slice";
 import { useAppDispatch } from "../../store/redux/hooks";
 // import { Meal } from "./MealsPage";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 // import { TMealValidator } from "../../lib/validators/meal-validator";
 import { Meal } from "./MealsPage";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { DeleteMealHttp } from "../../lib/http/DeleteMealHttp";
-import { queryClient } from "../../lib/http";
-import { useContext } from "react";
-import StateContext from "../../store/context/state-context";
+import { fetchMealDetails, queryClient } from "../../lib/http";
+// import { useContext } from "react";
+// import StateContext from "../../store/context/state-context";
 // import AddNewMealForm from "../Dashboard/AddNewMealForm";
 // import { useContext, useEffect, useRef } from "react";
 // import StateContext from "../../store/context/state-context";
 
 export default function Meals({ id, category, name, price, imageUrl }: Meal) {
   const path = useLocation();
-  // console.log("image in Meal:", imageUrl);
+  const navigate = useNavigate();
+  const params = useParams();
+  // console.log("Meal's data in Meals:", imageUrl);
 
   const dispatch = useAppDispatch();
   // console.log("id in Meal:", id);
@@ -27,22 +29,14 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
     }
   }
 
-  // const NewMealFormRef = useRef<HTMLDivElement>(null);
+  // const contextValue = useContext(StateContext) as {
+  //   setIsMealForm: (meal: boolean) => void;
+  // };
 
-  const contextValue = useContext(StateContext) as {
-    setIsMealForm: (meal: boolean) => void;
-  };
-
-  const { setIsMealForm } = contextValue;
-
-  // useEffect(() => {
-  //   if (isMealForm && NewMealFormRef.current) {
-  //     NewMealFormRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // }, [isMealForm]);
+  // const { setIsMealForm } = contextValue;
 
   const {
-    mutate,
+    mutate: deleteMutation,
     // , isPending, isError, error
   } = useMutation({
     // mutationKey: ["meals"],
@@ -56,12 +50,29 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
 
   function deleteMealHandler() {
     if (id) {
-      mutate(id);
+      deleteMutation(id);
     }
   }
 
+  const {
+    data: mealData,
+    // isPending: mealDataPending,
+    // isError: mealDataIsError,
+    // error: mealDataError,
+  } = useQuery({
+    queryKey: ["meals", id],
+    queryFn: ({ signal }) => fetchMealDetails({ signal, id: id }),
+  });
+
+  console.log("mealData in Meals last try:", mealData);
+
   function editMealHandler() {
-    setIsMealForm(true);
+    // if (id) {
+    console.log("id in edit", id);
+    navigate(`/dashboard/${params.restaurant}/update/${id}`);
+    // deleteMutation(id);
+    // }
+    // setIsMealForm(true);
   }
 
   return (
@@ -106,12 +117,14 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
           </div>
         )}
       </div>
+
       {/* {isMealForm && (
         <div className="relative" ref={NewMealFormRef}>
           <AddNewMealForm setIsMealForm={setIsMealForm} />
         </div>
       )} */}
     </div>
+
     // </Link>
   );
 }

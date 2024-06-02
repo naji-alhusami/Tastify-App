@@ -1,29 +1,25 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Input } from "../ui/Input";
+// interface Props {}
 import DashboardImage from "/Images/dashboard.png";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   MealValidator,
   TMealValidator,
 } from "../../lib/validators/meal-validator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AddMealHttp } from "../../lib/http/AddMealHttp";
-import { queryClient } from "../../lib/http";
+import { fetchMealDetails, queryClient } from "../../lib/http";
 import { Meal } from "../Cuisines/MealsPage";
+import { Input } from "../ui/Input";
 import { Loader2 } from "lucide-react";
-import { useParams } from "react-router-dom";
 
-interface AddNewMealFormProps {
-  allMealsData: Meal[];
-  setIsMealForm: (open: boolean) => void;
-}
-
-const AddNewMealForm = ({
-  allMealsData,
-  setIsMealForm,
-}: AddNewMealFormProps) => {
+const MealForm = () => {
+  const navigate = useNavigate();
   const { restaurant } = useParams();
-  console.log("allMealsData in New Form", allMealsData);
+  const params = useParams();
+  console.log("params:", params);
+  //   console.log("allMealsData in New Form", allMealsData);
 
   const {
     register,
@@ -33,13 +29,24 @@ const AddNewMealForm = ({
     resolver: zodResolver(MealValidator),
   });
 
+  const {
+    data: mealData,
+    // isPending: mealDataPending,
+    // isError: mealDataIsError,
+    // error: mealDataError,
+  } = useQuery({
+    queryKey: ["meals", params.id],
+    queryFn: ({ signal }) => fetchMealDetails({ signal, id: params.id }),
+  });
+  console.log("mealData in form", mealData);
+
   const { mutate, isPending, isError, error } = useMutation({
     // mutationKey: ["meals"],
     mutationFn: AddMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      setIsMealForm(false);
-      //   navigate("/cuisines");
+      //   setIsMealForm(false);
+      navigate(`/dashboard/${restaurant}`);
     },
   });
 
@@ -174,4 +181,4 @@ const AddNewMealForm = ({
   }
 };
 
-export default AddNewMealForm;
+export default MealForm;

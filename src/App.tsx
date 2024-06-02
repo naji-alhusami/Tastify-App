@@ -8,9 +8,9 @@ import Footer from "./components/Footer/Footer.tsx";
 import Dashboard from "./components/Dashboard/Dashboard.tsx";
 import { queryClient } from "./lib/http.ts";
 import Admin from "./components/Admin/Admin.tsx";
+import MealForm from "./components/MealForm/MealForm.tsx";
 
 function App() {
-
   return (
     <div className="relative">
       <QueryClientProvider client={queryClient}>
@@ -20,6 +20,10 @@ function App() {
           <Route path="/cuisines" element={<MealsPage />} />
           <Route path="/cuisines/:id" element={<MealDetails />} />
           <Route path="/dashboard/:restaurant" element={<Dashboard />} />
+          <Route
+            path="/dashboard/:restaurant/:mealform/:id?"
+            element={<MealForm />}
+          />
           <Route path="/admin" element={<Admin />} />
         </Routes>
         <Footer />
