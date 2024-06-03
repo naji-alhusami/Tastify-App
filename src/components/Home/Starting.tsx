@@ -16,7 +16,7 @@ const Starting = () => {
           Everything You Need Is Brought To Your Door With Our{" "}
           <span className="text-rose-500">Delivery Service</span>..
         </h1>
-        <div className="relative w-full flex flex-col justify-between bg-white p-4 rounded-md gap-2 shadow-lg md:absolute md:top-2/4 md:flex-row md:max-w-2xl lg:top-96">
+        <div className="relative w-full flex flex-col justify-between bg-white p-4 rounded-md gap-2 shadow-lg md:absolute md:flex-row md:max-w-2xl lg:top-96">
           <AddressLocator />
         </div>
       </div>

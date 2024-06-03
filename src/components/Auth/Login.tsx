@@ -1,17 +1,16 @@
-// import { Label } from "../ui/label";
-import { Input } from "../ui/Input";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+
 import {
   AuthValidator,
   type TAuthValidator,
 } from "../../lib/validators/account-validator";
 import { loginUser, setUserLogin } from "../../store/redux/user-slice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
-import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import FormField from "../ui/FormField";
 
 interface LoginProps {
   setIsSignupBuyerForm: (open: boolean) => void;
@@ -31,9 +30,7 @@ const Login = ({
   } = useForm<TAuthValidator>({
     resolver: zodResolver(AuthValidator),
   });
-
   const [error, setError] = useState<string>("");
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.users);
@@ -45,7 +42,6 @@ const Login = ({
 
   const onSubmit: SubmitHandler<TAuthValidator> = async (data) => {
     const { email, password } = data;
-    // console.log(data);
 
     try {
       const response = await dispatch(loginUser({ email, password })).unwrap();
@@ -65,7 +61,6 @@ const Login = ({
         }
       }
     } catch (error) {
-      // console.log(error);
       if (error && typeof error === "string") {
         if (error.includes("invalid-credential")) {
           setError("Check your email or password");
@@ -73,13 +68,6 @@ const Login = ({
           setError(error);
         }
       }
-      // if (error && typeof error === "string") {
-      //   if (error.includes("email-already-in-use")) {
-      //     setError(
-      //       "Email is already in use. Please use a different email address."
-      //     );
-      //   }
-      // }
     }
   };
 
@@ -87,37 +75,37 @@ const Login = ({
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
-          <div className="grid gap-1 py-2">
-            <label htmlFor="email">Email</label>
-            <Input
-              {...register("email")}
-              className={`focus-visible:ring-red-500${errors.email}`}
-              placeholder="Restaurant"
-            />
-            {errors?.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
-          </div>
+          {/* Email */}
+          <FormField
+            {...register("email")}
+            htmlFor="email"
+            labelValue="Email"
+            inputType="email"
+            placeholder="Your Email"
+            className={`focus-visible:ring-red-500 ${errors.email}`}
+            hasErrors={errors?.email ? true : false}
+            errorsMessage={errors.email?.message || ""}
+          />
 
-          <div className="grid gap-1 py-2">
-            <label htmlFor="password">Password</label>
-            <Input
-              {...register("password")}
-              type="password"
-              className={`
-                "focus-visible:ring-red-500" ${errors.password},
-                `}
-              placeholder="Password"
-            />
-            {errors?.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
-            )}
-          </div>
+          {/* Password */}
+          <FormField
+            {...register("password")}
+            htmlFor="password"
+            labelValue="Password"
+            inputType="password"
+            placeholder="Your Password"
+            className={`focus-visible:ring-red-500 ${errors.password}`}
+            hasErrors={errors?.password ? true : false}
+            errorsMessage={errors.password?.message || ""}
+          />
+
+          {/* Errors From Firebase */}
           {error && (
             <p className="text-md text-red-500 text-center font-bold">
               {error}
             </p>
           )}
+
           <div className="flex flex-row justify-center items-center">
             <button
               type="submit"

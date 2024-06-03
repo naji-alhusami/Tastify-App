@@ -5,7 +5,7 @@ import { fetchMeals } from "../../lib/http";
 import Loading from "../ui/Loading";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
-import DashboardImage from "/Images/dashboard.png";
+// import DashboardImage from "/Images/dashboard.png";
 import { FetchError } from "../../lib/http/error";
 
 export type Meal = {
@@ -94,10 +94,10 @@ const MealsPage = () => {
 
   return (
     <>
-      <div>
+      {/* <div>
         <img src={DashboardImage} alt="dashboard-image" />
-      </div>
-      <div className="mx-4 mt-4">
+      </div> */}
+      <div className="mx-10 mt-4 h-screen">
         <div>
           <h1 className="text-4xl">Choose Cuisines:</h1>
         </div>

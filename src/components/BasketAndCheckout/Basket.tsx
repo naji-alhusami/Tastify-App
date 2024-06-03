@@ -71,7 +71,12 @@ export default function Basket({ setIsCheckoutForm }: BasketProps) {
       <div id="flex flex-row justify-end items-center">
         Cart Total: <strong>${formattedTotalPrice}</strong>
       </div>
-      <button onClick={openCheckoutHandler}>checkout</button>
+      <button
+        className="bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
+        onClick={openCheckoutHandler}
+      >
+        checkout
+      </button>
     </div>
   );
 }
