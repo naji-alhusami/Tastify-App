@@ -7,17 +7,9 @@ import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
 // import DashboardImage from "/Images/dashboard.png";
 import { FetchError } from "../../lib/http/error";
+import { Meal } from "../../lib/types";
 
-export type Meal = {
-  id?: string;
-  category: string;
-  name: string;
-  price: number;
-  image?: FileList;
-  imageUrl?: string;
-  description: string;
-  restaurant: string;
-};
+
 
 const MealsPage = () => {
   // const [params] = useSearchParams();
@@ -97,7 +89,7 @@ const MealsPage = () => {
       {/* <div>
         <img src={DashboardImage} alt="dashboard-image" />
       </div> */}
-      <div className="mx-10 mt-4 h-screen">
+      <div className="mx-10 mt-4">
         <div>
           <h1 className="text-4xl">Choose Cuisines:</h1>
         </div>

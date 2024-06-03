@@ -113,7 +113,7 @@ const Login = ({
           <div className="flex flex-row justify-center items-center">
             <Button
               type="submit"
-              className=" text-white bg-rose-500 hover:bg-rose-600"
+              className="w-full text-white bg-rose-500 hover:bg-rose-600"
             >
               {loading ? (
                 <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
@@ -137,7 +137,7 @@ const Login = ({
             <Button
               type="button"
               onClick={SignupFormHandler}
-              className="bg-white border border-rose-500 hover:bg-rose-100 text-rose-600"
+              className="w-full bg-white border border-rose-500 hover:bg-rose-100 text-rose-600"
             >
               Sign up
             </Button>

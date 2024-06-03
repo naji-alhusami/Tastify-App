@@ -1,7 +1,6 @@
 // import React from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Input } from "../ui/Input";
 import {
   CheckoutValidator,
   TCheckoutValidator,
@@ -16,6 +15,8 @@ import { sendOrders } from "../../lib/http";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { clearBasket } from "../../store/redux/basket-slice";
+import { Order } from "../../lib/types";
+import FormField from "../ui/FormField";
 
 interface CheckoutProps {
   // openCheckout: (open: boolean) => void;
@@ -24,17 +25,7 @@ interface CheckoutProps {
   setIsBasketForm: (open: boolean) => void;
 }
 
-export type Order = {
-  name: string;
-  email: string;
-  state: string;
-  city: string;
-  zip: string;
-  street: string;
-  house: string;
-};
-
-const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
+const Checkout = ({ setIsCheckoutForm, setIsBasketForm }: CheckoutProps) => {
   const navigate = useNavigate();
   const {
     register,
@@ -81,7 +72,17 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
         <div className="grid gap-1 py-2">
           <div className=" flex flex-row justify-center items-center">
             <div className="w-full grid gap-1 py-2 pr-2">
-              <label htmlFor="password">Name</label>
+              <FormField
+                {...register("name")}
+                htmlFor="name"
+                labelValue="Name"
+                inputType="text"
+                placeholder="Your Name"
+                className={`focus-visible:ring-red-500 ${errors.name}`}
+                hasErrors={errors?.name ? true : false}
+                errorsMessage={errors.name?.message || ""}
+              />
+              {/* <label htmlFor="password">Name</label>
               <Input
                 {...register("name")}
                 // type="password"
@@ -90,10 +91,20 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
               />
               {errors?.name && (
                 <p className="text-sm text-red-500">{errors.name.message}</p>
-              )}
+              )} */}
             </div>
             <div className="w-full grid gap-1 py-2">
-              <label htmlFor="email">Email</label>
+              <FormField
+                {...register("email")}
+                htmlFor="email"
+                labelValue="Email"
+                inputType="email"
+                placeholder="Your Email"
+                className={`focus-visible:ring-red-500 ${errors.email}`}
+                hasErrors={errors?.email ? true : false}
+                errorsMessage={errors.email?.message || ""}
+              />
+              {/* <label htmlFor="email">Email</label>
               <Input
                 {...register("email")}
                 className={`focus-visible:ring-red-500 ${errors.email}`}
@@ -101,12 +112,23 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
               />
               {errors?.email && (
                 <p className="text-sm text-red-500">{errors.email.message}</p>
-              )}
+              )} */}
             </div>
           </div>
           <div className="flex flex-row items-center justify-start">
             <div className="flex flex-col items-start justify-center pr-2">
-              <label htmlFor="state" className="pb-2">
+              <FormField
+                {...register("state")}
+                htmlFor="state"
+                labelValue="State"
+                inputType="text"
+                placeholder="Your State"
+                defaultValue={state}
+                className={`focus-visible:ring-red-500 ${errors.state}`}
+                hasErrors={errors?.state ? true : false}
+                errorsMessage={errors.state?.message || ""}
+              />
+              {/* <label htmlFor="state" className="pb-2">
                 State
               </label>
               <Input
@@ -117,10 +139,21 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
               />
               {errors?.state && (
                 <p className="text-sm text-red-500">{errors.state.message}</p>
-              )}
+              )} */}
             </div>
             <div className="flex flex-col items-start justify-center pr-2">
-              <label htmlFor="city" className="pb-2">
+              <FormField
+                {...register("city")}
+                htmlFor="city"
+                labelValue="City"
+                inputType="text"
+                placeholder="Your City"
+                defaultValue={city}
+                className={`focus-visible:ring-red-500 ${errors.city}`}
+                hasErrors={errors?.city ? true : false}
+                errorsMessage={errors.city?.message || ""}
+              />
+              {/* <label htmlFor="city" className="pb-2">
                 City
               </label>
               <Input
@@ -131,10 +164,21 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
               />
               {errors?.city && (
                 <p className="text-sm text-red-500">{errors.city.message}</p>
-              )}
+              )} */}
             </div>
             <div className="flex flex-col items-start justify-center pr-2">
-              <label htmlFor="zip" className="pb-2">
+              <FormField
+                {...register("zip")}
+                htmlFor="zip"
+                labelValue="Zip"
+                inputType="text"
+                placeholder="Your Zip"
+                defaultValue={zipCode}
+                className={`focus-visible:ring-red-500 ${errors.zip}`}
+                hasErrors={errors?.zip ? true : false}
+                errorsMessage={errors.zip?.message || ""}
+              />
+              {/* <label htmlFor="zip" className="pb-2">
                 Zip
               </label>
               <Input
@@ -146,12 +190,23 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
               />
               {errors?.zip && (
                 <p className="text-sm text-red-500">{errors.zip.message}</p>
-              )}
+              )} */}
             </div>
           </div>
           <div className="flex flex-row items-center justify-start py-2">
             <div className="flex flex-col items-start justify-center pr-2">
-              <label htmlFor="street" className="pb-2">
+              <FormField
+                {...register("street")}
+                htmlFor="street"
+                labelValue="Street"
+                inputType="text"
+                placeholder="Your Street Name"
+                defaultValue={street}
+                className={`focus-visible:ring-red-500 ${errors.street}`}
+                hasErrors={errors?.street ? true : false}
+                errorsMessage={errors.street?.message || ""}
+              />
+              {/* <label htmlFor="street" className="pb-2">
                 Street
               </label>
               <Input
@@ -162,11 +217,21 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
               />
               {errors?.street && (
                 <p className="text-sm text-red-500">{errors.street.message}</p>
-              )}
+              )} */}
             </div>
 
             <div className="flex flex-col items-start justify-center">
-              <label htmlFor="house" className="pb-2">
+              <FormField
+                {...register("house")}
+                htmlFor="house"
+                labelValue="House Number"
+                inputType="number"
+                placeholder="Your House Number"
+                className={`focus-visible:ring-red-500 ${errors.house}`}
+                hasErrors={errors?.house ? true : false}
+                errorsMessage={errors.house?.message || ""}
+              />
+              {/* <label htmlFor="house" className="pb-2">
                 House Number
               </label>
               <Input
@@ -177,7 +242,7 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm}: CheckoutProps) => {
               />
               {errors?.house && (
                 <p className="text-sm text-red-500">{errors.house.message}</p>
-              )}
+              )} */}
             </div>
           </div>
           {/* {error && <p className="text-sm text-red-500">{error}</p>} */}

@@ -12,7 +12,7 @@ const Button = ({ type, onClick, className, children }: ButtonProps) => {
     <button
       type={type}
       onClick={onClick}
-      className={`${className} flex flex-row items-center justify-center px-4 py-2 w-full  rounded-md `}
+      className={`${className} flex flex-row items-center justify-center px-4 py-2   rounded-md `}
     >
       {children}
     </button>

@@ -10,10 +10,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AddMealHttp } from "../../lib/http/AddMealHttp";
 import { fetchMealDetails, queryClient } from "../../lib/http";
-import { Meal } from "../Cuisines/MealsPage";
-import { Input } from "../ui/Input";
+import { type Meal } from "../../lib/types";
+// import { Input } from "../ui/Input";
 import { Loader2 } from "lucide-react";
 import { UpdateMealHttp } from "../../lib/http/UpdateMealHttp";
+import FormField from "../ui/FormField";
 
 const MealForm = () => {
   const navigate = useNavigate();
@@ -103,16 +104,24 @@ const MealForm = () => {
                   ...data,
                 })
               )}
-              // onSubmit={handleSubmit(onSubmit)}
-              // onSubmit={handleSubmit((data) =>
-              //   onSubmit({ id: uuidv4(), ...data })
-              // )}
-              // onSubmit={handleSubmit((data) => onSubmit(data))}
             >
               <div className="grid gap-2 w-full">
                 <div className="flex flex-col md:flex-row md:justify-between md:w-full">
                   <div className="grid gap-1 py-2 w-full md:mr-6">
-                    <label htmlFor="name">Name</label>
+                    <FormField
+                      {...register("name")}
+                      htmlFor="name"
+                      labelValue="Meal Name"
+                      inputType="text"
+                      placeholder="Meal Name"
+                      className={`focus-visible:ring-red-500 ${errors.name}`}
+                      defaultValue={
+                        params.mealform === "update" ? mealData?.name : ""
+                      }
+                      hasErrors={errors?.name ? true : false}
+                      errorsMessage={errors.name?.message || ""}
+                    />
+                    {/* <label htmlFor="name">Name</label>
                     <Input
                       {...register("name")}
                       className={`focus-visible:ring-red-500 ${errors.name}`}
@@ -125,7 +134,7 @@ const MealForm = () => {
                       <p className="text-sm text-red-500">
                         {errors.name.message}
                       </p>
-                    )}
+                    )} */}
                   </div>
                   <div className="grid gap-1 py-2 w-full md:mr-6">
                     <label htmlFor="password">Category</label>
@@ -144,7 +153,20 @@ const MealForm = () => {
                     </select>
                   </div>
                   <div className="grid gap-1 py-2 w-full">
-                    <label htmlFor="name">Price</label>
+                    <FormField
+                      {...register("price")}
+                      htmlFor="price"
+                      labelValue="Price"
+                      inputType="number"
+                      placeholder="12.99$"
+                      className={`focus-visible:ring-red-500 ${errors.price}`}
+                      defaultValue={
+                        params.mealform === "update" ? mealData?.price : ""
+                      }
+                      hasErrors={errors?.price ? true : false}
+                      errorsMessage={errors.price?.message || ""}
+                    />
+                    {/* <label htmlFor="name">Price</label>
                     <Input
                       {...register("price", { valueAsNumber: true })}
                       className={`focus-visible:ring-red-500 ${errors.price}`}
@@ -159,7 +181,7 @@ const MealForm = () => {
                       <p className="text-sm text-red-500">
                         {errors.price.message}
                       </p>
-                    )}
+                    )} */}
                   </div>
                 </div>
                 <div className="grid gap-1 py-2">

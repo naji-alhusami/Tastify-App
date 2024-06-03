@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchMeals } from "../../lib/http";
 // import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
-import { Meal } from "../Cuisines/MealsPage";
+import { type Meal } from "../../lib/types";
 import Meals from "../Cuisines/Meals";
 // import { useContext, useEffect, useRef } from "react";
 // import AddNewMealForm from "./AddNewMealForm";
@@ -53,7 +53,7 @@ const Dashboard = () => {
   if (restaurant && allMealsData) {
     return (
       <>
-        <div className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col items-center justify-center h-screen">
           {restaurant && allMealsData.length > 0 ? (
             <div>
               <h1 className="text-center font-bold my-6 text-4xl pacifico-regular">
