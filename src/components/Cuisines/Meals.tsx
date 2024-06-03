@@ -85,7 +85,7 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
         <h1 className="text-xl font-semibold">{name}</h1>
         <p>{category}</p>
         <p>{price}$</p>
-        {path.pathname === "/Cuisines" ? (
+        {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
           <>
             <div className="flex flex-row text-rose-500">
               <Bike color="#db0042" strokeWidth={1} />

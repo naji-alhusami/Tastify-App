@@ -1,37 +1,60 @@
 import { FetchError } from "./error";
 import { type Meal } from "../../components/Cuisines/MealsPage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../firebase-config";
 
 export async function UpdateMealHttp(meal: Meal) {
-  const { id, name, category, price, imageUrl, description, restaurant } = meal;
-  console.log(name, category, price, imageUrl, description);
-
-  const newMealInfo = {
-    restaurant,
+  const { id, name, category, price, image, description, restaurant } = meal;
+  console.log(
+    "meal data inside http:",
+    id,
     name,
     category,
+    restaurant,
     price,
-    description,
-    imageUrl,
-  };
-
-  const response = await fetch(
-    `https://food-order-e25e0-default-rtdb.firebaseio.com/meals/${id}.json`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newMealInfo),
-    }
+    image,
+    description
   );
 
-  if (!response.ok) {
-    console.log("res not ok");
-    const info = await response.json();
-    throw new FetchError("Error occurred", info); // to check
+  if (image) {
+    const imageFile = image[0];
+
+    const metadata = {
+      contentType: imageFile.type,
+    };
+
+    const storageRef = ref(storage, `${name}`);
+    const snapshot = await uploadBytes(storageRef, imageFile, metadata);
+    const downloadUrl = await getDownloadURL(snapshot.ref);
+
+    const newMealInfo = {
+      restaurant,
+      name,
+      category,
+      price,
+      description,
+      imageUrl: downloadUrl,
+    };
+
+    const response = await fetch(
+      `https://food-order-e25e0-default-rtdb.firebaseio.com/meals/${id}.json`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newMealInfo),
+      }
+    );
+
+    if (!response.ok) {
+      console.log("res not ok");
+      const info = await response.json();
+      throw new FetchError("Error occurred", info); // to check
+    }
+
+    const mealData = await response.json();
+
+    return mealData;
   }
-
-  const mealData = await response.json();
-
-  return mealData;
 }

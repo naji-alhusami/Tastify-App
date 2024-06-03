@@ -19,9 +19,7 @@ const MealForm = () => {
   const navigate = useNavigate();
   const { restaurant } = useParams();
   const params = useParams();
-  console.log("params:", params.mealform === "update");
-  //   console.log("allMealsData in New Form", allMealsData);
-
+  console.log(params);
   const {
     register,
     handleSubmit,
@@ -39,7 +37,7 @@ const MealForm = () => {
     queryKey: ["meals", params.id],
     queryFn: ({ signal }) => fetchMealDetails({ signal, id: params.id }),
   });
-  console.log("mealData in form", mealData);
+  // console.log("mealData in form", mealData);
 
   const {
     mutate: AddMeal,
@@ -58,9 +56,10 @@ const MealForm = () => {
 
   const {
     mutate: UpdateMealMutate,
-    // , isPending, isError, error
+    isPending: updateMealPending,
+    // isError, error
   } = useMutation({
-    // mutationKey: ["meals"],
+    mutationKey: ["meals", params.id],
     mutationFn: UpdateMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
@@ -72,13 +71,15 @@ const MealForm = () => {
   const onSubmit: SubmitHandler<
     TMealValidator & { restaurant: string }
   > = async (data: Meal) => {
-    if (restaurant) {
-      const mealData = { ...data, restaurant };
-      if (params.mealform === "update") {
-        UpdateMealMutate(mealData);
-      } else {
-        AddMeal(mealData);
-      }
+    console.log("mealData before sending data to query:", data);
+    // if (restaurant) {
+    // const mealData = { params, ...data };
+    console.log("mealData inside update data in query:", data);
+    if (params.mealform === "update") {
+      UpdateMealMutate({ ...data, id: params.id });
+    } else {
+      AddMeal(data);
+      // }
     }
   };
 
@@ -116,7 +117,9 @@ const MealForm = () => {
                       {...register("name")}
                       className={`focus-visible:ring-red-500 ${errors.name}`}
                       placeholder="Cheese Burger"
-                      defaultValue={params.mealform === "update" ? mealData?.name : ""}
+                      defaultValue={
+                        params.mealform === "update" ? mealData?.name : ""
+                      }
                     />
                     {errors?.name && (
                       <p className="text-sm text-red-500">
@@ -131,7 +134,7 @@ const MealForm = () => {
                       className={`
               focus-visible:ring-red-500 h-8 ${errors.category}
            `}
-                      value={
+                      defaultValue={
                         params.mealform === "update" ? mealData?.category : ""
                       }
                     >
@@ -148,7 +151,7 @@ const MealForm = () => {
                       placeholder="Price"
                       type="number"
                       step="0.01"
-                      value={
+                      defaultValue={
                         params.mealform === "update" ? mealData?.price : ""
                       }
                     />
@@ -168,7 +171,7 @@ const MealForm = () => {
                       errors.description ? "border-red-500" : ""
                     }`}
                     placeholder="Write your description here"
-                    value={
+                    defaultValue={
                       params.mealform === "update" ? mealData?.description : ""
                     }
                   />
@@ -198,10 +201,14 @@ const MealForm = () => {
                     type="submit"
                     className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
                   >
-                    {isPending ? (
+                    {params.mealform === "update" ? (
+                      updateMealPending ? (
+                        <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
+                      ) : (
+                        "Update Meal"
+                      )
+                    ) : isPending ? (
                       <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
-                    ) : params.mealform === "update" ? (
-                      "Update Meal"
                     ) : (
                       "Add Meal"
                     )}

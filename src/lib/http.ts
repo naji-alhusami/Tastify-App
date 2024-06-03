@@ -21,7 +21,6 @@ export async function fetchMeals({
   restaurant,
   id,
 }: FetchMealsOptions): Promise<Meal[]> {
-
   const response = await fetch(
     "https://food-order-e25e0-default-rtdb.firebaseio.com/meals.json",
     { signal: signal }
@@ -51,7 +50,9 @@ export async function fetchMeals({
   // To check the details of any meal:
   if (id) {
     // console.log(id);
-    const mealDetails = allConvertedMeals.filter((meal: Meal) => meal.id === id);
+    const mealDetails = allConvertedMeals.filter(
+      (meal: Meal) => meal.id === id
+    );
 
     // console.log(mealDetails);
     return mealDetails;
@@ -59,7 +60,9 @@ export async function fetchMeals({
 
   // To get all the meals for speceific restaurant:
   if (restaurant) {
-    const restaurantMeals = allConvertedMeals.filter((meal: Meal) => meal.restaurant === restaurant);
+    const restaurantMeals = allConvertedMeals.filter(
+      (meal: Meal) => meal.restaurant === restaurant
+    );
 
     // console.log(restaurantMeals);
     return restaurantMeals;
@@ -120,6 +123,65 @@ export async function sendOrders(orders: Order) {
 
   return order;
 }
+
+// export async function UpdateMealHttp({
+//   signal,
+//   id,
+// }: FetchMealsOptions): Promise<Meal> {
+//   const { name, category, price, image, description, restaurant } = meal;
+//   console.log(
+//     "meal data inside http:",
+//     id,
+//     name,
+//     category,
+//     restaurant,
+//     price,
+//     image,
+//     description
+//   );
+
+  // if (image) {
+  //   const imageFile = image[0];
+
+  //   const metadata = {
+  //     contentType: imageFile.type,
+  //   };
+
+  //   const storageRef = ref(storage, `${name}`);
+  //   const snapshot = await uploadBytes(storageRef, imageFile, metadata);
+  //   const downloadUrl = await getDownloadURL(snapshot.ref);
+
+  //   const newMealInfo = {
+  //     restaurant,
+  //     name,
+  //     category,
+  //     price,
+  //     description,
+  //     imageUrl: downloadUrl,
+  //   };
+
+  //   const response = await fetch(
+  //     `https://food-order-e25e0-default-rtdb.firebaseio.com/meals/${id}.json`,
+  //     {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(newMealInfo),
+  //     }
+  //   );
+
+  //   if (!response.ok) {
+  //     console.log("res not ok");
+  //     const info = await response.json();
+  //     throw new FetchError("Error occurred", info); // to check
+  //   }
+
+  //   const mealData = await response.json();
+
+  //   return mealData;
+  // }
+// }
 
 // export async function AddNewMeal(newMealInfo: TMealValidator) {
 //   const { name, category, price, image, description } = newMealInfo;
