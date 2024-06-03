@@ -11,6 +11,7 @@ import {
 import { loginUser, setUserLogin } from "../../store/redux/user-slice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import FormField from "../ui/FormField";
+import Button from "../ui/Button";
 
 interface LoginProps {
   setIsSignupBuyerForm: (open: boolean) => void;
@@ -45,16 +46,15 @@ const Login = ({
 
     try {
       const response = await dispatch(loginUser({ email, password })).unwrap();
-      // console.log("response:", response);
 
       if (response.userlogin) {
         dispatch(setUserLogin(true));
         localStorage.setItem("userLogin", JSON.stringify(response.userlogin));
+
         setIsLoginForm(false);
         setIsAuth(false);
-        if (response.role === "admin") {
-          navigate("/admin");
-        } else if (response.role === "seller") {
+
+        if (response.role === "seller") {
           navigate(`/dashboard/${response.restaurant}`);
         } else {
           navigate("/cuisines");
@@ -76,28 +76,32 @@ const Login = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid gap-2">
           {/* Email */}
-          <FormField
-            {...register("email")}
-            htmlFor="email"
-            labelValue="Email"
-            inputType="email"
-            placeholder="Your Email"
-            className={`focus-visible:ring-red-500 ${errors.email}`}
-            hasErrors={errors?.email ? true : false}
-            errorsMessage={errors.email?.message || ""}
-          />
+          <div className="grid gap-1 py-2">
+            <FormField
+              {...register("email")}
+              htmlFor="email"
+              labelValue="Email"
+              inputType="email"
+              placeholder="Your Email"
+              className={`focus-visible:ring-red-500 ${errors.email}`}
+              hasErrors={errors?.email ? true : false}
+              errorsMessage={errors.email?.message || ""}
+            />
+          </div>
 
           {/* Password */}
-          <FormField
-            {...register("password")}
-            htmlFor="password"
-            labelValue="Password"
-            inputType="password"
-            placeholder="Your Password"
-            className={`focus-visible:ring-red-500 ${errors.password}`}
-            hasErrors={errors?.password ? true : false}
-            errorsMessage={errors.password?.message || ""}
-          />
+          <div className="grid gap-1 py-2">
+            <FormField
+              {...register("password")}
+              htmlFor="password"
+              labelValue="Password"
+              inputType="password"
+              placeholder="Your Password"
+              className={`focus-visible:ring-red-500 ${errors.password}`}
+              hasErrors={errors?.password ? true : false}
+              errorsMessage={errors.password?.message || ""}
+            />
+          </div>
 
           {/* Errors From Firebase */}
           {error && (
@@ -107,16 +111,16 @@ const Login = ({
           )}
 
           <div className="flex flex-row justify-center items-center">
-            <button
+            <Button
               type="submit"
-              className="flex flex-row items-center justify-center px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
+              className=" text-white bg-rose-500 hover:bg-rose-600"
             >
               {loading ? (
                 <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
               ) : (
                 "Log in"
               )}
-            </button>
+            </Button>
             <div className="relative py-4">
               <div
                 aria-hidden="true"
@@ -130,12 +134,13 @@ const Login = ({
                 </span>
               </div>
             </div>
-            <button
-              className="w-full bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
+            <Button
+              type="button"
               onClick={SignupFormHandler}
+              className="bg-white border border-rose-500 hover:bg-rose-100 text-rose-600"
             >
               Sign up
-            </button>
+            </Button>
           </div>
         </div>
       </form>

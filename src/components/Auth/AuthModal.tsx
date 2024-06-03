@@ -1,17 +1,16 @@
 import { createPortal } from "react-dom";
-
 import { XCircle } from "lucide-react";
+import { type ReactNode } from "react";
+
+import Modal from "../ui/Modal.tsx";
 import Backdrop from "../ui/Backdrop.tsx";
 import "../../index.css";
-import { type ReactNode } from "react";
-import Modal from "../ui/Modal.tsx";
 
 interface AuthModalProps {
   openAuth: boolean;
   closeAuth: () => void;
   isLoginForm: boolean;
   isSignupBuyerForm: boolean;
-  setIsSignupBuyerForm: (open: boolean) => void;
   isSignupSellerForm: boolean;
   children: ReactNode;
 }
@@ -24,10 +23,6 @@ export default function AuthModal({
   isSignupSellerForm,
   children,
 }: AuthModalProps) {
-  // console.log("isSignupBuyerForm", isSignupBuyerForm);
-  // console.log("isSignupSellerForm", isSignupSellerForm);
-  // console.log("isLoginForm", isLoginForm);
-
   return createPortal(
     <Modal>
       {openAuth && <Backdrop onClick={closeAuth} />}

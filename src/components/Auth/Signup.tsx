@@ -1,19 +1,18 @@
-import { Input } from "../ui/Input";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { v4 as uuidv4 } from "uuid";
+import { Loader2 } from "lucide-react";
+
 import {
-  // AuthValidator,
   BuyerAuthValidator,
   SellerAuthValidator,
   type TAuthValidator,
 } from "../../lib/validators/account-validator";
 import { User, signupUser } from "../../store/redux/user-slice";
-// import { useDispatch } from "react-redux";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
-import { useState } from "react";
-// import { ZodError } from "zod";
-import { v4 as uuidv4 } from "uuid";
-import { Loader2 } from "lucide-react";
+import FormField from "../ui/FormField";
+import Button from "../ui/Button";
 
 interface SignupProps {
   setIsThanks: (open: boolean) => void;
@@ -74,11 +73,6 @@ const Signup = ({
     event?.preventDefault();
 
     try {
-      // // Include restaurant only if the form is for a seller
-      // if (isSignupSellerForm && "restaurant" in data) {
-      //   userData.restaurant = data.restaurant;
-      // }
-
       await dispatch(
         signupUser({
           id: data.id,
@@ -113,65 +107,72 @@ const Signup = ({
     >
       <div className="grid gap-2">
         <div className="flex flex-row justify-between items-center">
-          <div className="grid gap-1 py-2">
-            <label htmlFor="email">Email</label>
-            <Input
+          {/* Email */}
+          <div className="grid gap-1 py-2 mr-2">
+            <FormField
               {...register("email")}
-              className={`focus-visible:ring-red-500 ${errors.email}
-          `}
-              placeholder="you@example.com"
+              htmlFor="email"
+              labelValue="Email"
+              inputType="email"
+              placeholder="Your Email"
+              className={`focus-visible:ring-red-500 ${errors.email}`}
+              hasErrors={errors?.email ? true : false}
+              errorsMessage={errors.email?.message || ""}
             />
-            {errors?.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
-            {error && <p className="text-sm text-red-500">{error}</p>}
           </div>
 
-          <div className="grid gap-1 py-2 ">
-            <label htmlFor="password">Password</label>
-            <Input
+          {/* Password */}
+          <div className="grid gap-1 py-2">
+            <FormField
               {...register("password")}
-              type="password"
-              className={`
-              focus-visible:ring-red-500 ${errors.password}
-           `}
-              placeholder="Password"
+              htmlFor="password"
+              labelValue="Password"
+              inputType="password"
+              placeholder="Your Password"
+              className={`focus-visible:ring-red-500 ${errors.password}`}
+              hasErrors={errors?.password ? true : false}
+              errorsMessage={errors.password?.message || ""}
             />
-            {errors?.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
-            )}
           </div>
         </div>
+
+        {/* Restaurant Name */}
         {isSignupSellerForm && (
           <div className="grid gap-1 py-2">
-            <label htmlFor="restaurant">Restaurant Name</label>
-            <Input
+            <FormField
               {...register("restaurant")}
+              htmlFor="restaurant"
+              labelValue="Restaurant Name"
+              inputType="text"
+              placeholder="Restaurant Name"
               className={`focus-visible:ring-red-500 ${
                 "restaurant" in errors && errors.restaurant
                   ? "border-red-500"
                   : ""
               }`}
-              placeholder="Restaurant Name"
+              hasErrors={
+                "restaurant" in errors && errors?.restaurant ? true : false
+              }
+              errorsMessage={
+                ("restaurant" in errors && errors.restaurant?.message) || ""
+              }
             />
-            {"restaurant" in errors && errors.restaurant && (
-              <p className="text-sm text-red-500">
-                {errors.restaurant.message}
-              </p>
-            )}
           </div>
         )}
+
+        {/* Errors From Firebase */}
+        {error && <p className="text-sm text-red-500">{error}</p>}
         <div className="flex flex-row justify-center items-center">
-          <button
+          <Button
             type="submit"
-            className="flex flex-row items-center justify-center px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
+            className=" text-white bg-rose-500 hover:bg-rose-600"
           >
             {loading ? (
               <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
             ) : (
               "Signup"
             )}
-          </button>
+          </Button>
           <div className="relative py-4">
             <div
               aria-hidden="true"
@@ -185,12 +186,13 @@ const Signup = ({
               </span>
             </div>
           </div>
-          <button
-            className=" w-full bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
+          <Button
+            type="button"
+            className="bg-white border border-rose-500 hover:bg-rose-100 text-rose-600"
             onClick={loginFormHandler}
           >
             Log in
-          </button>
+          </Button>
         </div>
 
         <div className="relative py-4">
@@ -206,24 +208,24 @@ const Signup = ({
         </div>
         {isSignupBuyerForm ? (
           <div className="w-full">
-            <button
+            <Button
               type="button"
               onClick={SignupSellerHandler}
               className="w-full bg-gray-300 hover:bg-gray-500 rounded-md px-4 py-2"
             >
               Signup as Seller
-            </button>
+            </Button>
           </div>
         ) : (
           isSignupSellerForm && (
             <div className="w-full">
-              <button
+              <Button
                 type="button"
                 onClick={SignupBuyerHandler}
                 className="w-full bg-gray-300 hover:bg-gray-500 rounded-md px-4 py-2"
               >
                 Signup as Buyer
-              </button>
+              </Button>
             </div>
           )
         )}

@@ -4,7 +4,7 @@ interface FormFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   htmlFor: string;
   labelValue: string;
   inputType: string;
-  className?: string;
+  className: string;
   hasErrors: boolean;
   errorsMessage: string;
 }
@@ -23,7 +23,7 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
     ref
   ) => {
     return (
-      <div className="grid gap-1 py-2">
+      <>
         <label htmlFor={htmlFor}>{labelValue}</label>
         <input
           ref={ref}
@@ -32,7 +32,7 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
           {...props}
         />
         {hasErrors && <p className="text-sm text-red-500">{errorsMessage}</p>}
-      </div>
+      </>
     );
   }
 );

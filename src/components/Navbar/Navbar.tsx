@@ -93,7 +93,6 @@ const Navbar = () => {
           closeAuth={closeAuthModalHandler}
           isLoginForm={isLoginForm}
           isSignupBuyerForm={isSignupBuyerForm}
-          setIsSignupBuyerForm={setIsSignupBuyerForm}
           isSignupSellerForm={isSignupSellerForm}
         >
           {isSignupBuyerForm || isSignupSellerForm ? (
