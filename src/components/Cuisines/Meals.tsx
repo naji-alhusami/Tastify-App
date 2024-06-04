@@ -4,10 +4,10 @@ import { useAppDispatch } from "../../store/redux/hooks";
 // import { Meal } from "./MealsPage";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 // import { TMealValidator } from "../../lib/validators/meal-validator";
-import { Meal } from "./MealsPage";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { type Meal } from "../../lib/types";
+import { useMutation } from "@tanstack/react-query";
 import { DeleteMealHttp } from "../../lib/http/DeleteMealHttp";
-import { fetchMealDetails, queryClient } from "../../lib/http";
+import { queryClient } from "../../lib/http";
 // import { useContext } from "react";
 // import StateContext from "../../store/context/state-context";
 // import AddNewMealForm from "../Dashboard/AddNewMealForm";
@@ -54,17 +54,17 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
     }
   }
 
-  const {
-    data: mealData,
-    // isPending: mealDataPending,
-    // isError: mealDataIsError,
-    // error: mealDataError,
-  } = useQuery({
-    queryKey: ["meals", id],
-    queryFn: ({ signal }) => fetchMealDetails({ signal, id: id }),
-  });
+  // const {
+  //   data: mealData,
+  //   // isPending: mealDataPending,
+  //   // isError: mealDataIsError,
+  //   // error: mealDataError,
+  // } = useQuery({
+  //   queryKey: ["meals", id],
+  //   queryFn: ({ signal }) => fetchMealDetails({ signal, id: id }),
+  // });
 
-  console.log("mealData in Meals last try:", mealData);
+  // console.log("mealData in Meals last try:", mealData);
 
   function editMealHandler() {
     // if (id) {

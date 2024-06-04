@@ -9,7 +9,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AddMealHttp } from "../../lib/http/AddMealHttp";
-import { fetchMealDetails, queryClient } from "../../lib/http";
+import { fetchMeals, queryClient } from "../../lib/http";
 import { type Meal } from "../../lib/types";
 // import { Input } from "../ui/Input";
 import { Loader2 } from "lucide-react";
@@ -31,14 +31,22 @@ const MealForm = () => {
 
   const {
     data: mealData,
-    // isPending: mealDataPending,
-    // isError: mealDataIsError,
-    // error: mealDataError,
+    isPending: mealDataPending,
+    isError: mealDataIsError,
+    error: mealDataError,
   } = useQuery({
     queryKey: ["meals", params.id],
-    queryFn: ({ signal }) => fetchMealDetails({ signal, id: params.id }),
+    queryFn: ({ signal }) => fetchMeals({ signal, id: params.id }),
   });
-  // console.log("mealData in form", mealData);
+  if (mealDataPending) {
+    console.log("Loading...");
+  } else if (mealDataIsError) {
+    console.log("Error:", mealDataError);
+  } else if (mealData && mealData.length > 0) {
+    console.log("First meal data:", mealData[0]);
+  } else {
+    console.log("No meal data available");
+  }
 
   const {
     mutate: AddMeal,

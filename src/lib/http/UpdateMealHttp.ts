@@ -1,5 +1,5 @@
 import { FetchError } from "./error";
-import { type Meal } from "../../components/Cuisines/MealsPage";
+import { type Meal } from "../types";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase-config";
 

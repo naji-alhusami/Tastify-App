@@ -1,46 +1,23 @@
 import Meals from "./Meals";
 import SwiperCuisines from "./SwiperCuisines";
-import { useQuery } from "@tanstack/react-query";
-import { fetchMeals } from "../../lib/http";
 import Loading from "../ui/Loading";
-import { useContext } from "react";
-import StateContext from "../../store/context/state-context";
+
 // import DashboardImage from "/Images/dashboard.png";
 import { FetchError } from "../../lib/http/error";
 import { Meal } from "../../lib/types";
-
-
+import useMealManager from "../../utils/hooks/useMealManager";
 
 const MealsPage = () => {
-  // const [params] = useSearchParams();
-  // const cuisine = params.get("cuisine");
-
   const {
-    data: allMealsData,
-    isPending: allMealsPending,
-    isError: allMealsIsError,
-    error: allMealsError,
-  } = useQuery({
-    queryKey: ["meals"],
-    queryFn: () => fetchMeals({}),
-    staleTime: 5000, // this ensure that the data will not be fetched from cache always, but in every 5 sec
-    // gcTime:1000 this is the time that talk about how much the data will kept around
-  });
-  // console.log("allMealsData:", allMealsData);
-  const contextValue = useContext(StateContext) as { isRestaurant: string };
-
-  const { isRestaurant } = contextValue;
-
-  const {
-    data: filteredMealsData,
-    isLoading: filteredMealsLoading,
-    isError: filteredMealsIsError,
-    error: filteredMealsError,
-  } = useQuery({
-    queryKey: ["meals", { cuisine: isRestaurant }],
-    queryFn: ({ signal }) => fetchMeals({ signal, isRestaurant }),
-    enabled: !!isRestaurant, // the isLoading will not be true if this query is just disabled
-  });
+    allMealsData,
+    allMealsPending,
+    allMealsIsError,
+    allMealsError,
+    filteredMealsData,
+    filteredMealsLoading,
+    filteredMealsIsError,
+    filteredMealsError,
+  } = useMealManager();
 
   let content;
   if (allMealsPending || filteredMealsLoading) {

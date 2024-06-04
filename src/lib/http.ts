@@ -1,10 +1,7 @@
 import { type Order } from "./types";
 import { type Meal } from "./types";
 import { FetchError } from "./http/error";
-// import { Meal } from "../components/Cuisines/MealsPage";
-import { TMealValidator } from "./validators/meal-validator";
 import { QueryClient } from "@tanstack/react-query";
-// import { Meal } from "../components/Cuisines/MealsPage";
 
 export const queryClient = new QueryClient();
 
@@ -32,6 +29,7 @@ export async function fetchMeals({
   }
 
   const data = await response.json();
+  console.log("data in http:", data);
 
   const allConvertedMeals = Object.keys(data).map((key) => ({
     id: key,
@@ -41,7 +39,7 @@ export async function fetchMeals({
   // To filter meals for buyer users:
   if (isRestaurant) {
     const filteredMeals = allConvertedMeals.filter(
-      (meal: TMealValidator) => meal.category === isRestaurant
+      (meal: Meal) => meal.category === isRestaurant
     );
 
     return filteredMeals;
@@ -49,12 +47,12 @@ export async function fetchMeals({
 
   // To check the details of any meal:
   if (id) {
-    // console.log(id);
+    console.log("id in http:", id);
     const mealDetails = allConvertedMeals.filter(
       (meal: Meal) => meal.id === id
     );
 
-    // console.log(mealDetails);
+    console.log("mealDetails:", mealDetails);
     return mealDetails;
   }
 
@@ -71,27 +69,27 @@ export async function fetchMeals({
   return allConvertedMeals;
 }
 
-export async function fetchMealDetails({
-  signal,
-  id,
-}: FetchMealsOptions): Promise<Meal> {
-  // console.log(id);
-  const response = await fetch(
-    `https://food-order-e25e0-default-rtdb.firebaseio.com/meals/${id}.json`,
-    { signal: signal }
-  );
+// export async function fetchMealDetails({
+//   signal,
+//   id,
+// }: FetchMealsOptions): Promise<Meal> {
+//   // console.log(id);
+//   const response = await fetch(
+//     `https://food-order-e25e0-default-rtdb.firebaseio.com/meals/${id}.json`,
+//     { signal: signal }
+//   );
 
-  if (!response.ok) {
-    // console.log("res not ok");
-    const info = await response.json();
-    throw new FetchError("Error occurred", info);
-  }
+//   if (!response.ok) {
+//     // console.log("res not ok");
+//     const info = await response.json();
+//     throw new FetchError("Error occurred", info);
+//   }
 
-  const data = await response.json();
-  // console.log("data:", data);
+//   const data = await response.json();
+//   // console.log("data:", data);
 
-  return data;
-}
+//   return data;
+// }
 
 export async function sendOrders(orders: Order) {
   const { name, email, state, city, zip, street, house } = orders;

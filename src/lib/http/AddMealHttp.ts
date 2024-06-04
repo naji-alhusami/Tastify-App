@@ -2,7 +2,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase-config";
 
 import { FetchError } from "./error";
-import { type Meal } from "../../components/Cuisines/MealsPage";
+import { type Meal } from "../types";
 
 export async function AddMealHttp(meal: Meal) {
   const { name, category, price, image, description, restaurant } = meal;
