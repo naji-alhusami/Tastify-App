@@ -1,4 +1,3 @@
-// interface Props {}
 import DashboardImage from "/Images/dashboard.png";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";

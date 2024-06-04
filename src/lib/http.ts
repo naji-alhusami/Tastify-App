@@ -29,7 +29,7 @@ export async function fetchMeals({
   }
 
   const data = await response.json();
-  console.log("data in http:", data);
+  console.log("restaurant in http:", restaurant);
 
   const allConvertedMeals = Object.keys(data).map((key) => ({
     id: key,
@@ -62,7 +62,7 @@ export async function fetchMeals({
       (meal: Meal) => meal.restaurant === restaurant
     );
 
-    // console.log(restaurantMeals);
+    console.log(restaurantMeals);
     return restaurantMeals;
   }
 

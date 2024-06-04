@@ -1,9 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { fetchMeals } from "../../lib/http";
 import { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import { fetchMeals } from "../../lib/http";
 import StateContext from "../../store/context/state-context";
+import { useParams } from "react-router-dom";
 
 const useMealManager = () => {
+  // Fetch All Meals:
   const {
     data: allMealsData,
     isPending: allMealsPending,
@@ -16,8 +19,7 @@ const useMealManager = () => {
     // gcTime:1000 this is the time that talk about how much the data will kept around
   });
 
-
-  // 
+  // Fetch Meals Depending On Category:
   const contextValue = useContext(StateContext) as { isRestaurant: string };
   const { isRestaurant } = contextValue;
 
@@ -32,6 +34,22 @@ const useMealManager = () => {
     enabled: !!isRestaurant, // the isLoading will not be true if this query is just disabled
   });
 
+  // Fetch Meals Depending On Restaurant Name:
+  const { restaurant } = useParams();
+  
+  const {
+    data: allRestaurantMealsData,
+    isPending: allRestaurantMealsPending,
+    isError: allRestaurantMealsIsError,
+    error: allRestaurantMealsError,
+  } = useQuery({
+    queryKey: ["meals", { restaurant }],
+    queryFn: () => fetchMeals({ restaurant }),
+    staleTime: 5000,
+    enabled: !!restaurant,
+  });
+
+
   return {
     allMealsData,
     allMealsPending,
@@ -41,6 +59,10 @@ const useMealManager = () => {
     filteredMealsLoading,
     filteredMealsIsError,
     filteredMealsError,
+    allRestaurantMealsData,
+    allRestaurantMealsPending,
+    allRestaurantMealsIsError,
+    allRestaurantMealsError,
   };
 };
 
