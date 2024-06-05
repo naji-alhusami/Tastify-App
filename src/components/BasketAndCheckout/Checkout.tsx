@@ -1,5 +1,3 @@
-// import React from "react";
-
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   CheckoutValidator,
@@ -11,7 +9,7 @@ import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
 import { extractAddressDetails } from "../../lib/get-address";
 import { useMutation } from "@tanstack/react-query";
-import { sendOrders } from "../../lib/http";
+import { sendOrders } from "../../lib/http/SendOrderHttp";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { clearBasket } from "../../store/redux/basket-slice";

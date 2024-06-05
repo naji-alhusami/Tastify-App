@@ -1,25 +1,22 @@
 import DashboardImage from "/Images/dashboard.png";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   MealValidator,
   TMealValidator,
 } from "../../lib/validators/meal-validator";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { AddMealHttp } from "../../lib/http/AddMealHttp";
-import { fetchMeals, queryClient } from "../../lib/http";
+
 import { type Meal } from "../../lib/types";
-// import { Input } from "../ui/Input";
 import { Loader2 } from "lucide-react";
-import { UpdateMealHttp } from "../../lib/http/UpdateMealHttp";
 import FormField from "../ui/FormField";
+import useMealManager from "../../utils/hooks/useMealManager";
+import { FetchError } from "../../lib/http/error";
+import Loading from "../ui/Loading";
 
 const MealForm = () => {
-  const navigate = useNavigate();
   const { restaurant } = useParams();
   const params = useParams();
-  console.log(params);
   const {
     register,
     handleSubmit,
@@ -29,67 +26,44 @@ const MealForm = () => {
   });
 
   const {
-    data: mealData,
-    isPending: mealDataPending,
-    isError: mealDataIsError,
-    error: mealDataError,
-  } = useQuery({
-    queryKey: ["meals", params.id],
-    queryFn: ({ signal }) => fetchMeals({ signal, id: params.id }),
-  });
-  if (mealDataPending) {
-    console.log("Loading...");
-  } else if (mealDataIsError) {
-    console.log("Error:", mealDataError);
-  } else if (mealData && mealData.length > 0) {
-    console.log("First meal data:", mealData[0]);
-  } else {
-    console.log("No meal data available");
-  }
-
-  const {
-    mutate: AddMeal,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
-    // mutationKey: ["meals"],
-    mutationFn: AddMealHttp,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      //   setIsMealForm(false);
-      navigate(`/dashboard/${restaurant}`);
-    },
-  });
-
-  const {
-    mutate: UpdateMealMutate,
-    isPending: updateMealPending,
-    // isError, error
-  } = useMutation({
-    mutationKey: ["meals", params.id],
-    mutationFn: UpdateMealHttp,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      // setIsNewMealForm(false);
-      navigate(`/dashboard/${restaurant}`);
-    },
-  });
+    mealData,
+    mealDataPending,
+    mealDataIsError,
+    mealDataError,
+    addMealMutation,
+    addMealIsPending,
+    addMealIsError,
+    addMealError,
+    updateMealMutation,
+    updateMealIsPending,
+    updateMealIsError,
+    updateMealError,
+  } = useMealManager();
 
   const onSubmit: SubmitHandler<
     TMealValidator & { restaurant: string }
   > = async (data: Meal) => {
-    console.log("mealData before sending data to query:", data);
-    // if (restaurant) {
-    // const mealData = { params, ...data };
-    console.log("mealData inside update data in query:", data);
     if (params.mealform === "update") {
-      UpdateMealMutate({ ...data, id: params.id });
+      updateMealMutation({ ...data, id: params.id });
     } else {
-      AddMeal(data);
-      // }
+      addMealMutation(data);
     }
   };
+
+  // let content;
+  if (mealDataPending && params.mealform === "update") {
+    return <Loading />;
+  } else if (mealDataIsError && params.mealform === "update") {
+    if (mealDataError instanceof FetchError) {
+      return (
+        <div className="text-center text-xl h-[350px] text-rose-500">
+          <h1>
+            {mealDataError.message} - {mealDataError.info}
+          </h1>
+        </div>
+      );
+    }
+  }
 
   if (restaurant) {
     return (
@@ -123,35 +97,23 @@ const MealForm = () => {
                       placeholder="Meal Name"
                       className={`focus-visible:ring-red-500 ${errors.name}`}
                       defaultValue={
-                        params.mealform === "update" ? mealData?.name : ""
+                        params.mealform === "update" && mealData
+                          ? mealData[0].name
+                          : ""
                       }
                       hasErrors={errors?.name ? true : false}
                       errorsMessage={errors.name?.message || ""}
                     />
-                    {/* <label htmlFor="name">Name</label>
-                    <Input
-                      {...register("name")}
-                      className={`focus-visible:ring-red-500 ${errors.name}`}
-                      placeholder="Cheese Burger"
-                      defaultValue={
-                        params.mealform === "update" ? mealData?.name : ""
-                      }
-                    />
-                    {errors?.name && (
-                      <p className="text-sm text-red-500">
-                        {errors.name.message}
-                      </p>
-                    )} */}
                   </div>
                   <div className="grid gap-1 py-2 w-full md:mr-6">
                     <label htmlFor="password">Category</label>
                     <select
                       {...register("category")}
-                      className={`
-              focus-visible:ring-red-500 h-8 ${errors.category}
-           `}
+                      className={` focus-visible:ring-red-500 h-8 ${errors.category}`}
                       defaultValue={
-                        params.mealform === "update" ? mealData?.category : ""
+                        params.mealform === "update" && mealData
+                          ? mealData[0].category
+                          : ""
                       }
                     >
                       <option value="">Select a category</option>
@@ -161,34 +123,20 @@ const MealForm = () => {
                   </div>
                   <div className="grid gap-1 py-2 w-full">
                     <FormField
-                      {...register("price")}
+                      {...register("price", { valueAsNumber: true })}
                       htmlFor="price"
                       labelValue="Price"
                       inputType="number"
                       placeholder="12.99$"
                       className={`focus-visible:ring-red-500 ${errors.price}`}
                       defaultValue={
-                        params.mealform === "update" ? mealData?.price : ""
+                        params.mealform === "update" && mealData
+                          ? mealData[0].price
+                          : ""
                       }
                       hasErrors={errors?.price ? true : false}
                       errorsMessage={errors.price?.message || ""}
                     />
-                    {/* <label htmlFor="name">Price</label>
-                    <Input
-                      {...register("price", { valueAsNumber: true })}
-                      className={`focus-visible:ring-red-500 ${errors.price}`}
-                      placeholder="Price"
-                      type="number"
-                      step="0.01"
-                      defaultValue={
-                        params.mealform === "update" ? mealData?.price : ""
-                      }
-                    />
-                    {errors?.price && (
-                      <p className="text-sm text-red-500">
-                        {errors.price.message}
-                      </p>
-                    )} */}
                   </div>
                 </div>
                 <div className="grid gap-1 py-2">
@@ -201,7 +149,9 @@ const MealForm = () => {
                     }`}
                     placeholder="Write your description here"
                     defaultValue={
-                      params.mealform === "update" ? mealData?.description : ""
+                      params.mealform === "update" && mealData
+                        ? mealData[0].description
+                        : ""
                     }
                   />
                   {errors?.description && (
@@ -231,18 +181,31 @@ const MealForm = () => {
                     className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
                   >
                     {params.mealform === "update" ? (
-                      updateMealPending ? (
+                      updateMealIsPending ? (
                         <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
                       ) : (
                         "Update Meal"
                       )
-                    ) : isPending ? (
+                    ) : addMealIsPending ? (
                       <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
                     ) : (
                       "Add Meal"
                     )}
                   </button>
-                  {isError && <p>{error.message || "error"}</p>}
+                  {addMealIsError && (
+                    <p>
+                      {addMealError instanceof FetchError
+                        ? addMealError.message
+                        : "error"}
+                    </p>
+                  )}
+                  {updateMealIsError && (
+                    <p>
+                      {updateMealError instanceof FetchError
+                        ? updateMealError.message
+                        : "error"}
+                    </p>
+                  )}
                 </div>
               </div>
             </form>
