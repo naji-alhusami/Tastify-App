@@ -1,4 +1,4 @@
-import { type Order } from "../types";
+import { type Order } from "../types/types";
 import { FetchError } from "./error";
 
 export async function sendOrders(orders: Order) {

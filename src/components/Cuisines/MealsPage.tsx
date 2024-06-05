@@ -4,7 +4,7 @@ import Loading from "../ui/Loading";
 
 // import DashboardImage from "/Images/dashboard.png";
 import { FetchError } from "../../lib/http/error";
-import { Meal } from "../../lib/types";
+import { Meal } from "../../lib/types/types";
 import useMealManager from "../../utils/hooks/useMealManager";
 
 const MealsPage = () => {

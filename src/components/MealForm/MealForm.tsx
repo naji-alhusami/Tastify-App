@@ -7,7 +7,7 @@ import {
 } from "../../lib/validators/meal-validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { type Meal } from "../../lib/types";
+import { type Meal } from "../../lib/types/types";
 import { Loader2 } from "lucide-react";
 import FormField from "../ui/FormField";
 import useMealManager from "../../utils/hooks/useMealManager";

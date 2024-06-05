@@ -13,7 +13,7 @@ import { sendOrders } from "../../lib/http/SendOrderHttp";
 import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { clearBasket } from "../../store/redux/basket-slice";
-import { Order } from "../../lib/types";
+import { Order } from "../../lib/types/types";
 import FormField from "../ui/FormField";
 
 interface CheckoutProps {

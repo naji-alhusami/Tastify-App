@@ -1,14 +1,19 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { type Meal } from "../../lib/types";
+import { type Meal } from "../../lib/types/types";
 import { FetchError } from "../../lib/http/error";
 import Meals from "../Cuisines/Meals";
 import useMealManager from "../../utils/hooks/useMealManager";
 import Loading from "../ui/Loading";
+import { useContext } from "react";
+import StateContext from "../../store/context/state-context";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
   const { restaurant } = useParams();
+  const contextValue = useContext(StateContext) as {
+    setIsAddMealForm: (form: boolean) => void;
+  };
+  const { setIsAddMealForm } = contextValue;
 
   const {
     allRestaurantMealsData,
@@ -16,7 +21,7 @@ const Dashboard = () => {
     allRestaurantMealsIsError,
     allRestaurantMealsError,
   } = useMealManager();
-  
+
   let content;
   if (allRestaurantMealsPending) {
     content = <Loading />;
@@ -43,7 +48,8 @@ const Dashboard = () => {
   }
 
   function addNewMealFormHandler() {
-    navigate(`/dashboard/${restaurant}/add`);
+    setIsAddMealForm(true);
+    // navigate(`/dashboard/${restaurant}/add`);
   }
 
   if (restaurant && allRestaurantMealsData) {

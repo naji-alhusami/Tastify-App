@@ -19,7 +19,8 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
   const [lon, setLon] = useState<number | null>(null);
   const [isRestaurant, setIsRestaurant] = useState<string | null>(null);
   const [showRestaurants, setShowRestaurants] = useState<boolean>(false);
-  const [isMealForm, setIsMealForm] = useState<boolean>(false);
+  const [isAddMealForm, setIsAddMealForm] = useState<boolean>(false);
+  const [isUpdateMealForm, setIsUpdateMealForm] = useState<boolean>(false);
 
   const [params] = useSearchParams();
   // console.log(params.get("cuisine"));
@@ -52,8 +53,10 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
     setIsRestaurant,
     showRestaurants,
     setShowRestaurants,
-    isMealForm,
-    setIsMealForm,
+    isAddMealForm,
+    setIsAddMealForm,
+    isUpdateMealForm,
+    setIsUpdateMealForm,
   };
 
   return (

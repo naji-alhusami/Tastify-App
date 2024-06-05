@@ -1,16 +1,23 @@
 import { Bike, Loader2 } from "lucide-react";
 import { addToBasket } from "../../store/redux/basket-slice";
 import { useAppDispatch } from "../../store/redux/hooks";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { type Meal } from "../../lib/types";
+import { useLocation } from "react-router-dom";
+import { type Meal } from "../../lib/types/types";
 import useMealManager from "../../utils/hooks/useMealManager";
 import { FetchError } from "../../lib/http/error";
+import { useContext } from "react";
+import StateContext from "../../store/context/state-context";
 
 export default function Meals({ id, category, name, price, imageUrl }: Meal) {
   const path = useLocation();
-  const navigate = useNavigate();
-  const params = useParams();
+  // const navigate = useNavigate();
+  // const params = useParams();
   const dispatch = useAppDispatch();
+
+  const contextValue = useContext(StateContext) as {
+    setIsUpdateMealForm: (form: boolean) => void;
+  };
+  const { setIsUpdateMealForm } = contextValue;
 
   function addToBasketHandler() {
     if (id) {
@@ -33,9 +40,10 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
   }
 
   function editMealHandler() {
+    setIsUpdateMealForm(true);
     // if (id) {
     // console.log("id in edit", id);
-    navigate(`/dashboard/${params.restaurant}/update/${id}`);
+    // navigate(`/dashboard/${params.restaurant}/update/${id}`);
     // deleteMutation(id);
     // }
     // setIsMealForm(true);

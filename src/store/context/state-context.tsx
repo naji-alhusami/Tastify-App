@@ -11,8 +11,10 @@ interface ContextType {
   setIsRestaurant: (restaurant: string) => void;
   showRestaurants: boolean;
   setShowRestaurants: (restaurant: boolean) => void;
-  isMealForm: boolean;
-  setIsMealForm: (form: boolean) => void;
+  isAddMealForm: boolean;
+  setIsAddMealForm: (form: boolean) => void;
+  isUpdateMealForm: boolean;
+  setIsUpdateMealForm: (form: boolean) => void;
 }
 
 const StateContext = createContext<null | ContextType>(null);

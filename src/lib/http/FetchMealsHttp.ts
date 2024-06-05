@@ -1,4 +1,4 @@
-import { type Meal } from "../types";
+import { type Meal } from "../types/types";
 import { FetchError } from "./error";
 import { QueryClient } from "@tanstack/react-query";
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
 
 // import StateContext from "../../store/context/state-context";
@@ -13,6 +13,8 @@ import Checkout from "../BasketAndCheckout/Checkout";
 // import Basket from "../Basket/BasketModal";
 import BasketAndCheckoutModal from "../BasketAndCheckout/BasketAndCheckoutModal";
 import BasketItems from "../BasketAndCheckout/Basket";
+import MealFormModal from "../MealForm/MealFormModal";
+import StateContext from "../../store/context/state-context";
 
 const Navbar = () => {
   // Authentication (Signup and Login)
@@ -21,7 +23,7 @@ const Navbar = () => {
   const [isSignupBuyerForm, setIsSignupBuyerForm] = useState<boolean>(false);
   const [isSignupSellerForm, setIsSignupSellerForm] = useState<boolean>(false);
   const [isThanks, setIsThanks] = useState<boolean>(false);
-  
+
   const openSignupModalHandler = () => {
     setIsAuth(true);
     setIsSignupBuyerForm(true);
@@ -41,6 +43,25 @@ const Navbar = () => {
     setIsSignupBuyerForm(false);
     setIsSignupSellerForm(false);
     setIsThanks(false);
+  };
+
+  // Add Meal and Update:
+  const contextValue = useContext(StateContext) as {
+    isAddMealForm: boolean;
+    setIsAddMealForm: (form: boolean) => void;
+    isUpdateMealForm: boolean;
+    setIsUpdateMealForm: (form: boolean) => void;
+  };
+  const {
+    isAddMealForm,
+    setIsAddMealForm,
+    isUpdateMealForm,
+    setIsUpdateMealForm,
+  } = contextValue;
+
+  const closeMealFormModalHandler = () => {
+    setIsAddMealForm(false);
+    setIsUpdateMealForm(false);
   };
 
   // Basket and Checkout:
@@ -80,9 +101,6 @@ const Navbar = () => {
     localStorage.removeItem("address");
   };
 
-  // const contextValue = useContext(StateContext) as { address: string };
-  // const { address } = contextValue;
-
   const heightClass = path.pathname !== "/" ? "lg:h-16" : "h-16";
 
   return (
@@ -114,6 +132,14 @@ const Navbar = () => {
             />
           )}
         </AuthModal>
+      )}
+
+      {(isAddMealForm || isUpdateMealForm) && (
+        <MealFormModal
+          isAddMealForm={isAddMealForm}
+          closeMealForm={closeMealFormModalHandler}
+          isUpdateMealForm={isUpdateMealForm}
+        />
       )}
 
       {isBasketForm && (
