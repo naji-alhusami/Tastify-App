@@ -4,31 +4,44 @@ import type SwiperType from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
-import { ITEMS_CATEGORIES } from "./ItemsCategories";
+// import { ITEMS_CATEGORIES } from "./ItemsCategories";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import StateContext from "../../store/context/state-context";
+import useMealManager from "../../utils/hooks/useMealManager";
+import Meals from "./Meals";
+// import "./swiper.d.ts";
+
+// interface SwiperCuisinesProps {
+//   loopFillGroupWithBlank?: boolean;
+// }
 
 const SwiperCuisines = () => {
   const [swiper, setSwiper] = useState<null | SwiperType>(null);
+  const {
+    allMealsData,
+    // allMealsPending, allMealsIsError, allMealsError
+  } = useMealManager();
   const contextValue = useContext(StateContext);
 
   if (!contextValue) {
     // We should handle the case when contextValue is null
     return null; // or any other fallback logic
   }
-  const { isCuisine, setIsCuisine, setShowRestaurants } = contextValue;
+  // const { isCuisine,
+  //   // setIsCuisine, setShowRestaurants
+  //  } = contextValue;
 
-  const restaurantsHandler = (cuisine: string) => {
-    // console.log(cuisine);
-    setIsCuisine(cuisine);
-    setShowRestaurants(true);
-  };
+  // const restaurantsHandler = (cuisine: string) => {
+  //   // console.log(cuisine);
+  //   setIsCuisine(cuisine);
+  //   setShowRestaurants(true);
+  // };
 
   const activeStyles =
     "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
 
   return (
-    <div className="relative  h-32 overflow-hidden rounded-xl ">
+    <div className="relative  overflow-hidden rounded-xl ">
       <div className="absolute inset-0  opacity-100 transition ">
         <button
           onClick={(e) => {
@@ -45,7 +58,7 @@ const SwiperCuisines = () => {
             e.preventDefault();
             swiper?.slidePrev();
           }}
-          className={`${activeStyles} "left-3 transition`}
+          className={`${activeStyles} left-3 transition`}
           aria-label="previous image"
         >
           <ChevronLeft className="h-4 w-4 text-white" />{" "}
@@ -53,35 +66,31 @@ const SwiperCuisines = () => {
       </div>
 
       <Swiper
-        // pagination={{
-        //   renderBullet: (_, className) => {
-        //     return `<span class="rounded-full transition ${className}"></span>`;
-        //   },
-        // }}
         onSwiper={(swiper) => setSwiper(swiper)}
-        spaceBetween={50}
+        spaceBetween={5}
         loop={true}
+        // loopFillGroupWithBlank={true}
         modules={[Pagination]}
         className="h-full w-full flex justify-center items-center"
         breakpoints={{
           375: {
             slidesPerView: 1,
           },
-          640: {
+          // 640: {
+          //   slidesPerView: 2,
+          // },
+          850: {
             slidesPerView: 2,
           },
-          768: {
+          // 1024: {
+          //   slidesPerView: 3,
+          // },
+          1200: {
             slidesPerView: 3,
-          },
-          1024: {
-            slidesPerView: 3,
-          },
-          1110: {
-            slidesPerView: 4,
           },
         }}
       >
-        {ITEMS_CATEGORIES.map((item, i) => (
+        {allMealsData?.map((meal, i) => (
           <SwiperSlide
             style={{
               display: "flex",
@@ -93,23 +102,8 @@ const SwiperCuisines = () => {
             key={i}
             className="relative h-full mx-auto"
           >
-            <div
-              // to={`/cuisines/?lon=${params.get("lon")}&lat=${params.get(
-              //   "lat"
-              // )}&cuisine=${item.value}`}
-              onClick={() => restaurantsHandler(item.value)}
-              className={`hover:text-rose-500 text-center ${
-                isCuisine === item.value ? "text-rose-500 font-bold" : ""
-              }`}
-            >
-              <img
-                src={item.icon}
-                alt={item.value}
-                // width={100}
-                // height={100}
-                className="-z-10 h-16 w-16 object-cover object-center"
-              />
-              <p>{item.value}</p>
+            <div key={meal.id}>
+              <Meals {...meal} />
             </div>
           </SwiperSlide>
         ))}

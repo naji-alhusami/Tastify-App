@@ -66,14 +66,14 @@ const MealsPage = () => {
       {/* <div>
         <img src={DashboardImage} alt="dashboard-image" />
       </div> */}
-      <div className="mx-10 mt-4">
-        <div>
+      <div className=" mt-4">
+        {/* <div>
           <h1 className="text-4xl">Choose Cuisines:</h1>
-        </div>
+        </div> */}
         <div className="flex justify-center items-center m-4">
           <SwiperCuisines />
         </div>
-        <div>{content}</div>
+        {/* <div>{content}</div> */}
       </div>
     </>
   );
