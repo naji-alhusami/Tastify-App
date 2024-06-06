@@ -10,14 +10,14 @@ import StateContext from "../../store/context/state-context";
 
 export default function Meals({ id, category, name, price, imageUrl }: Meal) {
   const path = useLocation();
-  // const navigate = useNavigate();
-  // const params = useParams();
   const dispatch = useAppDispatch();
 
   const contextValue = useContext(StateContext) as {
     setIsUpdateMealForm: (form: boolean) => void;
+    setIsAddMealForm: (form: boolean) => void;
+    setIsMealId: (id: string) => void;
   };
-  const { setIsUpdateMealForm } = contextValue;
+  const { setIsUpdateMealForm, setIsAddMealForm, setIsMealId } = contextValue;
 
   function addToBasketHandler() {
     if (id) {
@@ -39,8 +39,10 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
     }
   }
 
-  function editMealHandler() {
+  function editMealHandler(id: string) {
+    setIsMealId(id);
     setIsUpdateMealForm(true);
+    setIsAddMealForm(false);
     // if (id) {
     // console.log("id in edit", id);
     // navigate(`/dashboard/${params.restaurant}/update/${id}`);
@@ -77,7 +79,7 @@ export default function Meals({ id, category, name, price, imageUrl }: Meal) {
         ) : (
           <div className="text-md flex flex-row justify-between items-center">
             <button
-              onClick={editMealHandler}
+              onClick={() => id && editMealHandler(id)}
               className="bg-white border border-rose-500 hover:bg-rose-200 text-rose-600 px-6 py-1 rounded-md mt-4"
             >
               Edit

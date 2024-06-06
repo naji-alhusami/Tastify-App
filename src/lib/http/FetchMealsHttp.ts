@@ -6,15 +6,15 @@ export const queryClient = new QueryClient();
 
 interface FetchMealsOptions {
   signal?: AbortSignal; // Type for signal, assuming you're using AbortController
-  isRestaurant?: string; // Type for cuisine, assuming it's a string
-  restaurant?: string;
+  isCuisine?: string; // Type for cuisine, assuming it's a string
+  isRestaurant?: string;
   id?: string;
 }
 
 export async function fetchMeals({
   signal,
+  isCuisine,
   isRestaurant,
-  restaurant,
   id,
 }: FetchMealsOptions): Promise<Meal[]> {
   const response = await fetch(
@@ -28,7 +28,7 @@ export async function fetchMeals({
   }
 
   const data = await response.json();
-  console.log("restaurant in http:", restaurant);
+  // console.log("restaurant in http:", restaurant);
 
   const allConvertedMeals = Object.keys(data).map((key) => ({
     id: key,
@@ -36,9 +36,9 @@ export async function fetchMeals({
   }));
 
   // To filter meals for buyer users:
-  if (isRestaurant) {
+  if (isCuisine) {
     const filteredMeals = allConvertedMeals.filter(
-      (meal: Meal) => meal.category === isRestaurant
+      (meal: Meal) => meal.category === isCuisine
     );
 
     return filteredMeals;
@@ -56,9 +56,9 @@ export async function fetchMeals({
   }
 
   // To get all the meals for speceific restaurant:
-  if (restaurant) {
+  if (isRestaurant) {
     const restaurantMeals = allConvertedMeals.filter(
-      (meal: Meal) => meal.restaurant === restaurant
+      (meal: Meal) => meal.restaurant === isRestaurant
     );
 
     // console.log(restaurantMeals);

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import StateContext from "../../store/context/state-context";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { DeleteMealHttp } from "../../lib/http/DeleteMealHttp";
 import { AddMealHttp } from "../../lib/http/AddMealHttp";
 import { UpdateMealHttp } from "../../lib/http/UpdateMealHttp";
@@ -25,8 +25,12 @@ const useMealManager = () => {
   });
 
   // Fetch Meals Depending On Category:
-  const contextValue = useContext(StateContext) as { isRestaurant: string };
-  const { isRestaurant } = contextValue;
+  const contextValue = useContext(StateContext) as {
+    isCuisine: string;
+    isRestaurant: string;
+    isMealId: string;
+  };
+  const { isCuisine } = contextValue;
 
   const {
     data: filteredMealsData,
@@ -34,13 +38,13 @@ const useMealManager = () => {
     isError: filteredMealsIsError,
     error: filteredMealsError,
   } = useQuery({
-    queryKey: ["meals", { cuisine: isRestaurant }],
-    queryFn: ({ signal }) => fetchMeals({ signal, isRestaurant }),
-    enabled: !!isRestaurant, // the isLoading will not be true if this query is just disabled
+    queryKey: ["meals", { cuisine: isCuisine }],
+    queryFn: ({ signal }) => fetchMeals({ signal, isCuisine }),
+    enabled: !!isCuisine, // the isLoading will not be true if this query is just disabled
   });
 
   // Fetch Meals Depending On Restaurant Name:
-  const { restaurant } = useParams();
+  const { isRestaurant } = contextValue;
 
   const {
     data: allRestaurantMealsData,
@@ -48,14 +52,14 @@ const useMealManager = () => {
     isError: allRestaurantMealsIsError,
     error: allRestaurantMealsError,
   } = useQuery({
-    queryKey: ["meals", { restaurant }],
-    queryFn: () => fetchMeals({ restaurant }),
+    queryKey: ["meals", { isRestaurant }],
+    queryFn: () => fetchMeals({ isRestaurant }),
     staleTime: 5000,
-    enabled: !!restaurant,
+    enabled: !!isRestaurant,
   });
 
   // Fetch Meals Depending On Meal's Id:
-  const { id } = useParams();
+  const { isMealId } = contextValue;
 
   const {
     data: mealData,
@@ -63,9 +67,9 @@ const useMealManager = () => {
     isError: mealDataIsError,
     error: mealDataError,
   } = useQuery({
-    queryKey: ["meals", id],
-    queryFn: ({ signal }) => fetchMeals({ signal, id: id }),
-    enabled: !!id,
+    queryKey: ["meals", isMealId],
+    queryFn: ({ signal }) => fetchMeals({ signal, id: isMealId }),
+    enabled: !!isMealId,
   });
 
   // Add Meal:
@@ -79,7 +83,7 @@ const useMealManager = () => {
     mutationFn: AddMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      navigate(`/dashboard/${restaurant}`);
+      navigate(`/dashboard/${isRestaurant}`);
     },
   });
 
@@ -90,11 +94,11 @@ const useMealManager = () => {
     isError: updateMealIsError,
     error: updateMealError,
   } = useMutation({
-    mutationKey: ["meals", id],
+    mutationKey: ["meals", isMealId],
     mutationFn: UpdateMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      navigate(`/dashboard/${restaurant}`);
+      navigate(`/dashboard/${isRestaurant}`);
     },
   });
 

@@ -5,15 +5,23 @@ import { FetchError } from "../../lib/http/error";
 import Meals from "../Cuisines/Meals";
 import useMealManager from "../../utils/hooks/useMealManager";
 import Loading from "../ui/Loading";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import StateContext from "../../store/context/state-context";
 
 const Dashboard = () => {
-  const { restaurant } = useParams();
+  const params = useParams();
+  // console.log(params.restaurant);
   const contextValue = useContext(StateContext) as {
     setIsAddMealForm: (form: boolean) => void;
+    setIsRestaurant: (restaurant: string) => void;
   };
-  const { setIsAddMealForm } = contextValue;
+  const { setIsAddMealForm, setIsRestaurant } = contextValue;
+
+  useEffect(() => {
+    if (params.restaurant) {
+      setIsRestaurant(params.restaurant);
+    }
+  }, [params.restaurant, setIsRestaurant]);
 
   const {
     allRestaurantMealsData,
@@ -52,14 +60,14 @@ const Dashboard = () => {
     // navigate(`/dashboard/${restaurant}/add`);
   }
 
-  if (restaurant && allRestaurantMealsData) {
+  if (params.restaurant && allRestaurantMealsData) {
     return (
       <>
         <div className="flex flex-col items-center justify-center">
-          {restaurant && allRestaurantMealsData.length > 0 ? (
+          {params.restaurant && allRestaurantMealsData.length > 0 ? (
             <div>
               <h1 className="text-center font-bold my-6 text-4xl pacifico-regular">
-                {restaurant} Meals
+                {params.restaurant} Meals
               </h1>
               {content}
             </div>

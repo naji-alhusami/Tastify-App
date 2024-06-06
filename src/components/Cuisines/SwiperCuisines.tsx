@@ -16,11 +16,11 @@ const SwiperCuisines = () => {
     // We should handle the case when contextValue is null
     return null; // or any other fallback logic
   }
-  const { isRestaurant, setIsRestaurant, setShowRestaurants } = contextValue;
+  const { isCuisine, setIsCuisine, setShowRestaurants } = contextValue;
 
   const restaurantsHandler = (cuisine: string) => {
-    console.log(cuisine);
-    setIsRestaurant(cuisine);
+    // console.log(cuisine);
+    setIsCuisine(cuisine);
     setShowRestaurants(true);
   };
 
@@ -99,7 +99,7 @@ const SwiperCuisines = () => {
               // )}&cuisine=${item.value}`}
               onClick={() => restaurantsHandler(item.value)}
               className={`hover:text-rose-500 text-center ${
-                isRestaurant === item.value ? "text-rose-500 font-bold" : ""
+                isCuisine === item.value ? "text-rose-500 font-bold" : ""
               }`}
             >
               <img

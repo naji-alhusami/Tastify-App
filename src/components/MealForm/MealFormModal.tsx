@@ -3,6 +3,7 @@ import Modal from "../ui/Modal";
 import { createPortal } from "react-dom";
 // import { ReactNode } from "react";
 import Backdrop from "../ui/Backdrop";
+import MealForm from "./MealForm";
 
 interface MealFormModalProps {
   isAddMealForm: boolean;
@@ -26,10 +27,15 @@ const MealFormModal = ({
         className="text-rose-500 h-8 w-8 self-end hover:bg-rose-200 hover:rounded-full cursor-pointer"
       />
 
-      <h1 className="font-bold text-2xl pb-4 text-center">
+      <h1 className="font-bold text-2xl pb-4 text-center pacifico-regular">
         {isAddMealForm ? "Add Meal" : "Update Meal"}
       </h1>
-      <div className="flex flex-row justify-center items-center pb-6"></div>
+      <div className="flex flex-row justify-center items-center pb-6">
+        <MealForm
+          isAddMealForm={isAddMealForm}
+          isUpdateMealForm={isUpdateMealForm}
+        />
+      </div>
     </Modal>,
     document.getElementById("modal")!
   );

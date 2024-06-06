@@ -6,7 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import MealDetails from "./components/Cuisines/MealDetails.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import Dashboard from "./components/Dashboard/Dashboard.tsx";
-import MealForm from "./components/MealForm/MealForm.tsx";
+// import MealForm from "./components/MealForm/MealForm.tsx";
 import { queryClient } from "./lib/http/FetchMealsHttp.ts";
 
 function App() {
@@ -19,10 +19,10 @@ function App() {
           <Route path="/cuisines" element={<MealsPage />} />
           <Route path="/cuisines/:id" element={<MealDetails />} />
           <Route path="/dashboard/:restaurant" element={<Dashboard />} />
-          <Route
+          {/* <Route
             path="/dashboard/:restaurant/:mealform/:id?"
             element={<MealForm />}
-          />
+          /> */}
           {/* <Route path="/admin" element={<Admin />} /> */}
         </Routes>
         <Footer />

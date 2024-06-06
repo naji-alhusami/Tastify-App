@@ -9,6 +9,10 @@ interface ContextType {
   setLon: (lon: number | null) => void;
   isRestaurant: string | null;
   setIsRestaurant: (restaurant: string) => void;
+  isMealId: string | null;
+  setIsMealId: (id: string) => void;
+  isCuisine: string | null;
+  setIsCuisine: (cuisine: string) => void;
   showRestaurants: boolean;
   setShowRestaurants: (restaurant: boolean) => void;
   isAddMealForm: boolean;

@@ -115,7 +115,7 @@ export const loginUser = createAsyncThunk<
     if (!docSnap.exists()) {
       return thunkApi.rejectWithValue("User data not found.");
     }
-    console.log(docSnap.data());
+
     const userData = {
       id: docSnap.id,
       email: docSnap.data().email,
