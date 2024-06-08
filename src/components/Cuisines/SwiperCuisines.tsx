@@ -9,13 +9,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import StateContext from "../../store/context/state-context";
 import useMealManager from "../../utils/hooks/useMealManager";
 import Meals from "./Meals";
-// import "./swiper.d.ts";
-
-// interface SwiperCuisinesProps {
-//   loopFillGroupWithBlank?: boolean;
-// }
 
 const SwiperCuisines = () => {
+  const [activeIndex, setActiveIndex] = useState<number>(0);
   const [swiper, setSwiper] = useState<null | SwiperType>(null);
   const {
     allMealsData,
@@ -67,9 +63,9 @@ const SwiperCuisines = () => {
 
       <Swiper
         onSwiper={(swiper) => setSwiper(swiper)}
+        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         spaceBetween={5}
         loop={true}
-        // loopFillGroupWithBlank={true}
         modules={[Pagination]}
         className="h-full w-full flex justify-center items-center"
         breakpoints={{
@@ -90,23 +86,50 @@ const SwiperCuisines = () => {
           },
         }}
       >
-        {allMealsData?.map((meal, i) => (
-          <SwiperSlide
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-            key={i}
-            className="relative h-full mx-auto"
-          >
-            <div key={meal.id}>
-              <Meals {...meal} />
-            </div>
-          </SwiperSlide>
-        ))}
+        {allMealsData?.map((meal, i) => {
+          let slidesPerView = swiper?.params.slidesPerView;
+          if (typeof slidesPerView !== "number") {
+            slidesPerView = 1;
+          }
+          const totalSlides = allMealsData.length;
+
+          // Determine if the current slide should be active
+          let isActive = false;
+          if (slidesPerView === 1) {
+            // Only one slide is active
+            const middleIndex =
+              (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+            isActive = i === middleIndex;
+          } else if (slidesPerView === 2) {
+            // Both slides are active
+            const firstActiveIndex = activeIndex % totalSlides;
+            const secondActiveIndex = (activeIndex + 1) % totalSlides;
+            isActive = i === firstActiveIndex || i === secondActiveIndex;
+          } else if (slidesPerView === 3) {
+            // Middle slide is active
+            const middleIndex =
+              (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+            isActive = i === middleIndex;
+          }
+
+          return (
+            <SwiperSlide
+              key={i}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+              }}
+              className="relative h-full mx-auto"
+            >
+              <div key={meal.id}>
+                <Meals {...meal} isActive={isActive} />
+              </div>
+            </SwiperSlide>
+          );
+        })}
       </Swiper>
     </div>
   );

@@ -8,16 +8,21 @@ import { FetchError } from "../../lib/http/error";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
 
+interface MealProps extends Meal {
+  isActive: boolean;
+}
+
 export default function Meals({
   id,
   name,
   description,
   price,
   imageUrl,
-}: Meal) {
+  isActive,
+}: MealProps) {
   const path = useLocation();
   const dispatch = useAppDispatch();
-
+  console.log("isActive:", isActive);
   const contextValue = useContext(StateContext) as {
     setIsUpdateMealForm: (form: boolean) => void;
     setIsAddMealForm: (form: boolean) => void;
@@ -65,7 +70,7 @@ export default function Meals({
       </div>
       <div className="p-4 ">
         <h1 className="text-xl font-semibold">{name}</h1>
-        <p className="italic py-4">{description}</p>
+        {isActive && <p className="italic py-4">{description}</p>}
         <p className="text-rose-500 text-2xl">{price}$</p>
         {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
           <>
@@ -73,14 +78,16 @@ export default function Meals({
               <Bike color="#db0042" strokeWidth={1} />
               <p className="#db0042">Free</p>
             </div> */}
-            <div className="flex justify-center items-center">
-              <button
-                onClick={addToBasketHandler}
-                className="bg-rose-500 hover:bg-rose-600 px-2 py-1 rounded-md mt-4 text-white"
-              >
-                Add To Basket +
-              </button>
-            </div>
+            {isActive && (
+              <div className="flex justify-center items-center">
+                <button
+                  onClick={addToBasketHandler}
+                  className="bg-rose-500 hover:bg-rose-600 px-2 py-1 rounded-md mt-4 text-white"
+                >
+                  Add To Basket +
+                </button>
+              </div>
+            )}
           </>
         ) : (
           <div className="text-md flex flex-row justify-between items-center">
