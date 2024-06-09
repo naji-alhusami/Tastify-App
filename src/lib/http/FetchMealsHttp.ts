@@ -1,8 +1,5 @@
 import { type Meal } from "../types/types";
 import { FetchError } from "./error";
-import { QueryClient } from "@tanstack/react-query";
-
-export const queryClient = new QueryClient();
 
 interface FetchMealsOptions {
   signal?: AbortSignal; // Type for signal, assuming you're using AbortController

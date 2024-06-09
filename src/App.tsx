@@ -6,7 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import Footer from "./components/Footer/Footer.tsx";
 import Dashboard from "./components/Dashboard/Dashboard.tsx";
 // import MealForm from "./components/MealForm/MealForm.tsx";
-import { queryClient } from "./lib/http/FetchMealsHttp.ts";
+import { queryClient } from "./lib/http/AddMealHttp.ts";
 
 function App() {
   return (

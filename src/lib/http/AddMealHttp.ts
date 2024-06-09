@@ -3,6 +3,9 @@ import { storage } from "../../firebase-config";
 
 import { FetchError } from "./error";
 import { type Meal } from "../types/types";
+import { QueryClient } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient();
 
 export async function AddMealHttp(meal: Meal) {
   const { name, category, price, image, description, restaurant } = meal;

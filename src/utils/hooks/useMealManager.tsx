@@ -2,15 +2,13 @@ import { useContext } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
 import StateContext from "../../store/context/state-context";
-import { useNavigate } from "react-router-dom";
 import { DeleteMealHttp } from "../../lib/http/DeleteMealHttp";
 import { AddMealHttp } from "../../lib/http/AddMealHttp";
 import { UpdateMealHttp } from "../../lib/http/UpdateMealHttp";
-import { fetchMeals, queryClient } from "../../lib/http/FetchMealsHttp";
+import { fetchMeals } from "../../lib/http/FetchMealsHttp";
+import { queryClient } from "../../lib/http/AddMealHttp";
 
 const useMealManager = () => {
-  const navigate = useNavigate();
-
   // Fetch All Meals:
   const {
     data: allMealsData,
@@ -29,6 +27,8 @@ const useMealManager = () => {
     isCuisine: string;
     isRestaurant: string;
     isMealId: string;
+    setIsUpdateMealForm: (form: boolean) => void;
+    setIsAddMealForm: (form: boolean) => void;
   };
   const { isCuisine } = contextValue;
 
@@ -51,6 +51,7 @@ const useMealManager = () => {
     isPending: allRestaurantMealsPending,
     isError: allRestaurantMealsIsError,
     error: allRestaurantMealsError,
+    refetch: refetchAllRestaurantMealsData,
   } = useQuery({
     queryKey: ["meals", { isRestaurant }],
     queryFn: () => fetchMeals({ isRestaurant }),
@@ -72,6 +73,7 @@ const useMealManager = () => {
     enabled: !!isMealId,
   });
 
+  const { setIsAddMealForm, setIsUpdateMealForm } = contextValue;
   // Add Meal:
   const {
     mutate: addMealMutation,
@@ -83,7 +85,9 @@ const useMealManager = () => {
     mutationFn: AddMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      navigate(`/dashboard/${isRestaurant}`);
+      console.log("success in adding");
+      refetchAllRestaurantMealsData();
+      setIsAddMealForm(false);
     },
   });
 
@@ -98,7 +102,7 @@ const useMealManager = () => {
     mutationFn: UpdateMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      navigate(`/dashboard/${isRestaurant}`);
+      setIsUpdateMealForm(false);
     },
   });
 
@@ -113,6 +117,7 @@ const useMealManager = () => {
     mutationFn: DeleteMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
+      refetchAllRestaurantMealsData();
     },
   });
 

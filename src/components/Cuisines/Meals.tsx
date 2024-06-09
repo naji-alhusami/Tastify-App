@@ -93,31 +93,33 @@ export default function Meals({
             )}
           </>
         ) : (
-          <div className="text-md flex flex-row justify-between items-center">
-            <button
-              onClick={() => id && editMealHandler(id)}
-              className="bg-white border border-rose-500 hover:bg-rose-200 text-rose-600 px-6 py-1 rounded-md mt-4"
-            >
-              Edit
-            </button>
-            <button
-              onClick={deleteMealHandler}
-              className="bg-white border border-rose-500 hover:bg-rose-200 text-rose-600 px-6 py-1 rounded-md mt-4"
-            >
-              {deleteMealPending ? (
-                <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
-              ) : (
-                "Delete"
+          isActive && (
+            <div className="text-md flex flex-row justify-between items-center">
+              <button
+                onClick={() => id && editMealHandler(id)}
+                className="bg-white border border-rose-500 hover:bg-rose-200 text-rose-600 px-6 py-1 rounded-md mt-4"
+              >
+                Edit
+              </button>
+              <button
+                onClick={deleteMealHandler}
+                className="bg-white border border-rose-500 hover:bg-rose-200 text-rose-600 px-6 py-1 rounded-md mt-4"
+              >
+                {deleteMealPending ? (
+                  <Loader2 className="mr-2 h-6 w-4 text-center animate-spin" />
+                ) : (
+                  "Delete"
+                )}
+              </button>
+              {deleteMealIsError && (
+                <p>
+                  {deleteMealError instanceof FetchError
+                    ? deleteMealError.message
+                    : "error"}
+                </p>
               )}
-            </button>
-            {deleteMealIsError && (
-              <p>
-                {deleteMealError instanceof FetchError
-                  ? deleteMealError.message
-                  : "error"}
-              </p>
-            )}
-          </div>
+            </div>
+          )
         )}
       </div>
     </div>

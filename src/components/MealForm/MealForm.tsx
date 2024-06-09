@@ -12,9 +12,10 @@ import { Loader2 } from "lucide-react";
 import FormField from "../ui/FormField";
 import useMealManager from "../../utils/hooks/useMealManager";
 import { FetchError } from "../../lib/http/error";
-import Loading from "../ui/Loading";
+// import Loading from "../ui/Loading";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 interface MealFormProps {
   isAddMealForm: boolean;
@@ -67,7 +68,7 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
 
   // let content;
   if (mealDataPending && isUpdateMealForm) {
-    return <Loading />;
+    return <LoadingSpinner />;
   } else if (mealDataIsError && isUpdateMealForm) {
     if (mealDataError instanceof FetchError) {
       return (
