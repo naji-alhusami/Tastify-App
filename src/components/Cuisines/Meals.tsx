@@ -22,7 +22,6 @@ export default function Meals({
 }: MealProps) {
   const path = useLocation();
   const dispatch = useAppDispatch();
-  console.log("isActive:", isActive);
   const contextValue = useContext(StateContext) as {
     setIsUpdateMealForm: (form: boolean) => void;
     setIsAddMealForm: (form: boolean) => void;
@@ -64,7 +63,11 @@ export default function Meals({
 
   return (
     // <Link to={`/cuisines/${id}`} className="cursor-pointer">
-    <div className="text-center w-[275px] border border-gray-200 rounded-lg  overflow-hidden hover:scale-100">
+    <div
+      className={`text-center w-[275px]  rounded-lg overflow-hidden hover:scale-100 ${
+        isActive ? "border-2 border-amber-400" : ""
+      }`}
+    >
       <div>
         <img src={imageUrl} alt="rest-image" className="w-full h-[250px]" />
       </div>
