@@ -142,11 +142,20 @@ const SwiperMeals = () => {
     );
   }
 
+  const mealsData = filteredMealsData || allMealsData || [];
+  const slidesPerView = 3; // Adjust based on your breakpoints
+  const loop = mealsData.length > slidesPerView;
+
   const activeStyles =
     "active:scale-[0.97] md:mx-6 grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
 
   return (
     <div className="relative overflow-hidden rounded-xl ">
+      {!loop && (
+        <div className="absolute top-0 left-0 w-full text-center text-red-500 bg-white p-2 z-20">
+          <p>Swiper Loop Warning: Add more meals to enable loop mode.</p>
+        </div>
+      )}
       <div className="absolute inset-0  opacity-100 transition ">
         <button
           onClick={(e) => {
@@ -176,7 +185,7 @@ const SwiperMeals = () => {
         spaceBetween={5}
         loop={true}
         modules={[Pagination]}
-        className="h-full w-full flex justify-center items-center"
+        className="h-full w-full flex flex-row justify-center items-center"
         breakpoints={{
           375: {
             slidesPerView: 1,

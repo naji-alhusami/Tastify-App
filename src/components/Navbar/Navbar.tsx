@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
 
-// import StateContext from "../../store/context/state-context";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import AuthModal from "../Auth/AuthModal";
@@ -10,7 +9,6 @@ import Login from "../Auth/Login";
 import ThanksModal from "../Thanks/ThanksModal";
 import { logoutUser, setUserLogin } from "../../store/redux/user-slice";
 import Checkout from "../BasketAndCheckout/Checkout";
-// import Basket from "../Basket/BasketModal";
 import BasketAndCheckoutModal from "../BasketAndCheckout/BasketAndCheckoutModal";
 import BasketItems from "../BasketAndCheckout/Basket";
 import MealFormModal from "../MealForm/MealFormModal";

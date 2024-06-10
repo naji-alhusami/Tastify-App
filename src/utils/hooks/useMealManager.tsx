@@ -102,6 +102,7 @@ const useMealManager = () => {
     mutationFn: UpdateMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
+      refetchAllRestaurantMealsData();
       setIsUpdateMealForm(false);
     },
   });

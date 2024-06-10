@@ -53,16 +53,9 @@ export default function Meals({
     setIsMealId(id);
     setIsUpdateMealForm(true);
     setIsAddMealForm(false);
-    // if (id) {
-    // console.log("id in edit", id);
-    // navigate(`/dashboard/${params.restaurant}/update/${id}`);
-    // deleteMutation(id);
-    // }
-    // setIsMealForm(true);
   }
 
   return (
-    // <Link to={`/cuisines/${id}`} className="cursor-pointer">
     <div
       className={`text-center w-[275px]  rounded-lg overflow-hidden hover:scale-100 ${
         isActive ? "border-2 border-amber-400" : ""
@@ -77,10 +70,6 @@ export default function Meals({
         <p className="text-rose-500 text-2xl">{price}$</p>
         {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
           <>
-            {/* <div className="flex flex-row text-rose-500">
-              <Bike color="#db0042" strokeWidth={1} />
-              <p className="#db0042">Free</p>
-            </div> */}
             {isActive && (
               <div className="flex justify-center items-center">
                 <button
@@ -123,7 +112,5 @@ export default function Meals({
         )}
       </div>
     </div>
-
-    // </Link>
   );
 }

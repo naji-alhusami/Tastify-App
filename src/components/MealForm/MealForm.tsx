@@ -1,6 +1,4 @@
-// import DashboardImage from "/Images/dashboard.png";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
 import {
   MealValidator,
   TMealValidator,
@@ -23,14 +21,12 @@ interface MealFormProps {
 }
 
 const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
-  // const { restaurant } = useParams();
-  const params = useParams();
-
   const contextValue = useContext(StateContext) as {
     isRestaurant: string;
+    isMealId: string;
   };
-  const { isRestaurant } = contextValue;
-  console.log(isRestaurant);
+  const { isRestaurant, isMealId } = contextValue;
+  console.log(isMealId);
 
   const {
     register,
@@ -60,7 +56,7 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
     TMealValidator & { restaurant: string }
   > = async (data: Meal) => {
     if (isUpdateMealForm) {
-      updateMealMutation({ ...data, id: params.id });
+      updateMealMutation({ ...data, id: isMealId });
     } else if (isAddMealForm) {
       addMealMutation(data);
     }
