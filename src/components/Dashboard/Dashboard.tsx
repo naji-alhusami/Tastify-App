@@ -59,7 +59,7 @@ const Dashboard = () => {
             slidesPerView = 1;
           }
           const totalSlides = allRestaurantMealsData.length;
-
+          console.log(allRestaurantMealsData);
           let isActive = false;
           if (slidesPerView === 1) {
             // Only one slide is active
@@ -102,7 +102,6 @@ const Dashboard = () => {
 
   function addNewMealFormHandler() {
     setIsAddMealForm(true);
-    // navigate(`/dashboard/${restaurant}/add`);
   }
 
   const activeStyles =
@@ -112,59 +111,66 @@ const Dashboard = () => {
     return (
       <>
         <div className="relative overflow-hidden rounded-xl ">
-          <div className="absolute inset-0  opacity-100 transition ">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                swiper?.slideNext();
-              }}
-              className={`${activeStyles} right-3 transition`}
-              aria-label="next image"
-            >
-              <ChevronRight className="h-4 w-4 text-white" />
-            </button>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                swiper?.slidePrev();
-              }}
-              className={`${activeStyles} left-3 transition`}
-              aria-label="previous image"
-            >
-              <ChevronLeft className="h-4 w-4 text-white" />
-            </button>
-          </div>
-          {/* <div className="flex flex-col items-center justify-center"> */}
-          {params.restaurant && allRestaurantMealsData.length > 0 ? (
+          {allRestaurantMealsData.length >= 3 && (
+            <div className="absolute inset-0  opacity-100 transition ">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  swiper?.slideNext();
+                }}
+                className={`${activeStyles} right-3 transition`}
+                aria-label="next image"
+              >
+                <ChevronRight className="h-4 w-4 text-white" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  swiper?.slidePrev();
+                }}
+                className={`${activeStyles} left-3 transition`}
+                aria-label="previous image"
+              >
+                <ChevronLeft className="h-4 w-4 text-white" />
+              </button>
+            </div>
+          )}
+          {params.restaurant && (
             <div>
               <h1 className="text-center font-bold my-12 text-4xl pacifico-regular">
                 {params.restaurant} Meals
               </h1>
-              <Swiper
-                onSwiper={(swiper) => setSwiper(swiper)}
-                onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                spaceBetween={5}
-                loop={true}
-                modules={[Pagination]}
-                className="h-full w-full flex justify-center items-center"
-                breakpoints={{
-                  375: {
-                    slidesPerView: 1,
-                  },
-                  850: {
-                    slidesPerView: 2,
-                  },
-                  1200: {
-                    slidesPerView: 3,
-                  },
-                }}
-              >
-                {content}
-              </Swiper>
-            </div>
-          ) : (
-            <div className="text-center text-xl font-bold my-6">
-              No meals added!
+              {allRestaurantMealsData.length === 0 ? (
+                <div className="text-center text-xl font-bold my-6">
+                  No meals added!
+                </div>
+              ) : allRestaurantMealsData.length < 3 ? (
+                <div className="text-center text-xl font-bold my-6">
+                  You Should Add At Least 3 Meals.
+                </div>
+              ) : (
+                <Swiper
+                  onSwiper={(swiper) => setSwiper(swiper)}
+                  onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                  spaceBetween={5}
+                  loop={true}
+                  modules={[Pagination]}
+                  className="h-full w-full flex justify-center items-center"
+                  breakpoints={{
+                    375: {
+                      slidesPerView: 1,
+                    },
+                    850: {
+                      slidesPerView: 2,
+                    },
+                    1200: {
+                      slidesPerView: 3,
+                    },
+                  }}
+                >
+                  {content}
+                </Swiper>
+              )}
             </div>
           )}
         </div>
