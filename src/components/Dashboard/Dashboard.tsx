@@ -37,6 +37,9 @@ const Dashboard = () => {
     allRestaurantMealsError,
   } = useMealManager();
 
+  const activeStyles =
+    "active:scale-[0.97] md:mx-6 grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
+
   let content;
   if (allRestaurantMealsPending) {
     content = <Loading />;
@@ -51,70 +54,39 @@ const Dashboard = () => {
       );
     }
   } else if (allRestaurantMealsData) {
-    content = (
-      <>
-        {allRestaurantMealsData.map((meal, i) => {
-          let slidesPerView = swiper?.params?.slidesPerView;
-          if (typeof slidesPerView !== "number") {
-            slidesPerView = 1;
-          }
-          const totalSlides = allRestaurantMealsData.length;
-
-          // Check if the total number of slides is 3, make all slides active
-          let isActive = totalSlides === 3;
-
-          if (!isActive) {
-            if (slidesPerView === 1) {
-              // Only one slide is active
-              const middleIndex =
-                (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
-              isActive = i === middleIndex;
-            } else if (slidesPerView === 2) {
-              // Both slides are active
-              const firstActiveIndex = activeIndex % totalSlides;
-              const secondActiveIndex = (activeIndex + 1) % totalSlides;
-              isActive = i === firstActiveIndex || i === secondActiveIndex;
-            } else if (slidesPerView === 3) {
-              // Middle slide is active
-              const middleIndex =
-                (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
-              isActive = i === middleIndex;
-            }
-          }
-
-          return (
-            <SwiperSlide
-              key={i}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                // cursor: "pointer",
-              }}
-              className="relative h-full mx-auto"
-            >
-              <div key={meal.id}>
-                <Meals {...meal} isActive={isActive} />
-              </div>
-            </SwiperSlide>
-          );
-        })}
-      </>
-    );
-  }
-
-  function addNewMealFormHandler() {
-    setIsAddMealForm(true);
-  }
-
-  const activeStyles =
-    "active:scale-[0.97] md:mx-6 grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
-
-  if (params.restaurant && allRestaurantMealsData) {
-    return (
-      <>
-        <div className="relative overflow-hidden rounded-xl ">
+    if (allRestaurantMealsData.length === 0) {
+      content = (
+        <div className="text-center text-xl font-bold my-6">
+          No meals added!
+        </div>
+      );
+    } else if (allRestaurantMealsData.length < 3) {
+      content = (
+        <div className="text-center text-xl font-bold my-6 text-red-600">
+          You Should Add At Least 3 Meals.
+        </div>
+      );
+    } else {
+      content = (
+        <Swiper
+          onSwiper={(swiper) => setSwiper(swiper)}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          spaceBetween={5}
+          loop={true}
+          modules={[Pagination]}
+          className="h-full w-full flex justify-center items-center"
+          breakpoints={{
+            375: {
+              slidesPerView: 1,
+            },
+            850: {
+              slidesPerView: 2,
+            },
+            1200: {
+              slidesPerView: 3,
+            },
+          }}
+        >
           {allRestaurantMealsData.length >= 3 && (
             <div className="absolute inset-0  opacity-100 transition ">
               <button
@@ -139,57 +111,87 @@ const Dashboard = () => {
               </button>
             </div>
           )}
-          {params.restaurant && (
-            <div>
-              <h1 className="text-center font-bold my-12 text-4xl pacifico-regular">
-                {params.restaurant} Meals
-              </h1>
-              {allRestaurantMealsData.length === 0 ? (
-                <div className="text-center text-xl font-bold my-6">
-                  No meals added!
+          {allRestaurantMealsData.map((meal, i) => {
+            let slidesPerView = swiper?.params?.slidesPerView;
+            if (typeof slidesPerView !== "number") {
+              slidesPerView = 1;
+            }
+            const totalSlides = allRestaurantMealsData.length;
+
+            // Check if the total number of slides is 3, make all slides active
+            let isActive = totalSlides === 3;
+
+            if (!isActive) {
+              if (slidesPerView === 1) {
+                // Only one slide is active
+                const middleIndex =
+                  (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+                isActive = i === middleIndex;
+              } else if (slidesPerView === 2) {
+                // Both slides are active
+                const firstActiveIndex = activeIndex % totalSlides;
+                const secondActiveIndex = (activeIndex + 1) % totalSlides;
+                isActive = i === firstActiveIndex || i === secondActiveIndex;
+              } else if (slidesPerView === 3) {
+                // Middle slide is active
+                const middleIndex =
+                  (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+                isActive = i === middleIndex;
+              }
+            }
+
+            return (
+              <SwiperSlide
+                key={i}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  // cursor: "pointer",
+                }}
+                className="relative h-full mx-auto"
+              >
+                <div key={meal.id}>
+                  <Meals {...meal} isActive={isActive} />
                 </div>
-              ) : allRestaurantMealsData.length < 3 ? (
-                <div className="text-center text-xl font-bold my-6 text-red-600">
-                  You Should Add At Least 3 Meals.
-                </div>
-              ) : (
-                <Swiper
-                  onSwiper={(swiper) => setSwiper(swiper)}
-                  onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                  spaceBetween={5}
-                  loop={true}
-                  modules={[Pagination]}
-                  className="h-full w-full flex justify-center items-center"
-                  breakpoints={{
-                    375: {
-                      slidesPerView: 1,
-                    },
-                    850: {
-                      slidesPerView: 2,
-                    },
-                    1200: {
-                      slidesPerView: 3,
-                    },
-                  }}
-                >
-                  {content}
-                </Swiper>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="flex flex-row items-center justify-center">
-          <button
-            onClick={addNewMealFormHandler}
-            type="button"
-            className=" mb-52 mt-20 px-4 py-2 cursor-poniter text-white rounded-md bg-rose-500 hover:bg-rose-600"
-          >
-            Add New Meal
-          </button>
-        </div>
-      </>
-    );
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      );
+    }
   }
+
+  function addNewMealFormHandler() {
+    setIsAddMealForm(true);
+  }
+
+  return (
+    <>
+      <div className="relative overflow-hidden rounded-xl ">
+        {params.restaurant && (
+          <div>
+            <h1 className="text-center font-bold my-12 text-4xl pacifico-regular">
+              {params.restaurant} Meals
+            </h1>
+
+            {content}
+          </div>
+        )}
+      </div>
+      <div className="flex flex-row items-center justify-center">
+        <button
+          onClick={addNewMealFormHandler}
+          type="button"
+          className=" mb-52 mt-20 px-4 py-2 cursor-poniter text-white rounded-md bg-rose-500 hover:bg-rose-600"
+        >
+          Add New Meal
+        </button>
+      </div>
+    </>
+  );
 };
+// };
 
 export default Dashboard;
