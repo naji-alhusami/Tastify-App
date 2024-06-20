@@ -59,23 +59,27 @@ const Dashboard = () => {
             slidesPerView = 1;
           }
           const totalSlides = allRestaurantMealsData.length;
-          console.log(allRestaurantMealsData);
-          let isActive = false;
-          if (slidesPerView === 1) {
-            // Only one slide is active
-            const middleIndex =
-              (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
-            isActive = i === middleIndex;
-          } else if (slidesPerView === 2) {
-            // Both slides are active
-            const firstActiveIndex = activeIndex % totalSlides;
-            const secondActiveIndex = (activeIndex + 1) % totalSlides;
-            isActive = i === firstActiveIndex || i === secondActiveIndex;
-          } else if (slidesPerView === 3) {
-            // Middle slide is active
-            const middleIndex =
-              (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
-            isActive = i === middleIndex;
+
+          // Check if the total number of slides is 3, make all slides active
+          let isActive = totalSlides === 3;
+
+          if (!isActive) {
+            if (slidesPerView === 1) {
+              // Only one slide is active
+              const middleIndex =
+                (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+              isActive = i === middleIndex;
+            } else if (slidesPerView === 2) {
+              // Both slides are active
+              const firstActiveIndex = activeIndex % totalSlides;
+              const secondActiveIndex = (activeIndex + 1) % totalSlides;
+              isActive = i === firstActiveIndex || i === secondActiveIndex;
+            } else if (slidesPerView === 3) {
+              // Middle slide is active
+              const middleIndex =
+                (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+              isActive = i === middleIndex;
+            }
           }
 
           return (
@@ -145,7 +149,7 @@ const Dashboard = () => {
                   No meals added!
                 </div>
               ) : allRestaurantMealsData.length < 3 ? (
-                <div className="text-center text-xl font-bold my-6">
+                <div className="text-center text-xl font-bold my-6 text-red-600">
                   You Should Add At Least 3 Meals.
                 </div>
               ) : (
@@ -178,7 +182,7 @@ const Dashboard = () => {
           <button
             onClick={addNewMealFormHandler}
             type="button"
-            className=" my-8 px-4 py-2 cursor-poniter text-white rounded-md bg-rose-500 hover:bg-rose-600"
+            className=" mb-52 mt-20 px-4 py-2 cursor-poniter text-white rounded-md bg-rose-500 hover:bg-rose-600"
           >
             Add New Meal
           </button>
