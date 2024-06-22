@@ -9,7 +9,7 @@ const MealsPage = () => {
           <h1 className="text-4xl">Choose Cuisines:</h1>
           <Cuisines />
         </div>
-        <div className="flex justify-center items-center m-4">
+        <div>
           <SwiperMeals />
         </div>
       </div>

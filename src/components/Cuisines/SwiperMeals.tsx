@@ -9,6 +9,7 @@ import useMealManager from "../../utils/hooks/useMealManager";
 import Meals from "./Meals";
 import Loading from "../ui/Loading";
 import { FetchError } from "../../lib/http/error";
+import Cuisines from "./Cuisines";
 
 const SwiperMeals = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -23,6 +24,9 @@ const SwiperMeals = () => {
     filteredMealsIsError,
     filteredMealsError,
   } = useMealManager();
+
+  const activeStyles =
+    "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
 
   let content;
   if (allMealsPending || filteredMealsLoading) {
@@ -45,161 +49,213 @@ const SwiperMeals = () => {
       );
     }
   } else if (filteredMealsData) {
-    content = (
-      <>
-        {filteredMealsData.map((meal, i) => {
-          let slidesPerView = swiper?.params.slidesPerView;
-          if (typeof slidesPerView !== "number") {
-            slidesPerView = 1;
-          }
-          const totalSlides = filteredMealsData.length;
+    if (filteredMealsData.length === 0) {
+      content = (
+        <div className="text-center text-xl font-bold my-28">
+          No meals of this cuisine!
+        </div>
+      );
+    } else {
+      content = (
+        <Swiper
+          onSwiper={(swiper) => setSwiper(swiper)}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          spaceBetween={5}
+          loop={true}
+          modules={[Pagination]}
+          className="h-full w-full flex justify-center items-center"
+          breakpoints={{
+            375: {
+              slidesPerView: 1,
+            },
+            768: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+          }}
+        >
+          {filteredMealsData.length >= 3 && (
+            <div className="absolute inset-0  opacity-100 transition ">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  swiper?.slideNext();
+                }}
+                className={`${activeStyles} right-3 transition`}
+                aria-label="next image"
+              >
+                <ChevronRight className="h-4 w-4 text-white" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  swiper?.slidePrev();
+                }}
+                className={`${activeStyles} left-3 transition`}
+                aria-label="previous image"
+              >
+                <ChevronLeft className="h-4 w-4 text-white" />
+              </button>
+            </div>
+          )}
+          {filteredMealsData.map((meal, i) => {
+            let slidesPerView = swiper?.params?.slidesPerView;
+            if (typeof slidesPerView !== "number") {
+              slidesPerView = 1;
+            }
+            const totalSlides = filteredMealsData.length;
 
-          let isActive = false;
-          if (slidesPerView === 1) {
-            // Only one slide is active
-            const middleIndex =
-              (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
-            isActive = i === middleIndex;
-          } else if (slidesPerView === 2) {
-            // Both slides are active
-            const firstActiveIndex = activeIndex % totalSlides;
-            const secondActiveIndex = (activeIndex + 1) % totalSlides;
-            isActive = i === firstActiveIndex || i === secondActiveIndex;
-          } else if (slidesPerView === 3) {
-            // Middle slide is active
-            const middleIndex =
-              (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
-            isActive = i === middleIndex;
-          }
+            // Check if the total number of slides is 3, make all slides active
+            let isActive = totalSlides === 3;
+            if (!isActive) {
+              if (slidesPerView === 1) {
+                // Only one slide is active
+                const middleIndex =
+                  (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+                isActive = i === middleIndex;
+              } else if (slidesPerView === 2) {
+                // Both slides are active
+                const firstActiveIndex = activeIndex % totalSlides;
+                const secondActiveIndex = (activeIndex + 1) % totalSlides;
+                isActive = i === firstActiveIndex || i === secondActiveIndex;
+              } else if (slidesPerView === 3) {
+                // Middle slide is active
+                const middleIndex =
+                  (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+                isActive = i === middleIndex;
+              }
+            }
 
-          return (
-            <SwiperSlide
-              key={i}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                // cursor: "pointer",
-              }}
-              className="relative h-full mx-auto"
-            >
-              <div key={meal.id}>
-                <Meals {...meal} isActive={isActive} />
-              </div>
-            </SwiperSlide>
-          );
-        })}
-      </>
-    );
+            return (
+              <SwiperSlide
+                key={i}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  // cursor: "pointer",
+                }}
+                className="relative h-full mx-auto"
+              >
+                <div key={meal.id}>
+                  <Meals {...meal} isActive={isActive} />
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      );
+    }
   } else if (allMealsData) {
-    content = (
-      <>
-        {allMealsData.map((meal, i) => {
-          let slidesPerView = swiper?.params?.slidesPerView;
-          if (typeof slidesPerView !== "number") {
-            slidesPerView = 1;
-          }
-          const totalSlides = allMealsData.length;
+    if (allMealsData.length === 0 && allMealsData.length < 3) {
+      content = (
+        <div className="text-center text-xl font-bold my-20">
+          No meals for this restaurant!
+        </div>
+      );
+    } else {
+      content = (
+        <Swiper
+          onSwiper={(swiper) => setSwiper(swiper)}
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+          spaceBetween={5}
+          loop={true}
+          modules={[Pagination]}
+          className="h-full w-full flex justify-center items-center"
+          breakpoints={{
+            375: {
+              slidesPerView: 1,
+            },
+            768: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+          }}
+        >
+          {allMealsData.length >= 3 && (
+            <div className="absolute inset-0  opacity-100 transition ">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  swiper?.slideNext();
+                }}
+                className={`${activeStyles} right-3 transition`}
+                aria-label="next image"
+              >
+                <ChevronRight className="h-4 w-4 text-white" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  swiper?.slidePrev();
+                }}
+                className={`${activeStyles} left-3 transition`}
+                aria-label="previous image"
+              >
+                <ChevronLeft className="h-4 w-4 text-white" />
+              </button>
+            </div>
+          )}
+          {allMealsData.map((meal, i) => {
+            let slidesPerView = swiper?.params?.slidesPerView;
+            if (typeof slidesPerView !== "number") {
+              slidesPerView = 1;
+            }
+            const totalSlides = allMealsData.length;
 
-          let isActive = false;
-          if (slidesPerView === 1) {
-            // Only one slide is active
-            const middleIndex =
-              (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
-            isActive = i === middleIndex;
-          } else if (slidesPerView === 2) {
-            // Both slides are active
-            const firstActiveIndex = activeIndex % totalSlides;
-            const secondActiveIndex = (activeIndex + 1) % totalSlides;
-            isActive = i === firstActiveIndex || i === secondActiveIndex;
-          } else if (slidesPerView === 3) {
-            // Middle slide is active
-            const middleIndex =
-              (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
-            isActive = i === middleIndex;
-          }
+            // Check if the total number of slides is 3, make all slides active
+            let isActive = totalSlides === 3;
+            if (!isActive) {
+              if (slidesPerView === 1) {
+                // Only one slide is active
+                const middleIndex =
+                  (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+                isActive = i === middleIndex;
+              } else if (slidesPerView === 2) {
+                // Both slides are active
+                const firstActiveIndex = activeIndex % totalSlides;
+                const secondActiveIndex = (activeIndex + 1) % totalSlides;
+                isActive = i === firstActiveIndex || i === secondActiveIndex;
+              } else if (slidesPerView === 3) {
+                // Middle slide is active
+                const middleIndex =
+                  (activeIndex + Math.floor(slidesPerView / 2)) % totalSlides;
+                isActive = i === middleIndex;
+              }
+            }
 
-          return (
-            <SwiperSlide
-              key={i}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                // cursor: "pointer",
-              }}
-              className="relative h-full mx-auto"
-            >
-              <div key={meal.id}>
-                <Meals {...meal} isActive={isActive} />
-              </div>
-            </SwiperSlide>
-          );
-        })}
-      </>
-    );
+            return (
+              <SwiperSlide
+                key={i}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+                className="relative h-full mx-auto"
+              >
+                <div key={meal.id}>
+                  <Meals {...meal} isActive={isActive} />
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      );
+    }
   }
 
-  const mealsData = filteredMealsData || allMealsData || [];
-  const slidesPerView = 3; // Adjust based on your breakpoints
-  const loop = mealsData.length > slidesPerView;
-
-  const activeStyles =
-    "active:scale-[0.97] md:mx-6 grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
-
   return (
-    <div className="relative overflow-hidden rounded-xl ">
-      {!loop && (
-        <div className="absolute top-0 left-0 w-full text-center text-red-500 bg-white p-2 z-20">
-          <p>Swiper Loop Warning: Add more meals to enable loop mode.</p>
-        </div>
-      )}
-      <div className="absolute inset-0  opacity-100 transition ">
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            swiper?.slideNext();
-          }}
-          className={`${activeStyles} right-3 transition`}
-          aria-label="next image"
-        >
-          <ChevronRight className="h-4 w-4 text-white" />
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            swiper?.slidePrev();
-          }}
-          className={`${activeStyles} left-3 transition`}
-          aria-label="previous image"
-        >
-          <ChevronLeft className="h-4 w-4 text-white" />
-        </button>
-      </div>
-
-      <Swiper
-        onSwiper={(swiper) => setSwiper(swiper)}
-        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-        spaceBetween={5}
-        loop={true}
-        modules={[Pagination]}
-        className="h-full w-full flex flex-row justify-center items-center"
-        breakpoints={{
-          375: {
-            slidesPerView: 1,
-          },
-          850: {
-            slidesPerView: 2,
-          },
-          1200: {
-            slidesPerView: 3,
-          },
-        }}
-      >
-        {content}
-      </Swiper>
+    <div className="relative overflow-hidden rounded-xl mt-40 text-center">
+      <h1 className="text-4xl pacifico-regular">Tastify Meals</h1>
+      <Cuisines />
+      {content}
     </div>
   );
 };

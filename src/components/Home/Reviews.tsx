@@ -2,7 +2,7 @@ import { Check, Star } from "lucide-react";
 
 const Reviews = () => {
   return (
-    <div className="text-center mt-52 mb-20">
+    <div className="text-center mt-40 mb-20">
       <h1 className="text-4xl pacifico-regular">Reviews</h1>
       <div className="mx-20 mt-10 flex flex-col justify-center items-center gap-y-6 md:mx-10 md:flex-row md:gap-x-6">
         <div className="mx-auto grid max-w-2xl grid-cols-1 px-4 lg:mx-0 lg:max-w-none lg:grid-cols-2 gap-y-16">

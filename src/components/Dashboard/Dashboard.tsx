@@ -38,7 +38,7 @@ const Dashboard = () => {
   } = useMealManager();
 
   const activeStyles =
-    "active:scale-[0.97] md:mx-6 grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
+    "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
 
   let content;
   if (allRestaurantMealsPending) {
@@ -79,10 +79,10 @@ const Dashboard = () => {
             375: {
               slidesPerView: 1,
             },
-            850: {
+            768: {
               slidesPerView: 2,
             },
-            1200: {
+            1024: {
               slidesPerView: 3,
             },
           }}
@@ -148,7 +148,6 @@ const Dashboard = () => {
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
-                  // cursor: "pointer",
                 }}
                 className="relative h-full mx-auto"
               >
@@ -169,13 +168,12 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="relative overflow-hidden rounded-xl ">
+      <div className="relative overflow-hidden rounded-xl">
         {params.restaurant && (
           <div>
             <h1 className="text-center font-bold my-12 text-4xl pacifico-regular">
               {params.restaurant} Meals
             </h1>
-
             {content}
           </div>
         )}

@@ -56,8 +56,6 @@ const Login = ({
 
         if (response.role === "seller") {
           navigate(`/dashboard/${response.restaurant}`);
-        } else {
-          navigate("/cuisines");
         }
       }
     } catch (error) {

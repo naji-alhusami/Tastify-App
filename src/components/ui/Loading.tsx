@@ -1,66 +1,77 @@
-import { Bike } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const Loading = () => {
+  const path = useLocation();
+
   return (
-    <div className="flex flex-col justify-center items-center md:flex-row">
-      <div className="m-4 border border-gray-200 rounded-lg hover:bg-rose-100 overflow-hidden hover:scale-100">
-        <div className="w-[250px] h-[250px] bg-gray-300"></div>
+    <div className="flex flex-row justify-center md:justify-between items-center mx-20 mb-20">
+      <div className="w-[275px] flex flex-col justify-center items-center border-2 border-amber-400 rounded-md">
         <div className="p-4">
-          <div className="text-xl font-semibold bg-gray-300"></div>
-          <p className="bg-gray-300"></p>
-          <p className="bg-gray-300"></p>
-          <div className="flex flex-row text-rose-300">
-            <Bike color="#8c8c8c" strokeWidth={1} />
-            <p className="#8c8c8c"></p>
-          </div>
-          <div className="flex justify-end items-center">
-            <div className="bg-gray-300 px-2 py-1 rounded-md mt-4 text-white"></div>
-          </div>
+          <div className="w-[230px] h-[230px] bg-gray-300 rounded-md"></div>
+        </div>
+        <div className="p-4 flex flex-col justify-center items-center">
+          <div className="w-[100px] h-[25px] bg-gray-300 rounded-md"></div>
+          <div className="w-[100px] h-[25px] bg-gray-300 my-4 rounded-md"></div>
+          <div className="w-[25px] h-[25px] bg-gray-300 rounded-md my-4"></div>
+
+          {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
+            <>
+              <div className="flex justify-center items-center">
+                <div className="w-[90px] h-[30px] bg-gray-300 rounded-md"></div>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-row justify-between items-center">
+              <div className="w-[90px] h-[30px] bg-gray-300 rounded-md mr-10"></div>
+              <div className="w-[90px] h-[30px] bg-gray-300 rounded-md ml-10"></div>
+            </div>
+          )}
         </div>
       </div>
-      <div className="m-4 border border-gray-200 rounded-lg hover:bg-rose-100 overflow-hidden hover:scale-100">
-        <div className="w-[250px] h-[250px] bg-gray-300"></div>
+      <div className="hidden w-[275px] md:flex flex-col justify-center items-center border-2 border-amber-400 rounded-md">
         <div className="p-4">
-          <div className="text-xl font-semibold bg-gray-300"></div>
-          <p className="bg-gray-300"></p>
-          <p className="bg-gray-300"></p>
-          <div className="flex flex-row text-rose-300">
-            <Bike color="#8c8c8c" strokeWidth={1} />
-            <p className="#8c8c8c"></p>
-          </div>
-          <div className="flex justify-end items-center">
-            <div className="bg-gray-300 px-2 py-1 rounded-md mt-4 text-white"></div>
-          </div>
+          <div className="w-[230px] h-[230px] bg-gray-300 rounded-md"></div>
+        </div>
+        <div className="p-4 flex flex-col justify-center items-center">
+          <div className="w-[100px] h-[25px] bg-gray-300 rounded-md"></div>
+          <div className="w-[100px] h-[25px] bg-gray-300 my-4 rounded-md"></div>
+          <div className="w-[25px] h-[25px] bg-gray-300 rounded-md my-4"></div>
+
+          {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
+            <>
+              <div className="flex justify-center items-center">
+                <div className="w-[90px] h-[30px] bg-gray-300 rounded-md"></div>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-row justify-between items-center">
+              <div className="w-[90px] h-[30px] bg-gray-300 rounded-md mr-10"></div>
+              <div className="w-[90px] h-[30px] bg-gray-300 rounded-md ml-10"></div>
+            </div>
+          )}
         </div>
       </div>
-      <div className="m-4 border border-gray-200 rounded-lg hover:bg-rose-100 overflow-hidden hover:scale-100">
-        <div className="w-[250px] h-[250px] bg-gray-300"></div>
+      <div className="hidden w-[275px] lg:flex flex-col justify-center items-center border-2 border-amber-400 rounded-md">
         <div className="p-4">
-          <div className="text-xl font-semibold bg-gray-300"></div>
-          <p className="bg-gray-300"></p>
-          <p className="bg-gray-300"></p>
-          <div className="flex flex-row text-rose-300">
-            <Bike color="#8c8c8c" strokeWidth={1} />
-            <p className="#8c8c8c"></p>
-          </div>
-          <div className="flex justify-end items-center">
-            <div className="bg-gray-300 px-2 py-1 rounded-md mt-4 text-white"></div>
-          </div>
+          <div className="w-[230px] h-[230px] bg-gray-300 rounded-md"></div>
         </div>
-      </div>
-      <div className="m-4 border border-gray-200 rounded-lg hover:bg-rose-100 overflow-hidden hover:scale-100">
-        <div className="w-[250px] h-[250px] bg-gray-300"></div>
-        <div className="p-4">
-          <div className="text-xl font-semibold bg-gray-300"></div>
-          <p className="bg-gray-300"></p>
-          <p className="bg-gray-300"></p>
-          <div className="flex flex-row text-rose-300">
-            <Bike color="#8c8c8c" strokeWidth={1} />
-            <p className="#8c8c8c"></p>
-          </div>
-          <div className="flex justify-end items-center">
-            <div className="bg-gray-300 px-2 py-1 rounded-md mt-4 text-white"></div>
-          </div>
+        <div className="p-4 flex flex-col justify-center items-center">
+          <div className="w-[100px] h-[25px] bg-gray-300 rounded-md"></div>
+          <div className="w-[100px] h-[25px] bg-gray-300 my-4 rounded-md"></div>
+          <div className="w-[25px] h-[25px] bg-gray-300 rounded-md my-4"></div>
+
+          {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
+            <>
+              <div className="flex justify-center items-center">
+                <div className="w-[90px] h-[30px] bg-gray-300 rounded-md"></div>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-row justify-between items-center">
+              <div className="w-[90px] h-[30px] bg-gray-300 rounded-md mr-10"></div>
+              <div className="w-[90px] h-[30px] bg-gray-300 rounded-md ml-10"></div>
+            </div>
+          )}
         </div>
       </div>
     </div>
