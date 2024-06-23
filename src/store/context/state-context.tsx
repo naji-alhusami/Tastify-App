@@ -19,6 +19,8 @@ interface ContextType {
   setIsAddMealForm: (form: boolean) => void;
   isUpdateMealForm: boolean;
   setIsUpdateMealForm: (form: boolean) => void;
+  isNotLoginModal: boolean;
+  setIsNotLoginModal: (notLogin: boolean) => void;
 }
 
 const StateContext = createContext<null | ContextType>(null);

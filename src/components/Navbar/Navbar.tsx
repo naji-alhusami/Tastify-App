@@ -13,8 +13,26 @@ import BasketAndCheckoutModal from "../BasketAndCheckout/BasketAndCheckoutModal"
 import BasketItems from "../BasketAndCheckout/Basket";
 import MealFormModal from "../MealForm/MealFormModal";
 import StateContext from "../../store/context/state-context";
+import NotLoginModal from "../NotLogin/NotLoginModal";
 
 const Navbar = () => {
+  const contextValue = useContext(StateContext) as {
+    isAddMealForm: boolean;
+    setIsAddMealForm: (form: boolean) => void;
+    isUpdateMealForm: boolean;
+    setIsUpdateMealForm: (form: boolean) => void;
+    isNotLoginModal: boolean;
+    setIsNotLoginModal: (notLogin: boolean) => void;
+  };
+  const {
+    isAddMealForm,
+    setIsAddMealForm,
+    isUpdateMealForm,
+    setIsUpdateMealForm,
+    isNotLoginModal,
+    setIsNotLoginModal,
+  } = contextValue;
+
   // Authentication (Signup and Login)
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
@@ -33,6 +51,7 @@ const Navbar = () => {
     setIsSignupBuyerForm(false);
     setIsSignupSellerForm(false);
     setIsThanks(false);
+    setIsNotLoginModal(false);
   };
 
   const closeAuthModalHandler = () => {
@@ -44,19 +63,6 @@ const Navbar = () => {
   };
 
   // Add Meal and Update:
-  const contextValue = useContext(StateContext) as {
-    isAddMealForm: boolean;
-    setIsAddMealForm: (form: boolean) => void;
-    isUpdateMealForm: boolean;
-    setIsUpdateMealForm: (form: boolean) => void;
-  };
-  const {
-    isAddMealForm,
-    setIsAddMealForm,
-    isUpdateMealForm,
-    setIsUpdateMealForm,
-  } = contextValue;
-
   const closeMealFormModalHandler = () => {
     setIsAddMealForm(false);
     setIsUpdateMealForm(false);
@@ -163,6 +169,10 @@ const Navbar = () => {
           closeThanksModalHandler={closeAuthModalHandler}
           openLoginModalHandler={openLoginModalHandler}
         />
+      )}
+
+      {isNotLoginModal && (
+        <NotLoginModal openLoginModalHandler={openLoginModalHandler} />
       )}
 
       {/* Navbar */}

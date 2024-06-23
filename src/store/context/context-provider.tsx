@@ -23,6 +23,7 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
   const [showRestaurants, setShowRestaurants] = useState<boolean>(false);
   const [isAddMealForm, setIsAddMealForm] = useState<boolean>(false);
   const [isUpdateMealForm, setIsUpdateMealForm] = useState<boolean>(false);
+  const [isNotLoginModal, setIsNotLoginModal] = useState<boolean>(false);
 
   const [params] = useSearchParams();
   // console.log(params.get("cuisine"));
@@ -63,6 +64,8 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
     setIsAddMealForm,
     isUpdateMealForm,
     setIsUpdateMealForm,
+    isNotLoginModal,
+    setIsNotLoginModal
   };
 
   return (

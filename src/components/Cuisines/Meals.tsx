@@ -1,6 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { addToBasket } from "../../store/redux/basket-slice";
-import { useAppDispatch } from "../../store/redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { useLocation } from "react-router-dom";
 import { type Meal } from "../../lib/types/types";
 import useMealManager from "../../utils/hooks/useMealManager";
@@ -22,16 +22,24 @@ export default function Meals({
 }: MealProps) {
   const path = useLocation();
   const dispatch = useAppDispatch();
+  const userLogin = useAppSelector((state) => state.users.userlogin);
   const contextValue = useContext(StateContext) as {
     setIsUpdateMealForm: (form: boolean) => void;
     setIsAddMealForm: (form: boolean) => void;
     setIsMealId: (id: string) => void;
+    setIsNotLoginModal: (notLogin: boolean) => void;
   };
-  const { setIsUpdateMealForm, setIsAddMealForm, setIsMealId } = contextValue;
+  const {
+    setIsUpdateMealForm,
+    setIsAddMealForm,
+    setIsMealId,
+    setIsNotLoginModal,
+  } = contextValue;
 
   function addToBasketHandler() {
-    if (id) {
-      // const numericPrice = parseFloat(price);
+    if (!userLogin) {
+      setIsNotLoginModal(true);
+    } else if (id && userLogin) {
       dispatch(addToBasket({ id, name, price }));
     }
   }
