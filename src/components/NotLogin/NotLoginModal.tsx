@@ -1,8 +1,8 @@
+import { CircleAlert, XCircle } from "lucide-react";
 import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
 import Modal from "../ui/Modal";
 import Backdrop from "../ui/Backdrop";
-import { CircleAlert, XCircle } from "lucide-react";
 
 interface NotLoginModalProps {
   openLoginModalHandler: () => void;

@@ -22,7 +22,8 @@ export default function Meals({
 }: MealProps) {
   const path = useLocation();
   const dispatch = useAppDispatch();
-  const userLogin = useAppSelector((state) => state.users.userlogin);
+  const user = useAppSelector((state) => state.users);
+  console.log("userLogin:", user.userlogin);
   const contextValue = useContext(StateContext) as {
     setIsUpdateMealForm: (form: boolean) => void;
     setIsAddMealForm: (form: boolean) => void;
@@ -37,9 +38,9 @@ export default function Meals({
   } = contextValue;
 
   function addToBasketHandler() {
-    if (!userLogin) {
+    if (!user.userlogin || user.user.role === "seller") {
       setIsNotLoginModal(true);
-    } else if (id && userLogin) {
+    } else if (id && user.userlogin) {
       dispatch(addToBasket({ id, name, price }));
     }
   }
