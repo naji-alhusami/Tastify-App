@@ -5,6 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import Footer from "./components/Footer/Footer.tsx";
 import Dashboard from "./components/Dashboard/Dashboard.tsx";
 import { queryClient } from "./lib/http/AddMealHttp.ts";
+import Meals from "./components/Meals/Meals.tsx";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/meals" element={<Meals />} />
           <Route path="/dashboard/:restaurant" element={<Dashboard />} />
         </Routes>
         <Footer />

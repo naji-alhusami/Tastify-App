@@ -10,8 +10,10 @@ import Meals from "./Meals";
 import Loading from "../ui/Loading";
 import { FetchError } from "../../lib/http/error";
 import Cuisines from "./Cuisines";
+import { useLocation } from "react-router-dom";
 
 const SwiperMeals = () => {
+  const path = useLocation();
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [swiper, setSwiper] = useState<null | SwiperType>(null);
   const {
@@ -252,9 +254,9 @@ const SwiperMeals = () => {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-xl mt-40 text-center">
-      <h1 className="text-4xl pacifico-regular">Tastify Meals</h1>
-      <Cuisines />
+    <div className="relative overflow-hidden rounded-xl mt-16 mb-28 text-center">
+      <h1 className="text-4xl pacifico-regular my-6">Tastify Meals</h1>
+      {path.pathname === '/meals' && <Cuisines />}
       {content}
     </div>
   );
