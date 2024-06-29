@@ -14,12 +14,19 @@ const AddressLocator = () => {
     return null; // or any other fallback logic
   }
 
-  const { address, setAddress, setLat, setLon } = contextValue;
+  const {
+    setAddress,
+    lon,
+    lat,
+    //  address,
+    setLat,
+    setLon,
+  } = contextValue;
   const findCuisinesHandler = () => {
-    localStorage.setItem("address", JSON.stringify(address));
+    // localStorage.setItem("address", JSON.stringify(address));
     // localStorage.setItem("lat", JSON.stringify(lat));
     // navigate(`/cuisines?lon=${lon}&lat=${lat}`);
-    navigate(`/cuisines`);
+    navigate(`/meals?lng=${lon}&lat=${lat}`);
   };
 
   const determineAddress = () => {

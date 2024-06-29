@@ -26,9 +26,8 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
   const [isNotLoginModal, setIsNotLoginModal] = useState<boolean>(false);
 
   const [params] = useSearchParams();
-  // console.log(params.get("cuisine"));
   const latString = params.get("lat");
-  const lonString = params.get("lon");
+  const lonString = params.get("lng");
 
   const lata = latString ? parseFloat(latString) : null;
   const lona = lonString ? parseFloat(lonString) : null;
@@ -65,7 +64,7 @@ const ContextProvider = ({ children }: ContextProviderProps) => {
     isUpdateMealForm,
     setIsUpdateMealForm,
     isNotLoginModal,
-    setIsNotLoginModal
+    setIsNotLoginModal,
   };
 
   return (

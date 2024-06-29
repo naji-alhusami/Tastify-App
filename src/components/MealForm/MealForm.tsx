@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { type Meal } from "../../lib/types/types";
 import { Loader2 } from "lucide-react";
 import FormField from "../ui/FormField";
-import useMealManager from "../../utils/hooks/useMealManager";
+import useMealManager from "../../utils/custom-hooks/useMealManager";
 import { FetchError } from "../../lib/http/error";
 // import Loading from "../ui/Loading";
 import { useContext } from "react";

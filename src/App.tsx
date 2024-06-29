@@ -8,6 +8,7 @@ import { queryClient } from "./lib/http/AddMealHttp.ts";
 import Meals from "./components/Meals/Meals.tsx";
 
 function App() {
+  
   return (
     <div className="relative">
       <QueryClientProvider client={queryClient}>

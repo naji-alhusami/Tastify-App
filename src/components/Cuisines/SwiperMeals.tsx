@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import useMealManager from "../../utils/hooks/useMealManager";
+import useMealManager from "../../utils/custom-hooks/useMealManager";
 import Meals from "./Meals";
 import Loading from "../ui/Loading";
 import { FetchError } from "../../lib/http/error";

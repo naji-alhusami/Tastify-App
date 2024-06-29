@@ -14,8 +14,12 @@ import BasketItems from "../BasketAndCheckout/Basket";
 import MealFormModal from "../MealForm/MealFormModal";
 import StateContext from "../../store/context/state-context";
 import NotLoginModal from "../NotLogin/NotLoginModal";
+import useAddressCoords from "../../utils/custom-hooks/useAddressCoords";
 
 const Navbar = () => {
+  const { address } = useAddressCoords();
+  // console.log(address);
+
   const contextValue = useContext(StateContext) as {
     isAddMealForm: boolean;
     setIsAddMealForm: (form: boolean) => void;
@@ -32,7 +36,6 @@ const Navbar = () => {
     isNotLoginModal,
     setIsNotLoginModal,
   } = contextValue;
-
   // Authentication (Signup and Login)
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
@@ -85,7 +88,7 @@ const Navbar = () => {
 
   // Check if user state exists in local storage
   const storedUserLogin = localStorage.getItem("userLogin");
-  const storedAddress = localStorage.getItem("address");
+  // const storedAddress = localStorage.getItem("address");
 
   if (storedUserLogin) {
     // Parse stored user state and set Redux state
@@ -206,9 +209,9 @@ const Navbar = () => {
           {path.pathname !== "/" && (
             <div className="hidden text-center  lg:flex lg:flex-row lg:items-center lg:justify-center lg:px-12">
               <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
-              {storedAddress ? (
+              {address ? (
                 <p className="text-rose-500 xl:max-w-xl lg:max-w-lg lg:overflow-hidden lg:whitespace-nowrap lg:overflow-ellipsis">
-                  {JSON.parse(storedAddress)}
+                  {address}
                 </p>
               ) : (
                 <p>Loading...</p>
@@ -253,9 +256,9 @@ const Navbar = () => {
         {path.pathname !== "/" && (
           <div className="mx-4 text-center flex flex-row items-center justify-center py-4 h-16 lg:hidden">
             <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
-            {storedAddress ? (
+            {address ? (
               <p className="text-rose-500 font-bold overflow-hidden whitespace-nowrap overflow-ellipsis">
-                {JSON.parse(storedAddress)}
+                {address}
               </p>
             ) : (
               <p>Loading...</p>

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { FetchError } from "../../lib/http/error";
 import Meals from "../Cuisines/Meals";
-import useMealManager from "../../utils/hooks/useMealManager";
+import useMealManager from "../../utils/custom-hooks/useMealManager";
 import Loading from "../ui/Loading";
 import { useContext, useEffect, useState } from "react";
 import StateContext from "../../store/context/state-context";
