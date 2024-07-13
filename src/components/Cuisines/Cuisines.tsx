@@ -21,11 +21,11 @@ const Cuisines = () => {
   //   "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
 
   return (
-    <div className="mx-12 my-4 flex flex-row flex-wrap items-center justify-center  h-32 rounded-xl text-gray-500">
+    <div className="mx-12 my-10 flex flex-row flex-wrap items-center justify-center  h-32 rounded-xl text-gray-500">
       {ITEMS_CATEGORIES.map((item, i) => (
         <div
           key={i}
-          className="relative mx-auto "
+          className="relative mx-auto my-1"
         >
           <div
             // to={`/cuisines/?lon=${params.get("lon")}&lat=${params.get(

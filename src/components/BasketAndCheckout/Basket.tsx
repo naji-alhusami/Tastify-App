@@ -52,13 +52,17 @@ export default function Basket({ setIsCheckoutForm }: BasketProps) {
                     <span>{item.name}</span>
                     <span> ({formattedPrice})</span>
                   </div>
-                  <div>
+                  <div className="flex flex-row justify-center items-center">
                     <button onClick={() => handleRemoveFromBasket(item.id)}>
-                      <Minus />
+                      <div className="m-2 p-1 bg-amber-500 rounded-full hover:bg-amber-600">
+                        <Minus className=" text-white h-3 w-3" />
+                      </div>
                     </button>
                     <span>{item.quantity}</span>
                     <button onClick={() => handleAddToBasket(item)}>
-                      <Plus />
+                      <div className="m-2 p-1 bg-amber-500 rounded-full hover:bg-amber-600">
+                        <Plus className=" text-white h-3 w-3" />
+                      </div>
                     </button>
                   </div>
                 </li>
@@ -68,8 +72,9 @@ export default function Basket({ setIsCheckoutForm }: BasketProps) {
         )}
       </div>
       <div className="flex flex-row justify-between items-center">
-        <div className="flex flex-col">
-          Cart Total: <strong>${formattedTotalPrice}</strong>
+        <div className="text-2xl flex flex-row justify-center items-center">
+          Total:
+          <p className="text-rose-500 font-bold pl-2">{formattedTotalPrice}$</p>
         </div>
         <Button
           type="button"

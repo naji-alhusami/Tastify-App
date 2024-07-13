@@ -11,7 +11,7 @@ import { extractAddressDetails } from "../../lib/get-address";
 import { useMutation } from "@tanstack/react-query";
 import { sendOrders } from "../../lib/http/SendOrderHttp";
 import { Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { clearBasket } from "../../store/redux/basket-slice";
 import { Order } from "../../lib/types/types";
 import FormField from "../ui/FormField";
@@ -21,10 +21,17 @@ interface CheckoutProps {
   // closeCheckout: (open: boolean) => void;
   setIsCheckoutForm: (open: boolean) => void;
   setIsBasketForm: (open: boolean) => void;
+  setIsThanksOrder: (open: boolean) => void;
+  setIsThanks: (open: boolean) => void;
 }
 
-const Checkout = ({ setIsCheckoutForm, setIsBasketForm }: CheckoutProps) => {
-  const navigate = useNavigate();
+const Checkout = ({
+  setIsCheckoutForm,
+  setIsBasketForm,
+  setIsThanksOrder,
+  setIsThanks,
+}: CheckoutProps) => {
+  // const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -55,7 +62,9 @@ const Checkout = ({ setIsCheckoutForm, setIsBasketForm }: CheckoutProps) => {
     onSuccess: () => {
       setIsCheckoutForm(false);
       setIsBasketForm(false);
-      navigate("/");
+      setIsThanksOrder(true);
+      setIsThanks(true);
+      // navigate("/");
       dispatch(clearBasket());
     },
   });

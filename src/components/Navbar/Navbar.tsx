@@ -43,6 +43,7 @@ const Navbar = () => {
   const [isSignupBuyerForm, setIsSignupBuyerForm] = useState<boolean>(false);
   const [isSignupSellerForm, setIsSignupSellerForm] = useState<boolean>(false);
   const [isThanks, setIsThanks] = useState<boolean>(false);
+  const [isThanksOrder, setIsThanksOrder] = useState<boolean>(false);
 
   const openSignupModalHandler = () => {
     setIsAuth(true);
@@ -161,6 +162,8 @@ const Navbar = () => {
             <Checkout
               setIsBasketForm={setIsBasketForm}
               setIsCheckoutForm={setIsCheckoutForm}
+              setIsThanksOrder={setIsThanksOrder}
+              setIsThanks={setIsThanks}
             />
           ) : (
             <BasketItems setIsCheckoutForm={setIsCheckoutForm} />
@@ -171,6 +174,7 @@ const Navbar = () => {
       {isThanks && (
         <ThanksModal
           isThanks={isThanks}
+          isThanksOrder={isThanksOrder}
           closeThanksModalHandler={closeAuthModalHandler}
           openLoginModalHandler={openLoginModalHandler}
         />
@@ -208,7 +212,7 @@ const Navbar = () => {
               Tastify
             </h1>
           </div>
-          {path.pathname !== "/" && (
+          {path.pathname === "/meals" && (
             <div className="hidden text-center  lg:flex lg:flex-row lg:items-center lg:justify-center lg:px-12">
               <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
               {address ? (
