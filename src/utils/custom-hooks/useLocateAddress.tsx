@@ -50,7 +50,7 @@ const useLocateAddress = (): DetermineAddressReturn => {
       );
     }
   };
-  console.log("address in useLocateAddress but outside fun:", address);
+  // console.log("address in useLocateAddress but outside fun:", fullAddress);
 
   return {
     determineAddress,

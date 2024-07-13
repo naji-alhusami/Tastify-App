@@ -15,6 +15,7 @@ import MealFormModal from "../MealForm/MealFormModal";
 import StateContext from "../../store/context/state-context";
 import NotLoginModal from "../NotLogin/NotLoginModal";
 import useAddressCoords from "../../utils/custom-hooks/useAddressCoords";
+import { clearBasket } from "../../store/redux/basket-slice";
 
 const Navbar = () => {
   const { address } = useAddressCoords();
@@ -103,6 +104,7 @@ const Navbar = () => {
 
   const logoutHandler = () => {
     dispatch(logoutUser());
+    dispatch(clearBasket());
     navigate("/");
     localStorage.removeItem("userLogin");
     localStorage.removeItem("address");
