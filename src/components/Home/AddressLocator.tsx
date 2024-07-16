@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
-import { LocateFixed } from "lucide-react";
-import StateContext from "../../store/context/state-context";
 import { useNavigate } from "react-router-dom";
+import { LocateFixed } from "lucide-react";
+
+import StateContext from "../../store/context/state-context";
 
 const AddressLocator = () => {
   const [enabledButton, setEnabledButton] = useState<boolean>(false);
@@ -14,18 +15,8 @@ const AddressLocator = () => {
     return null; // or any other fallback logic
   }
 
-  const {
-    setAddress,
-    lon,
-    lat,
-    //  address,
-    setLat,
-    setLon,
-  } = contextValue;
+  const { setAddress, lon, lat, setLat, setLon } = contextValue;
   const findCuisinesHandler = () => {
-    // localStorage.setItem("address", JSON.stringify(address));
-    // localStorage.setItem("lat", JSON.stringify(lat));
-    // navigate(`/cuisines?lon=${lon}&lat=${lat}`);
     navigate(`/meals?lng=${lon}&lat=${lat}`);
   };
 
@@ -64,9 +55,7 @@ const AddressLocator = () => {
         type="text"
         className="border border-gray-300  focus:ring-rose-500 overflow-hidden whitespace-nowrap overflow-ellipsis w-full px-4 py-2 rounded-md"
         placeholder="Locate Address"
-        // defaultValue={address || ""}
         value={inputValue}
-        // value={address || clearInput}
         readOnly
       />
       <button

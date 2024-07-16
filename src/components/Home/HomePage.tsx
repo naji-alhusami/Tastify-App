@@ -1,8 +1,8 @@
-import { useAppSelector } from "../../store/redux/hooks";
-import SwiperMeals from "../Cuisines/SwiperMeals";
-import OrderSteps from "./OrderSteps";
-import Reviews from "./Reviews";
 import Starting from "./Starting";
+import OrderSteps from "./OrderSteps";
+import SwiperMeals from "../Cuisines/SwiperMeals";
+import Reviews from "./Reviews";
+import { useAppSelector } from "../../store/redux/hooks";
 
 const Home = () => {
   const user = useAppSelector((state) => state.users);
