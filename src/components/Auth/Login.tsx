@@ -42,8 +42,9 @@ const Login = ({
     setIsLoginForm(false);
   };
   const { 
-    // lat, lon,
-     determineAddress } = useLocateAddress();
+    // lat, lon, 
+    determineAddress } = useLocateAddress();
+  // console.log("lat in Login:", lat);
 
   const onSubmit: SubmitHandler<TAuthValidator> = async (data) => {
     const { email, password } = data;
@@ -61,7 +62,7 @@ const Login = ({
           navigate(`/dashboard/${response.restaurant}`);
         } else if (response.role === "buyer") {
           await determineAddress();
-          // navigate(`/meas?lng=${lon}&lat=${lat}`);
+          // navigate(`/meals?lng=${lon}&lat=${lat}`);
         }
       }
     } catch (error) {

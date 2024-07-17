@@ -1,52 +1,13 @@
-import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useLocateAddress from "../../utils/custom-hooks/useLocateAddress";
 import { LocateFixed } from "lucide-react";
 
-import StateContext from "../../store/context/state-context";
-
 const AddressLocator = () => {
-  const [enabledButton, setEnabledButton] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>("");
-  const contextValue = useContext(StateContext);
+  const { determineAddress, enabledButton, inputValue, lat, lon } =
+    useLocateAddress();
   const navigate = useNavigate();
-
-  if (!contextValue) {
-    // We should handle the case when contextValue is null
-    return null; // or any other fallback logic
-  }
-
-  const { setAddress, lon, lat, setLat, setLon } = contextValue;
   const findCuisinesHandler = () => {
     navigate(`/meals?lng=${lon}&lat=${lat}`);
-  };
-
-  const determineAddress = () => {
-    setEnabledButton(true);
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        async (position) => {
-          const { latitude, longitude } = position.coords;
-          setLat(latitude);
-          setLon(longitude);
-          try {
-            const response = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-            );
-            const data = await response.json();
-            const fullAddress = data.display_name;
-            setAddress(fullAddress);
-            setInputValue(fullAddress);
-          } catch (error) {
-            console.error("Error fetching address:", error);
-            setAddress(null);
-          }
-        },
-        (error) => {
-          console.error("Error getting current location:", error);
-          setAddress(null);
-        }
-      );
-    }
   };
 
   return (
