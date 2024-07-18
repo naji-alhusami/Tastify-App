@@ -1,9 +1,9 @@
+import { QueryClient } from "@tanstack/react-query";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../../firebase-config";
 
+import { storage } from "../../firebase-config";
 import { FetchError } from "./error";
 import { type Meal } from "../types/types";
-import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient();
 
@@ -13,10 +13,6 @@ export async function AddMealHttp(meal: Meal) {
 
   if (image) {
     const imageFile = image[0];
-
-    //   if (!imageFile) {
-    //     throw new Error("No file selected");
-    //   }
 
     const metadata = {
       contentType: imageFile.type,

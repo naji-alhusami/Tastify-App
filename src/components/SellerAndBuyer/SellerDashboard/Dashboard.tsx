@@ -1,23 +1,24 @@
-import { useParams } from "react-router-dom";
-import { FetchError } from "../../lib/http/error";
-import Meals from "../Cuisines/Meals";
-import useMealManager from "../../utils/custom-hooks/useMealManager";
-import Loading from "../ui/Loading";
 import { useContext, useEffect, useState } from "react";
-import StateContext from "../../store/context/state-context";
+import { useParams } from "react-router-dom";
 import { Pagination } from "swiper/modules";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type SwiperType from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import StateContext from "../../../store/context/state-context";
+import { FetchError } from "../../../lib/http/error";
+import Meals from "../Meals";
+import useMealManager from "../../../utils/custom-hooks/useMealManager";
+import Loading from "../../ui/Loading";
 
 const Dashboard = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [swiper, setSwiper] = useState<null | SwiperType>(null);
 
   const params = useParams();
-  // console.log(params.restaurant);
+
   const contextValue = useContext(StateContext) as {
     setIsAddMealForm: (form: boolean) => void;
     setIsRestaurant: (restaurant: string) => void;
@@ -190,6 +191,5 @@ const Dashboard = () => {
     </>
   );
 };
-// };
 
 export default Dashboard;

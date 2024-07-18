@@ -1,16 +1,17 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Pagination } from "swiper/modules";
 import type SwiperType from "swiper";
 import "swiper/css";
 import "swiper/css/pagination";
-import { Pagination } from "swiper/modules";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import useMealManager from "../../utils/custom-hooks/useMealManager";
-import Meals from "./Meals";
-import Loading from "../ui/Loading";
-import { FetchError } from "../../lib/http/error";
+
+import useMealManager from "../../../utils/custom-hooks/useMealManager";
+import Meals from "../Meals";
+import Loading from "../../ui/Loading";
+import { FetchError } from "../../../lib/http/error";
 import Cuisines from "./Cuisines";
-import { useLocation } from "react-router-dom";
 
 const SwiperMeals = () => {
   const path = useLocation();

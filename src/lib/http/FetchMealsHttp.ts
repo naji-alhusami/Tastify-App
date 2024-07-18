@@ -25,7 +25,6 @@ export async function fetchMeals({
   }
 
   const data = await response.json();
-  // console.log("restaurant in http:", restaurant);
 
   const allConvertedMeals = Object.keys(data).map((key) => ({
     id: key,
@@ -43,12 +42,10 @@ export async function fetchMeals({
 
   // To check the details of any meal:
   if (id) {
-    // console.log("id in http:", id);
     const mealDetails = allConvertedMeals.filter(
       (meal: Meal) => meal.id === id
     );
 
-    // console.log("mealDetails:", mealDetails);
     return mealDetails;
   }
 
@@ -58,7 +55,6 @@ export async function fetchMeals({
       (meal: Meal) => meal.restaurant === isRestaurant
     );
 
-    // console.log(restaurantMeals);
     return restaurantMeals;
   }
 

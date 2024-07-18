@@ -8,11 +8,11 @@ import {
   AuthValidator,
   type TAuthValidator,
 } from "../../lib/validators/account-validator";
-import { loginUser, setUserLogin } from "../../store/redux/user-slice";
-import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import FormField from "../ui/FormField";
 import Button from "../ui/Button";
 import useLocateAddress from "../../utils/custom-hooks/useLocateAddress";
+import { loginUser, setUserLogin } from "../../store/redux/user-slice";
+import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 
 interface LoginProps {
   setIsSignupBuyerForm: (open: boolean) => void;
@@ -41,10 +41,7 @@ const Login = ({
     setIsSignupBuyerForm(true);
     setIsLoginForm(false);
   };
-  const { 
-    // lat, lon, 
-    determineAddress } = useLocateAddress();
-  // console.log("lat in Login:", lat);
+  const { determineAddress } = useLocateAddress();
 
   const onSubmit: SubmitHandler<TAuthValidator> = async (data) => {
     const { email, password } = data;
@@ -62,7 +59,6 @@ const Login = ({
           navigate(`/dashboard/${response.restaurant}`);
         } else if (response.role === "buyer") {
           await determineAddress();
-          // navigate(`/meals?lng=${lon}&lat=${lat}`);
         }
       }
     } catch (error) {

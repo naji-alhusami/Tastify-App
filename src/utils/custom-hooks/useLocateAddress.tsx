@@ -1,6 +1,4 @@
-// import { useState } from "react";
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
 
 interface DetermineAddressReturn {
   determineAddress: () => void;
@@ -17,7 +15,6 @@ const useLocateAddress = (): DetermineAddressReturn => {
   const [address, setAddress] = useState<string | null>(null);
   const [enabledButton, setEnabledButton] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
-  // const navigate = useNavigate();
 
   const determineAddress = () => {
     setEnabledButton(true);
@@ -35,7 +32,6 @@ const useLocateAddress = (): DetermineAddressReturn => {
             const fullAddress = data.display_name;
             setAddress(fullAddress);
             setInputValue(fullAddress);
-            // navigate(`/meals?lng=${longitude}&lat=${latitude}`);
           } catch (error) {
             console.error("Error fetching address:", error);
             setAddress(null);
@@ -48,7 +44,6 @@ const useLocateAddress = (): DetermineAddressReturn => {
       );
     }
   };
-  // console.log("address in useLocateAddress but outside fun:", fullAddress);
 
   return {
     determineAddress,

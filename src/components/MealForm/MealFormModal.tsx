@@ -1,7 +1,7 @@
-import { XCircle } from "lucide-react";
-import Modal from "../ui/Modal";
 import { createPortal } from "react-dom";
-// import { ReactNode } from "react";
+import { XCircle } from "lucide-react";
+
+import Modal from "../ui/Modal";
 import Backdrop from "../ui/Backdrop";
 import MealForm from "./MealForm";
 

@@ -1,16 +1,14 @@
 import { createPortal } from "react-dom";
+import { XCircle } from "lucide-react";
+import { type ReactNode } from "react";
+
 import Modal from "../ui/Modal";
 import Backdrop from "../ui/Backdrop";
-import { XCircle } from "lucide-react";
-import { ReactNode } from "react";
-// import Checkout from "../Checkout/Checkout";
-// import BasketItems from "./BasketItems";
 
 interface BasketAndCheckoutModalProps {
   children: ReactNode;
   isCheckoutForm: boolean;
   isBasketForm: boolean;
-  //   openBasketAndCheckout: () => void;
   closeBasketAndCheckout: () => void;
 }
 
@@ -18,7 +16,6 @@ const BasketAndCheckoutModal = ({
   children,
   isCheckoutForm,
   isBasketForm,
-  //   openBasketAndCheckout,
   closeBasketAndCheckout,
 }: BasketAndCheckoutModalProps) => {
   return createPortal(

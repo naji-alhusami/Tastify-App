@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import useLocateAddress from "../../utils/custom-hooks/useLocateAddress";
 import { LocateFixed } from "lucide-react";
 
+import useLocateAddress from "../../utils/custom-hooks/useLocateAddress";
+import Button from "../ui/Button";
+
 const AddressLocator = () => {
+  const navigate = useNavigate();
   const { determineAddress, enabledButton, inputValue, lat, lon } =
     useLocateAddress();
-  const navigate = useNavigate();
+
   const findCuisinesHandler = () => {
     navigate(`/meals?lng=${lon}&lat=${lat}`);
   };
@@ -19,13 +22,14 @@ const AddressLocator = () => {
         value={inputValue}
         readOnly
       />
-      <button
+      <div
         className="absolute right-8 top-6 md:right-28 md:top-6 cursor-pointer"
         onClick={determineAddress}
       >
         <LocateFixed size={20} className="bg-white" />
-      </button>
-      <button
+      </div>
+      <Button
+        type="button"
         onClick={findCuisinesHandler}
         disabled={!enabledButton}
         className={`text-white ${
@@ -33,7 +37,7 @@ const AddressLocator = () => {
         } px-4 py-2 rounded-md`}
       >
         Search
-      </button>
+      </Button>
     </>
   );
 };

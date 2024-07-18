@@ -1,7 +1,8 @@
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+
+import { storage } from "../../firebase-config";
 import { FetchError } from "./error";
 import { type Meal } from "../types/types";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../../firebase-config";
 
 export async function UpdateMealHttp(meal: Meal) {
   const { id, name, category, price, image, description, restaurant } = meal;

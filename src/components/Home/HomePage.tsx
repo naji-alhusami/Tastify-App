@@ -1,6 +1,6 @@
 import Starting from "./Starting";
 import OrderSteps from "./OrderSteps";
-import SwiperMeals from "../Cuisines/SwiperMeals";
+import SwiperMeals from "../SellerAndBuyer/BuyerMeals/SwiperMeals";
 import Reviews from "./Reviews";
 import { useAppSelector } from "../../store/redux/hooks";
 

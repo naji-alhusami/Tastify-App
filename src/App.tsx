@@ -1,11 +1,12 @@
 import { Route, Routes } from "react-router-dom";
+import { QueryClientProvider } from "@tanstack/react-query";
+
 import Navbar from "./components/Navbar/Navbar.tsx";
 import Home from "./components/Home/HomePage.tsx";
-import { QueryClientProvider } from "@tanstack/react-query";
 import Footer from "./components/Footer/Footer.tsx";
-import Dashboard from "./components/Dashboard/Dashboard.tsx";
+import Dashboard from "./components/SellerAndBuyer/SellerDashboard/Dashboard.tsx";
+import MealsPage from "./components/SellerAndBuyer/BuyerMeals/MealsPage.tsx";
 import { queryClient } from "./lib/http/AddMealHttp.ts";
-import Meals from "./components/Meals/Meals.tsx";
 
 function App() {
   
@@ -15,7 +16,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/meals" element={<Meals />} />
+          <Route path="/meals" element={<MealsPage />} />
           <Route path="/dashboard/:restaurant" element={<Dashboard />} />
         </Routes>
         <Footer />

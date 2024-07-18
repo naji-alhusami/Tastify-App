@@ -1,11 +1,12 @@
+import { useContext } from "react";
+import { useLocation } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+
 import { addToBasket } from "../../store/redux/basket-slice";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
-import { useLocation } from "react-router-dom";
 import { type Meal } from "../../lib/types/types";
 import useMealManager from "../../utils/custom-hooks/useMealManager";
 import { FetchError } from "../../lib/http/error";
-import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
 
 interface MealProps extends Meal {
@@ -23,7 +24,7 @@ export default function Meals({
   const path = useLocation();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.users);
-  // console.log("userLogin:", user.userlogin);
+
   const contextValue = useContext(StateContext) as {
     setIsUpdateMealForm: (form: boolean) => void;
     setIsAddMealForm: (form: boolean) => void;

@@ -1,17 +1,16 @@
+import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   MealValidator,
-  TMealValidator,
+  type TMealValidator,
 } from "../../lib/validators/meal-validator";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 
 import { type Meal } from "../../lib/types/types";
-import { Loader2 } from "lucide-react";
 import FormField from "../ui/FormField";
 import useMealManager from "../../utils/custom-hooks/useMealManager";
 import { FetchError } from "../../lib/http/error";
-// import Loading from "../ui/Loading";
-import { useContext } from "react";
 import StateContext from "../../store/context/state-context";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
@@ -35,8 +34,7 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
   } = useForm<TMealValidator>({
     resolver: zodResolver(MealValidator),
   });
-  console.log("isAddMealForm:", isAddMealForm);
-  console.log("isUpdateMealForm:", isUpdateMealForm);
+
   const {
     mealData,
     mealDataPending,
@@ -62,7 +60,6 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
     }
   };
 
-  // let content;
   if (mealDataPending && isUpdateMealForm) {
     return <LoadingSpinner />;
   } else if (mealDataIsError && isUpdateMealForm) {
@@ -77,15 +74,10 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
     }
   }
 
-  // console.log("inside before return");
-  // console.log("restaurant:", restaurant);
-  // console.log("restaurant:", params);
-  // if (restaurant) {
   return (
     <div>
       <div
         className="w-full h-full bg-cover"
-        // style={{ backgroundImage: `url(${DashboardImage})` }}
       >
         <div className="w-full p-4">
           <form
@@ -214,6 +206,5 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
     </div>
   );
 };
-// };
 
 export default MealForm;
