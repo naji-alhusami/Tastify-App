@@ -25,7 +25,6 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
     isMealId: string;
   };
   const { isRestaurant, isMealId } = contextValue;
-  console.log(isMealId);
 
   const {
     register,

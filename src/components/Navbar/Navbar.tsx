@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CircleUserRound, ShoppingCart, MapPin } from "lucide-react";
-
 import { useLocation, useNavigate } from "react-router-dom";
+
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import AuthModal from "../Auth/AuthModal";
 import Signup from "../Auth/Signup";
@@ -19,7 +19,6 @@ import { clearBasket } from "../../store/redux/basket-slice";
 
 const Navbar = () => {
   const { address } = useAddressCoords();
-  // console.log(address);
 
   const contextValue = useContext(StateContext) as {
     isAddMealForm: boolean;
@@ -29,6 +28,7 @@ const Navbar = () => {
     isNotLoginModal: boolean;
     setIsNotLoginModal: (notLogin: boolean) => void;
   };
+
   const {
     isAddMealForm,
     setIsAddMealForm,
@@ -37,13 +37,16 @@ const Navbar = () => {
     isNotLoginModal,
     setIsNotLoginModal,
   } = contextValue;
+
+  // Thanks Modal
+  const [isThanks, setIsThanks] = useState<boolean>(false);
+  const [isThanksOrder, setIsThanksOrder] = useState<boolean>(false);
+
   // Authentication (Signup and Login)
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [isLoginForm, setIsLoginForm] = useState<boolean>(false);
   const [isSignupBuyerForm, setIsSignupBuyerForm] = useState<boolean>(false);
   const [isSignupSellerForm, setIsSignupSellerForm] = useState<boolean>(false);
-  const [isThanks, setIsThanks] = useState<boolean>(false);
-  const [isThanksOrder, setIsThanksOrder] = useState<boolean>(false);
 
   const openSignupModalHandler = () => {
     setIsAuth(true);
@@ -88,14 +91,14 @@ const Navbar = () => {
   const dispatch = useAppDispatch();
   const userLogin = useAppSelector((state) => state.users.userlogin);
 
-  // Check if user state exists in local storage
-  const storedUserLogin = localStorage.getItem("userLogin");
-  // const storedAddress = localStorage.getItem("address");
+  useEffect(() => {
+    const storedUserLogin = localStorage.getItem("userLogin");
 
-  if (storedUserLogin) {
-    // Parse stored user state and set Redux state
-    dispatch(setUserLogin(JSON.parse(storedUserLogin)));
-  }
+    if (storedUserLogin) {
+      // Parse stored user state and set Redux state
+      dispatch(setUserLogin(JSON.parse(storedUserLogin)));
+    }
+  }, [dispatch]);
 
   const navigate = useNavigate();
   const path = useLocation();
@@ -113,6 +116,8 @@ const Navbar = () => {
 
   const heightClass = path.pathname !== "/" ? "lg:h-16" : "h-16";
 
+  console.log("address:", address);
+
   return (
     <>
       {isAuth && (
@@ -121,7 +126,6 @@ const Navbar = () => {
           closeAuth={closeAuthModalHandler}
           isLoginForm={isLoginForm}
           isSignupBuyerForm={isSignupBuyerForm}
-          // setIsSignupBuyerForm={setIsSignupBuyerForm}
           isSignupSellerForm={isSignupSellerForm}
         >
           {isSignupBuyerForm || isSignupSellerForm ? (
@@ -164,6 +168,7 @@ const Navbar = () => {
               setIsCheckoutForm={setIsCheckoutForm}
               setIsThanksOrder={setIsThanksOrder}
               setIsThanks={setIsThanks}
+              address={address}
             />
           ) : (
             <BasketItems setIsCheckoutForm={setIsCheckoutForm} />

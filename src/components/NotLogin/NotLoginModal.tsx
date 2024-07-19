@@ -1,8 +1,10 @@
-import { CircleAlert, XCircle } from "lucide-react";
 import { useContext } from "react";
+import { CircleAlert, XCircle } from "lucide-react";
+
 import StateContext from "../../store/context/state-context";
 import Modal from "../ui/Modal";
 import Backdrop from "../ui/Backdrop";
+import Button from "../ui/Button";
 
 interface NotLoginModalProps {
   openLoginModalHandler: () => void;
@@ -33,12 +35,13 @@ const NotLoginModal = ({ openLoginModalHandler }: NotLoginModalProps) => {
         You Should Login in Order to Add Meals to Basket
       </h1>
       <div className="flex flex-row justify-end items-center">
-        <button
+        <Button
+          type="button"
           className=" mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
           onClick={openLoginModalHandler}
         >
           Log in
-        </button>
+        </Button>
       </div>
     </Modal>
   );

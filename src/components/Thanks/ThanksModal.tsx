@@ -1,7 +1,8 @@
-import { MailCheck, XCircle } from "lucide-react";
+import { MailCheck, XCircle, CheckCheck } from "lucide-react";
+
 import Backdrop from "../ui/Backdrop";
 import Modal from "../ui/Modal";
-import { CheckCheck } from "lucide-react";
+import Button from "../ui/Button";
 
 interface ThanksModalProps {
   isThanks: boolean;
@@ -45,19 +46,20 @@ const ThanksModal = ({
       )}
       <div className="flex flex-row justify-end items-center">
         {isThanksOrder ? (
-          <button
+          <div
             className=" mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
             onClick={closeThanksModalHandler}
           >
             Close
-          </button>
+          </div>
         ) : (
-          <button
+          <Button
+            type="button"
             className=" mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
             onClick={openLoginModalHandler}
           >
             Log in
-          </button>
+          </Button>
         )}
       </div>
     </Modal>

@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -9,19 +8,20 @@ import {
   type TCheckoutValidator,
 } from "../../lib/validators/checkout-validators";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
-import StateContext from "../../store/context/state-context";
 import { extractAddressDetails } from "../../lib/get-address";
 import { sendOrders } from "../../lib/http/SendOrderHttp";
 import { clearBasket } from "../../store/redux/basket-slice";
 import { type Order } from "../../lib/types/types";
 import FormField from "../ui/FormField";
 import Button from "../ui/Button";
+// import useLocateAddress from "../../utils/custom-hooks/useLocateAddress";
 
 interface CheckoutProps {
   setIsCheckoutForm: (open: boolean) => void;
   setIsBasketForm: (open: boolean) => void;
   setIsThanksOrder: (open: boolean) => void;
   setIsThanks: (open: boolean) => void;
+  address: string | null;
 }
 
 const Checkout = ({
@@ -29,6 +29,7 @@ const Checkout = ({
   setIsBasketForm,
   setIsThanksOrder,
   setIsThanks,
+  address,
 }: CheckoutProps) => {
   const {
     register,
@@ -38,13 +39,8 @@ const Checkout = ({
     resolver: zodResolver(CheckoutValidator),
   });
 
-  const contextValue = useContext(StateContext) as {
-    address: string;
-  };
-
-  const { address } = contextValue;
-
-  const { street, city, state, zipCode } = extractAddressDetails(address);
+  console.log("address:", address);
+  const { street, city, state, zipCode } = extractAddressDetails(address)!;
 
   const dispatch = useAppDispatch();
   const basketItems = useAppSelector((state) => state.basket.items);

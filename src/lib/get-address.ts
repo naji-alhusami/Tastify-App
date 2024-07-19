@@ -28,13 +28,21 @@ export const getAddress = async (
   }
 };
 
-export const extractAddressDetails = (address: string): addressDetails => {
-  const addressDetails = address.split(",");
+export const extractAddressDetails = (
+  address: string | null
+): addressDetails | undefined => {
+  if (address) {
+    const addressParts = address.split(",");
 
-  const street = addressDetails[1].trim();
-  const city = addressDetails[3].trim();
-  const state = addressDetails[4].trim();
-  const zipCode = addressDetails[5].trim();
-
-  return { street, city, state, zipCode };
-};
+    // Ensure that the address has enough parts to extract details
+    if (addressParts.length >= 6) {
+      const street = addressParts[1].trim();
+      const city = addressParts[3].trim();
+      const state = addressParts[4].trim();
+      const zipCode = addressParts[5].trim();
+      return { street, city, state, zipCode };
+    } else {
+      console.error("Address format is not as expected:", address);
+      return undefined;
+    }
+  }}
