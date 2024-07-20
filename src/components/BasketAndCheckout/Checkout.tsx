@@ -8,7 +8,7 @@ import {
   type TCheckoutValidator,
 } from "../../lib/validators/checkout-validators";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
-import { extractAddressDetails } from "../../lib/get-address";
+import { ExtractAddressDetails } from "../../lib/ExtractAddressDetails";
 import { sendOrders } from "../../lib/http/SendOrderHttp";
 import { clearBasket } from "../../store/redux/basket-slice";
 import { type Order } from "../../lib/types/types";
@@ -40,7 +40,7 @@ const Checkout = ({
   });
 
   console.log("address:", address);
-  const { street, city, state, zipCode } = extractAddressDetails(address)!;
+  const { street, city, state, zipCode } = ExtractAddressDetails(address)!;
 
   const dispatch = useAppDispatch();
   const basketItems = useAppSelector((state) => state.basket.items);

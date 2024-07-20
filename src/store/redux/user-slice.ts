@@ -1,8 +1,4 @@
-import {
-  //   type PayloadAction,
-  createAsyncThunk,
-  createSlice,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -153,53 +149,6 @@ export const logoutUser = createAsyncThunk(
 );
 // End of Logout User.
 
-// Start of Load User:
-// export const loadUser = createAsyncThunk<
-//   {
-//     id: string;
-//     email: string;
-//     password: string;
-//     // userlogin: boolean;
-//     error: string | null;
-//   },
-//   { id: string; emailVerified: boolean }
-// >("user/loadUser", async (payload, thunkApi) => {
-//   try {
-//     if (payload.emailVerified === false) {
-//       return thunkApi.rejectWithValue("Email is not verified");
-//     }
-//     console.log("payload", payload);
-//     // console.log(payload);
-//     // if (typeof payload.id !== "string") {
-//     //   return thunkApi.rejectWithValue("Some error");
-//     // }
-//     const docRef = doc(db, "users", payload.id);
-//     const docSnap = await getDoc(docRef);
-//     console.log(docSnap.data());
-//     console.log(docSnap);
-//     if (!docSnap.exists()) {
-//       return thunkApi.rejectWithValue("User data not found.");
-//     }
-
-//     const userData = {
-//       id: docSnap.data().id,
-//       email: docSnap.data().email,
-//       password: docSnap.data().password,
-//       userlogin: true,
-//       error: null,
-//     };
-
-//     return userData;
-//   } catch (error) {
-//     if (error instanceof FirebaseError) {
-//       return thunkApi.rejectWithValue(error.message);
-//     } else {
-//       return thunkApi.rejectWithValue("An error occurred during Login.");
-//     }
-//   }
-// });
-// End of of Load User.
-
 const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -224,7 +173,6 @@ const usersSlice = createSlice({
           restaurant: action.payload.restaurant,
         }),
       };
-      // state.error = false;
     });
     builder.addCase(signupUser.rejected, (state, action) => {
       state.loading = false;
@@ -241,7 +189,6 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      // console.log("action:", action);
       state.loading = false;
       if (action.payload.error) {
         state.user = {} as User;
@@ -267,10 +214,6 @@ const usersSlice = createSlice({
       if (action.payload && typeof action.payload === "string") {
         state.error = action.payload;
       }
-      // else {
-      //   state.error = "An error occurred during sign up.";
-      // }
-      // state.error = action.payload;
     });
 
     // Logout Cases:
@@ -290,36 +233,6 @@ const usersSlice = createSlice({
         state.error = action.payload;
       }
     });
-
-    // Load User Cases:
-    // builder.addCase(loadUser.pending, (state) => {
-    //   state.loading = true;
-    // });
-    // builder.addCase(loadUser.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   if (action.payload && action.payload.error) {
-    //     state.user = {} as User;
-    //     state.userlogin = false;
-    //     state.error = action.payload.error;
-    //   } else {
-    //     state.user = {
-    //       id: action.meta.arg.id,
-    //       email: action.payload.email,
-    //       // password: action.meta.arg.password,
-    //       password: "",
-    //       role: "user",
-    //     };
-    //     state.userlogin = true;
-    //     state.error = null;
-    //   }
-    // });
-    // builder.addCase(loadUser.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.user = {} as User;
-    //   if (action.payload && typeof action.payload === "string") {
-    //     state.error = action.payload;
-    //   }
-    // });
   },
 });
 

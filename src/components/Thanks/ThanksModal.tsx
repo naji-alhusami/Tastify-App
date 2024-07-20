@@ -46,12 +46,13 @@ const ThanksModal = ({
       )}
       <div className="flex flex-row justify-end items-center">
         {isThanksOrder ? (
-          <div
+          <Button
+            type="button"
             className=" mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
             onClick={closeThanksModalHandler}
           >
             Close
-          </div>
+          </Button>
         ) : (
           <Button
             type="button"

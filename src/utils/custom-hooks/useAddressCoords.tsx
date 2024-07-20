@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { getAddress } from "../../lib/get-address";
+import { GetAddress } from "../../lib/GetAddress";
 
 const useAddressCoords = () => {
   const [address, setAddress] = useState<string | null>("");
@@ -15,7 +15,7 @@ const useAddressCoords = () => {
   useEffect(() => {
     const fetchAddress = async () => {
       if (lata !== null && lona !== null) {
-        const fetchedAddress = await getAddress(lata, lona);
+        const fetchedAddress = await GetAddress(lata, lona);
         setAddress(fetchedAddress);
       }
     };
