@@ -22,7 +22,6 @@ export async function sendOrders(orders: Order) {
   );
 
   if (!response.ok) {
-    // console.log("res not ok");
     const info = await response.json();
     throw new FetchError("Error occurred", info);
   }

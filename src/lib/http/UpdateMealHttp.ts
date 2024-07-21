@@ -6,16 +6,6 @@ import { type Meal } from "../types/types";
 
 export async function UpdateMealHttp(meal: Meal) {
   const { id, name, category, price, image, description, restaurant } = meal;
-  console.log(
-    "meal data inside http:",
-    id,
-    name,
-    category,
-    restaurant,
-    price,
-    image,
-    description
-  );
 
   if (image) {
     const imageFile = image[0];
@@ -49,7 +39,6 @@ export async function UpdateMealHttp(meal: Meal) {
     );
 
     if (!response.ok) {
-      console.log("res not ok");
       const info = await response.json();
       throw new FetchError("Error occurred", info); // to check
     }

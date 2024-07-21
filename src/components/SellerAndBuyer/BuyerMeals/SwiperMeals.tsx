@@ -27,7 +27,7 @@ const SwiperMeals = () => {
     filteredMealsIsError,
     filteredMealsError,
   } = useMealManager();
-
+  
   const activeStyles =
     "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
 
@@ -257,7 +257,7 @@ const SwiperMeals = () => {
   return (
     <div className="relative overflow-hidden rounded-xl mt-16 mb-28 text-center">
       <h1 className="text-4xl pacifico-regular my-6">Tastify Meals</h1>
-      {path.pathname === '/meals' && <Cuisines />}
+      {path.pathname === "/meals" && <Cuisines />}
       {content}
     </div>
   );

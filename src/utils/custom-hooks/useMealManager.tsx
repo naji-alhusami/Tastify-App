@@ -85,7 +85,6 @@ const useMealManager = () => {
     mutationFn: AddMealHttp,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"], exact: true });
-      console.log("success in adding");
       refetchAllRestaurantMealsData();
       setIsAddMealForm(false);
     },

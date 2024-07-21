@@ -4,9 +4,8 @@ const Reviews = () => {
   return (
     <div className="text-center mt-40 mb-20">
       <h1 className="text-4xl pacifico-regular">Reviews</h1>
-      <div className="mx-20 mt-10 flex flex-col justify-center items-center gap-y-6 md:mx-10 md:flex-row md:gap-x-6">
+      <div className="mx-40 mt-10 flex flex-col justify-center items-center gap-y-6 md:mx-10 md:flex-row md:gap-x-6">
         <div className="mx-auto grid max-w-2xl grid-cols-1 px-4 lg:mx-0 lg:max-w-none lg:grid-cols-2 gap-y-16">
-          
           {/* First user review */}
           <div className="flex flex-auto flex-col gap-4 lg:pr-12 xl:pr-20">
             <div className="flex gap-0.5 mb-2">
@@ -62,9 +61,9 @@ const Reviews = () => {
                 quick and hassle-free, and the delivery time is impressively
                 prompt. Not to mention,
                 <span className="p-0.5 bg-amber-500 text-white">
-                  the food quality has consistently been top-notch! 
+                  the food quality has consistently been top-notch!
                 </span>
-                 Highly recommended!"
+                Highly recommended!"
               </p>
             </div>
             <div className="flex gap-4 mt-2">

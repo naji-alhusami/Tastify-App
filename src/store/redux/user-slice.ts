@@ -71,7 +71,6 @@ export const signupUser = createAsyncThunk<
       role,
       ...(role === "seller" && { restaurant }),
     };
-    console.log("userData:", userData);
 
     return userData;
   } catch (error) {

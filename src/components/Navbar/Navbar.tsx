@@ -116,8 +116,6 @@ const Navbar = () => {
 
   const heightClass = path.pathname !== "/" ? "lg:h-16" : "h-16";
 
-  console.log("address:", address);
-
   return (
     <>
       {isAuth && (
@@ -221,7 +219,7 @@ const Navbar = () => {
             <div className="hidden text-center  lg:flex lg:flex-row lg:items-center lg:justify-center lg:px-12">
               <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
               {address ? (
-                <p className="text-rose-500 xl:max-w-xl lg:max-w-lg lg:overflow-hidden lg:whitespace-nowrap lg:overflow-ellipsis">
+                <p className="text-rose-500 font-bold  xl:max-w-xl lg:max-w-lg lg:overflow-hidden lg:whitespace-nowrap lg:overflow-ellipsis">
                   {address}
                 </p>
               ) : (
@@ -264,7 +262,7 @@ const Navbar = () => {
             </div>
           </div>
         </header>
-        {path.pathname !== "/" && (
+        {path.pathname === "/meals" && (
           <div className="mx-4 text-center flex flex-row items-center justify-center py-4 h-16 lg:hidden">
             <MapPin strokeWidth={1} className="h-8 w-8 mr-2" />
             {address ? (

@@ -20,6 +20,7 @@ export default function Meals({
   price,
   imageUrl,
   isActive,
+  restaurant,
 }: MealProps) {
   const path = useLocation();
   const dispatch = useAppDispatch();
@@ -76,6 +77,7 @@ export default function Meals({
       </div>
       <div className="p-4 ">
         <h1 className="text-xl font-semibold">{name}</h1>
+        <h1 className="text-xl text-rose-500 font-bold">({restaurant})</h1>
         {isActive && <p className="italic py-4">{description}</p>}
         <p className="text-rose-500 text-2xl">{price}$</p>
         {path.pathname === "/meals" || path.pathname === "/" ? (

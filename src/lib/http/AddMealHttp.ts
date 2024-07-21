@@ -9,7 +9,6 @@ export const queryClient = new QueryClient();
 
 export async function AddMealHttp(meal: Meal) {
   const { name, category, price, image, description, restaurant } = meal;
-  console.log(name, category, price, image, description);
 
   if (image) {
     const imageFile = image[0];
@@ -43,7 +42,6 @@ export async function AddMealHttp(meal: Meal) {
     );
 
     if (!response.ok) {
-      console.log("res not ok");
       const info = await response.json();
       throw new FetchError("Error occurred", info); // to check
     }

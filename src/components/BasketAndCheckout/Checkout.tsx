@@ -39,7 +39,6 @@ const Checkout = ({
     resolver: zodResolver(CheckoutValidator),
   });
 
-  console.log("address:", address);
   const { street, city, state, zipCode } = ExtractAddressDetails(address)!;
 
   const dispatch = useAppDispatch();

@@ -54,6 +54,10 @@ const Dashboard = () => {
         </div>
       );
     }
+  } else if (!allRestaurantMealsData) {
+    content = (
+      <div className="text-center text-xl font-bold my-6">No meals added!</div>
+    );
   } else if (allRestaurantMealsData) {
     if (allRestaurantMealsData.length === 0) {
       content = (
@@ -183,7 +187,7 @@ const Dashboard = () => {
         <button
           onClick={addNewMealFormHandler}
           type="button"
-          className=" mb-52 mt-20 px-4 py-2 cursor-poniter text-white rounded-md bg-rose-500 hover:bg-rose-600"
+          className=" mb-[16rem] mt-20 px-4 py-2 cursor-poniter text-white rounded-md bg-rose-500 hover:bg-rose-600"
         >
           Add New Meal
         </button>
