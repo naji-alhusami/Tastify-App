@@ -7,9 +7,9 @@ import Footer from "./components/Footer/Footer.tsx";
 import Dashboard from "./components/SellerAndBuyer/SellerDashboard/Dashboard.tsx";
 import MealsPage from "./components/SellerAndBuyer/BuyerMeals/MealsPage.tsx";
 import { queryClient } from "./lib/http/AddMealHttp.ts";
+import RequireAuth from "./components/RequireAuth/RequireAuth.tsx";
 
 function App() {
-  
   return (
     <div className="relative">
       <QueryClientProvider client={queryClient}>
@@ -17,7 +17,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/meals" element={<MealsPage />} />
-          <Route path="/dashboard/:restaurant" element={<Dashboard />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/dashboard/:restaurant" element={<Dashboard />} />
+          </Route>
         </Routes>
         <Footer />
       </QueryClientProvider>

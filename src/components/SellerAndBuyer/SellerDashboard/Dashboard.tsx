@@ -68,7 +68,7 @@ const Dashboard = () => {
     } else if (allRestaurantMealsData.length < 3) {
       content = (
         <div className="text-center text-xl font-bold my-6 text-red-600">
-          You Should Add At Least 3 Meals.
+          You Should Add At Least 3 Meals!
         </div>
       );
     } else {

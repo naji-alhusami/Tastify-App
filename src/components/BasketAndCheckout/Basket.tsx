@@ -13,6 +13,7 @@ interface BasketProps {
 }
 
 export default function Basket({ setIsCheckoutForm }: BasketProps) {
+  const userLogin = useAppSelector((state) => state.users.userlogin);
   const basketItems = useAppSelector((state) => state.basket.items);
   const dispatch = useAppDispatch();
 
@@ -77,13 +78,19 @@ export default function Basket({ setIsCheckoutForm }: BasketProps) {
           Total:
           <p className="text-rose-500 font-bold pl-2">{formattedTotalPrice}$</p>
         </div>
-        <Button
-          type="button"
-          className="bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
-          onClick={openCheckoutHandler}
-        >
-          Checkout
-        </Button>
+        {userLogin ? (
+          <Button
+            type="button"
+            className="bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
+            onClick={openCheckoutHandler}
+          >
+            Checkout
+          </Button>
+        ) : (
+          <div className="bg-gray-500  rounded-md px-4 py-2 text-white">
+            Checkout
+          </div>
+        )}
       </div>
     </div>
   );
