@@ -4,6 +4,7 @@ import HomeImage from "/Images/home-image.jpg";
 
 const Starting = () => {
   const userLogin = useAppSelector((state) => state.users.userlogin);
+  const userRole = useAppSelector((state) => state.users.user);
 
   return (
     <div>
@@ -19,7 +20,7 @@ const Starting = () => {
           Everything You Need Is Brought To Your Door With Our{" "}
           <span className="text-rose-500">Delivery Service</span>..
         </h1>
-        {userLogin && (
+        {userLogin &&  userRole.role === "buyer" && (
           <div className="relative w-full flex flex-col justify-between bg-white p-4 rounded-md gap-2 shadow-lg md:absolute md:flex-row md:max-w-2xl lg:top-96">
             <AddressLocator />
           </div>

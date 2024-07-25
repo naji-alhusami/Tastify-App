@@ -7,7 +7,7 @@ import Footer from "./components/Footer/Footer.tsx";
 import Dashboard from "./components/SellerAndBuyer/SellerDashboard/Dashboard.tsx";
 import MealsPage from "./components/SellerAndBuyer/BuyerMeals/MealsPage.tsx";
 import { queryClient } from "./lib/http/AddMealHttp.ts";
-import RequireAuth from "./components/RequireAuth/RequireAuth.tsx";
+// import RequireAuth from "./components/RequireAuth/RequireAuth.tsx";
 
 function App() {
   return (
@@ -17,9 +17,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/meals" element={<MealsPage />} />
-          <Route element={<RequireAuth />}>
+          {/* <Route element={<RequireAuth />}> */}
             <Route path="/dashboard/:restaurant" element={<Dashboard />} />
-          </Route>
+          {/* </Route> */}
         </Routes>
         <Footer />
       </QueryClientProvider>
