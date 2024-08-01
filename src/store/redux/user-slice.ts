@@ -14,7 +14,7 @@ export type User = {
   id: string;
   email: string;
   emailVerified?: boolean;
-  password: string;
+  // password: string;
   role: string;
   restaurant?: string;
 };
@@ -41,9 +41,9 @@ export const signupUser = createAsyncThunk<
     role: string;
     restaurant?: string;
   },
-  User
+  { email: string; password: string; role: string; restaurant?: string }
 >("user/signupUser", async (payload, thunkApi) => {
-  const { id, email, password, role, restaurant } = payload;
+  const { email, password, role, restaurant } = payload;
 
   try {
     const { user } = await createUserWithEmailAndPassword(
@@ -58,7 +58,7 @@ export const signupUser = createAsyncThunk<
     // Send User Data to firestore:
     const docRef = doc(db, "users", user.uid);
     await setDoc(docRef, {
-      id,
+      id: user.uid,
       email,
       password,
       role,
@@ -66,7 +66,7 @@ export const signupUser = createAsyncThunk<
     });
 
     const userData = {
-      id: id,
+      id: user.uid,
       email: email,
       role,
       ...(role === "seller" && { restaurant }),
@@ -148,6 +148,58 @@ export const logoutUser = createAsyncThunk(
 );
 // End of Logout User.
 
+// Start of Load User:
+export const loadUser = createAsyncThunk<
+  {
+    id: string;
+    email: string;
+    password: string;
+    userlogin: boolean;
+    error: string | null;
+    role: string;
+    restaurant?: string;
+  },
+  {
+    email: string | null;
+    password: string;
+    emailVerified: boolean;
+    uid: string;
+  }
+>("user/loadUser", async (payload, thunkApi) => {
+  try {
+    if (payload.emailVerified === false) {
+      return thunkApi.rejectWithValue("Email is not verified");
+    }
+    const docRef = doc(db, "users", payload.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      return thunkApi.rejectWithValue("User data not found.");
+    }
+
+    const userData = {
+      id: docSnap.id,
+      email: docSnap.data()?.email,
+      password: docSnap.data()?.password,
+      userlogin: true,
+      error: null,
+      role: docSnap.data()?.role,
+      ...(docSnap.data()?.role === "seller" && {
+        restaurant: docSnap.data()?.restaurant,
+      }),
+    };
+
+    return userData;
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      return thunkApi.rejectWithValue(error.message);
+    } else {
+      return thunkApi.rejectWithValue("An error occurred during sign up.");
+    }
+  }
+});
+// End of of Load User.
+
 const usersSlice = createSlice({
   name: "users",
   initialState,
@@ -166,7 +218,7 @@ const usersSlice = createSlice({
       state.user = {
         id: action.payload.id,
         email: action.payload.email,
-        password: action.meta.arg.password,
+        // password: action.meta.arg.password,
         role: action.payload.role,
         ...(action.payload.role === "seller" && {
           restaurant: action.payload.restaurant,
@@ -174,13 +226,18 @@ const usersSlice = createSlice({
       };
     });
     builder.addCase(signupUser.rejected, (state, action) => {
+      // state.loading = false;
+      // state.user = {} as User;
+      // if (action.payload && typeof action.payload === "string") {
+      //   state.error = action.payload;
+      // } else {
+      //   state.error = "An error occurred during sign up.";
+      // }
+
       state.loading = false;
       state.user = {} as User;
-      if (action.payload && typeof action.payload === "string") {
-        state.error = action.payload;
-      } else {
-        state.error = "An error occurred during sign up.";
-      }
+      state.userlogin = false;
+      state.error = action.payload as string;
     });
 
     // Login with user & Password Cases:
@@ -197,7 +254,7 @@ const usersSlice = createSlice({
         state.user = {
           id: action.payload.id,
           email: action.payload.email,
-          password: action.meta.arg.password,
+          // password: action.meta.arg.password,
           role: action.payload.role,
           ...(action.payload.role === "seller" && {
             restaurant: action.payload.restaurant,
@@ -208,11 +265,15 @@ const usersSlice = createSlice({
       }
     });
     builder.addCase(loginUser.rejected, (state, action) => {
+      // state.loading = false;
+      // state.user = {} as User;
+      // if (action.payload && typeof action.payload === "string") {
+      //   state.error = action.payload;
+      // }
       state.loading = false;
       state.user = {} as User;
-      if (action.payload && typeof action.payload === "string") {
-        state.error = action.payload;
-      }
+      state.userlogin = false;
+      state.error = action.payload as string;
     });
 
     // Logout Cases:
@@ -226,6 +287,42 @@ const usersSlice = createSlice({
       state.userlogin = false;
     });
     builder.addCase(logoutUser.rejected, (state, action) => {
+      // state.loading = false;
+      // state.user = {} as User;
+      // if (action.payload && typeof action.payload === "string") {
+      //   state.error = action.payload;
+      // }
+      state.loading = false;
+      state.user = {} as User;
+      state.userlogin = false;
+      state.error = action.payload as string;
+    });
+
+    // Load user Cases:
+    builder.addCase(loadUser.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(loadUser.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload.error) {
+        state.user = {} as User;
+        state.userlogin = false;
+        state.error = action.payload.error;
+      } else {
+        state.user = {
+          id: action.payload.id,
+          email: action.payload.email,
+          // password: action.meta.arg.password,
+          role: action.payload.role,
+          ...(action.payload.role === "seller" && {
+            restaurant: action.payload.restaurant,
+          }),
+        };
+        state.userlogin = true;
+        state.error = null;
+      }
+    });
+    builder.addCase(loadUser.rejected, (state, action) => {
       state.loading = false;
       state.user = {} as User;
       if (action.payload && typeof action.payload === "string") {
