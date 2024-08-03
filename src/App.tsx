@@ -11,12 +11,12 @@ import RequireAuth from "./components/RequireAuth/RequireAuth.tsx";
 import { useAppDispatch, useAppSelector } from "./store/redux/hooks.ts";
 import { useEffect } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import LoadingSpinner from "./components/ui/LoadingSpinner.tsx";
+// import LoadingSpinner from "./components/ui/LoadingSpinner.tsx";
 import { loadUser } from "./store/redux/user-slice.ts";
 
 function App() {
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector((state) => state.users);
+  const { loading: authLoading } = useAppSelector((state) => state.users);
 
   useEffect(() => {
     const load = () => {
@@ -40,8 +40,8 @@ function App() {
     load();
   }, [dispatch]);
 
-  if (loading) {
-    return <LoadingSpinner />;
+  if (authLoading) {
+    return <h1>Loading</h1>
   }
 
   return (

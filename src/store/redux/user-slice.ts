@@ -14,7 +14,7 @@ export type User = {
   id: string;
   email: string;
   emailVerified?: boolean;
-  // password: string;
+  password?: string;
   role: string;
   restaurant?: string;
 };
@@ -29,6 +29,7 @@ type UserState = {
 const initialState: UserState = {
   loading: false,
   user: {} as User,
+  // user: null,
   error: null,
   userlogin: false,
 };
@@ -41,7 +42,12 @@ export const signupUser = createAsyncThunk<
     role: string;
     restaurant?: string;
   },
-  { email: string; password: string; role: string; restaurant?: string }
+  {
+    email: string;
+    password: string;
+    role: string;
+    restaurant?: string;
+  }
 >("user/signupUser", async (payload, thunkApi) => {
   const { email, password, role, restaurant } = payload;
 
@@ -51,7 +57,7 @@ export const signupUser = createAsyncThunk<
       email,
       password
     );
-
+    console.log(user);
     // Send Email for verification in Firebase:
     await sendEmailVerification(auth.currentUser!);
 
@@ -60,7 +66,7 @@ export const signupUser = createAsyncThunk<
     await setDoc(docRef, {
       id: user.uid,
       email,
-      password,
+      // password,
       role,
       ...(role === "seller" && { restaurant }),
     });
@@ -71,7 +77,6 @@ export const signupUser = createAsyncThunk<
       role,
       ...(role === "seller" && { restaurant }),
     };
-
     return userData;
   } catch (error) {
     if (error instanceof FirebaseError) {
@@ -88,7 +93,7 @@ export const loginUser = createAsyncThunk<
   {
     id: string;
     email: string;
-    password: string;
+    // password: string;
     userlogin: boolean;
     error: string | null;
     role: string;
@@ -114,7 +119,7 @@ export const loginUser = createAsyncThunk<
     const userData = {
       id: docSnap.id,
       email: docSnap.data().email,
-      password: docSnap.data().password,
+      // password: docSnap.data().password,
       userlogin: true,
       error: null,
       role: docSnap.data().role,
@@ -153,7 +158,7 @@ export const loadUser = createAsyncThunk<
   {
     id: string;
     email: string;
-    password: string;
+    // password: string;
     userlogin: boolean;
     error: string | null;
     role: string;
@@ -161,7 +166,7 @@ export const loadUser = createAsyncThunk<
   },
   {
     email: string | null;
-    password: string;
+    // password: string;
     emailVerified: boolean;
     uid: string;
   }
@@ -180,7 +185,7 @@ export const loadUser = createAsyncThunk<
     const userData = {
       id: docSnap.id,
       email: docSnap.data()?.email,
-      password: docSnap.data()?.password,
+      // password: docSnap.data()?.password,
       userlogin: true,
       error: null,
       role: docSnap.data()?.role,

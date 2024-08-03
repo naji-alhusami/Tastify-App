@@ -72,10 +72,15 @@ const Signup = ({
   > = async (data: User, event) => {
     event?.preventDefault();
 
+    if (!data.password) {
+      setError("Password is required.");
+      return;
+    }
+
     try {
       await dispatch(
         signupUser({
-          id: data.id,
+          // id: data.id,
           email: data.email,
           password: data.password,
           role: isSignupSellerForm ? "seller" : "buyer",
