@@ -1,22 +1,14 @@
 import { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
-// import { Pagination } from "swiper/modules";
-// import { ChevronLeft, ChevronRight } from "lucide-react";
-// import { Swiper, SwiperSlide } from "swiper/react";
-// import type SwiperType from "swiper";
-// import "swiper/css";
-// import "swiper/css/pagination";
 
 import StateContext from "../../../store/context/state-context";
 import { FetchError } from "../../../lib/http/error";
 import Meals from "../Meals";
 import useMealManager from "../../../utils/custom-hooks/useMealManager";
 import Loading from "../../ui/Loading";
+import useLoadUser from "../../../utils/custom-hooks/useLoadUser";
 
 const Dashboard = () => {
-  // const [activeIndex, setActiveIndex] = useState<number>(0);
-  // const [swiper, setSwiper] = useState<null | SwiperType>(null);
-
   const params = useParams();
 
   const contextValue = useContext(StateContext) as {
@@ -40,6 +32,12 @@ const Dashboard = () => {
 
   // const activeStyles =
   //   "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
+
+  const { loading } = useLoadUser();
+
+  if (loading) {
+    return <Loading />;
+  }
 
   let content;
   if (allRestaurantMealsPending) {
@@ -81,6 +79,10 @@ const Dashboard = () => {
   function addNewMealFormHandler() {
     setIsAddMealForm(true);
   }
+
+  // if (loading) {
+  //   return <h1>Loading</h1>
+  // }
 
   return (
     <>
