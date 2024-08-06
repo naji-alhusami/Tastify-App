@@ -16,6 +16,7 @@ import StateContext from "../../store/context/state-context";
 import NotLoginModal from "../NotLogin/NotLoginModal";
 import useAddressCoords from "../../utils/custom-hooks/useAddressCoords";
 import { clearBasket } from "../../store/redux/basket-slice";
+import Button from "../ui/Button";
 
 const Navbar = () => {
   const { address } = useAddressCoords();
@@ -199,12 +200,13 @@ const Navbar = () => {
             {!userLogin ? (
               <CircleUserRound className="text-rose-500 h-6 w-6 lg:hidden" />
             ) : (
-              <button
+              <Button
+                type="button"
                 onClick={logoutHandler}
                 className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
               >
                 Logout
-              </button>
+              </Button>
             )}
           </div>
           <div className="ml-0 md:ml-4">

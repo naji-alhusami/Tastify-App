@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
 import { addToBasket } from "../../store/redux/basket-slice";
@@ -22,7 +22,7 @@ export default function Meals({
   isActive,
   restaurant,
 }: MealProps) {
-  const params = useParams();
+  // const params = useParams();
   const path = useLocation();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.users);
@@ -66,7 +66,7 @@ export default function Meals({
     setIsUpdateMealForm(true);
     setIsAddMealForm(false);
   }
-  
+
   return (
     <div className="text-center w-[275px]  rounded-lg overflow-hidden hover:scale-100 border-2 border-amber-400">
       <div>
@@ -75,10 +75,10 @@ export default function Meals({
       <div className="p-4 ">
         <h1 className="text-xl font-semibold">{name}</h1>
         <h1 className="text-xl text-rose-500 font-bold">({restaurant})</h1>
-        {isActive && path.pathname === "/meals" && (
+        {/* {isActive && path.pathname === "/meals" && (
           <p className="italic py-4">{description}</p>
-        )}
-        {params.restaurant && <p className="italic py-4">{description}</p>}
+        )} */}
+        {isActive && <p className="italic py-4">{description}</p>}
         <p className="text-rose-500 text-2xl">{price}$</p>
         {path.pathname === "/meals" || path.pathname === "/" ? (
           <>

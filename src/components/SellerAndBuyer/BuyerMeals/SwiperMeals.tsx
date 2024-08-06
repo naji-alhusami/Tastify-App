@@ -9,7 +9,7 @@ import "swiper/css/pagination";
 
 import useMealManager from "../../../utils/custom-hooks/useMealManager";
 import Meals from "../Meals";
-import Loading from "../../ui/Loading";
+import Loading from "../../ui/LoadingMeals";
 import { FetchError } from "../../../lib/http/error";
 import Cuisines from "./Cuisines";
 

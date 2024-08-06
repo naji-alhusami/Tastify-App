@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
 
-const Loading = () => {
+const LoadingDashboard = () => {
   const path = useLocation();
 
   return (
-    <div className="flex flex-row justify-center md:justify-between items-center mx-20 mb-20">
+    <div className="flex flex-row justify-center md:justify-between items-center mx-52 my-44 mb-20">
       <div className="w-[275px] flex flex-col justify-center items-center border-2 border-amber-400 rounded-md">
         <div className="p-4">
           <div className="w-[230px] h-[230px] bg-gray-300 rounded-md"></div>
@@ -14,7 +14,7 @@ const Loading = () => {
           <div className="w-[100px] h-[25px] bg-gray-300 my-4 rounded-md"></div>
           <div className="w-[25px] h-[25px] bg-gray-300 rounded-md my-4"></div>
 
-          {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
+          {path.pathname === "/meals" ? (
             <>
               <div className="flex justify-center items-center">
                 <div className="w-[90px] h-[30px] bg-gray-300 rounded-md"></div>
@@ -37,7 +37,7 @@ const Loading = () => {
           <div className="w-[100px] h-[25px] bg-gray-300 my-4 rounded-md"></div>
           <div className="w-[25px] h-[25px] bg-gray-300 rounded-md my-4"></div>
 
-          {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
+          {path.pathname === "/meals" ? (
             <>
               <div className="flex justify-center items-center">
                 <div className="w-[90px] h-[30px] bg-gray-300 rounded-md"></div>
@@ -60,7 +60,7 @@ const Loading = () => {
           <div className="w-[100px] h-[25px] bg-gray-300 my-4 rounded-md"></div>
           <div className="w-[25px] h-[25px] bg-gray-300 rounded-md my-4"></div>
 
-          {path.pathname === "/cuisines" || path.pathname === "/Cuisines" ? (
+          {path.pathname === "/meals" ? (
             <>
               <div className="flex justify-center items-center">
                 <div className="w-[90px] h-[30px] bg-gray-300 rounded-md"></div>
@@ -78,4 +78,4 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+export default LoadingDashboard;

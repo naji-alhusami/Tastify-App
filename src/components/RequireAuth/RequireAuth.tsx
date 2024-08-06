@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useAppDispatch, useAppSelector } from "../../store/redux/hooks";
 import { loadUser } from "../../store/redux/user-slice";
-import LoadingSpinner from "../ui/LoadingSpinner";
+import LoadingDashboard from "../ui/LoadingDashboard";
 
 const RequireAuth = () => {
   const { userlogin } = useAppSelector((state) => state.users);
@@ -30,7 +30,7 @@ const RequireAuth = () => {
   }, [dispatch]);
 
   if (!authChecked) {
-    return <LoadingSpinner />;
+    return <LoadingDashboard />;
   }
 
   return userlogin ? (

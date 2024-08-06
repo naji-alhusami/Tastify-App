@@ -5,7 +5,7 @@ import StateContext from "../../../store/context/state-context";
 import { FetchError } from "../../../lib/http/error";
 import Meals from "../Meals";
 import useMealManager from "../../../utils/custom-hooks/useMealManager";
-import Loading from "../../ui/Loading";
+import LoadingDashboard from "../../ui/LoadingDashboard";
 import useLoadUser from "../../../utils/custom-hooks/useLoadUser";
 
 const Dashboard = () => {
@@ -30,18 +30,15 @@ const Dashboard = () => {
     allRestaurantMealsError,
   } = useMealManager();
 
-  // const activeStyles =
-  //   "active:scale-[0.97] grid opacity-100 hover:scale-105 absolute top-1/2 -translate-y-1/2 aspect-square h-8 w-8 z-20 place-items-center rounded-full border-2 bg-rose-500 border-rose-500";
-
   const { loading } = useLoadUser();
 
   if (loading) {
-    return <Loading />;
+    return <LoadingDashboard />;
   }
 
   let content;
   if (allRestaurantMealsPending) {
-    content = <Loading />;
+    content = <LoadingDashboard />;
   } else if (allRestaurantMealsIsError) {
     if (allRestaurantMealsError instanceof FetchError) {
       content = (

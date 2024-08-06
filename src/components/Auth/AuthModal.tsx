@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
-import { XCircle } from "lucide-react";
 import { type ReactNode } from "react";
+import { XCircle } from "lucide-react";
 
 import Modal from "../ui/Modal.tsx";
 import Backdrop from "../ui/Backdrop.tsx";
