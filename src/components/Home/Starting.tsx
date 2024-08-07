@@ -1,14 +1,15 @@
-import AddressLocator from "./AddressLocator";
-import { useAppSelector } from "../../store/redux/hooks";
-import HomeImage from "/Images/home-image.jpg";
-import Button from "../ui/Button";
 import { useNavigate } from "react-router-dom";
 import { MoveRight } from "lucide-react";
+
+import AddressLocator from "./AddressLocator";
+import { useAppSelector } from "../../store/redux/hooks";
+import Button from "../ui/Button";
+import HomeImage from "/Images/home-image.jpg";
 
 const Starting = () => {
   const navigate = useNavigate();
   const { userlogin, user } = useAppSelector((state) => state.users);
-  console.log(user);
+
   function openDashboardHandler() {
     navigate(`/dashboard/${user.restaurant}`);
   }

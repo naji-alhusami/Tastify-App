@@ -14,7 +14,6 @@ import { clearBasket } from "../../store/redux/basket-slice";
 import { type Order } from "../../lib/types/types";
 import FormField from "../ui/FormField";
 import Button from "../ui/Button";
-// import useLocateAddress from "../../utils/custom-hooks/useLocateAddress";
 
 interface CheckoutProps {
   setIsCheckoutForm: (open: boolean) => void;

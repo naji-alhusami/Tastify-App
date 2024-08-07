@@ -40,7 +40,7 @@ export async function UpdateMealHttp(meal: Meal) {
 
     if (!response.ok) {
       const info = await response.json();
-      throw new FetchError("Error occurred", info); // to check
+      throw new FetchError("Error occurred", info);
     }
 
     const mealData = await response.json();

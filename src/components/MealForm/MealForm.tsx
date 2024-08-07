@@ -1,18 +1,19 @@
 import { useContext } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+
 import {
   MealValidator,
   type TMealValidator,
 } from "../../lib/validators/meal-validator";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-
 import { type Meal } from "../../lib/types/types";
 import FormField from "../ui/FormField";
 import useMealManager from "../../utils/custom-hooks/useMealManager";
 import { FetchError } from "../../lib/http/error";
 import StateContext from "../../store/context/state-context";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import Button from "../ui/Button";
 
 interface MealFormProps {
   isAddMealForm: boolean;
@@ -167,7 +168,7 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
                 )}
               </div>
               <div>
-                <button
+                <Button
                   type="submit"
                   className="flex flex-row items-center justify-center mb-2 px-4 py-2 w-full text-white rounded-md bg-rose-500 hover:bg-rose-600"
                 >
@@ -182,7 +183,7 @@ const MealForm = ({ isAddMealForm, isUpdateMealForm }: MealFormProps) => {
                   ) : (
                     "Add Meal"
                   )}
-                </button>
+                </Button>
                 {addMealIsError && (
                   <p>
                     {addMealError instanceof FetchError

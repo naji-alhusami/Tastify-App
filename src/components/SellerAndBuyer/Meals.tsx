@@ -8,6 +8,7 @@ import { type Meal } from "../../lib/types/types";
 import useMealManager from "../../utils/custom-hooks/useMealManager";
 import { FetchError } from "../../lib/http/error";
 import StateContext from "../../store/context/state-context";
+import Button from "../ui/Button";
 
 interface MealProps extends Meal {
   isActive?: boolean;
@@ -87,24 +88,27 @@ export default function Meals({
           <>
             {isActive && (
               <div className="flex justify-center items-center">
-                <button
+                <Button
+                  type="button"
                   onClick={addToBasketHandler}
                   className="bg-rose-500 hover:bg-rose-600 px-2 py-1 rounded-md mt-4 text-white"
                 >
                   Add To Basket +
-                </button>
+                </Button>
               </div>
             )}
           </>
         ) : (
           <div className="text-md flex flex-row justify-between items-center">
-            <button
+            <Button
+              type="button"
               onClick={() => id && editMealHandler(id)}
               className="bg-white border border-rose-500 hover:bg-rose-200 text-rose-600 px-6 py-1 rounded-md mt-4"
             >
               Edit
-            </button>
-            <button
+            </Button>
+            <Button
+              type="button"
               onClick={deleteMealHandler}
               className="bg-white border border-rose-500 hover:bg-rose-200 text-rose-600 px-6 py-1 rounded-md mt-4"
             >
@@ -113,7 +117,7 @@ export default function Meals({
               ) : (
                 "Delete"
               )}
-            </button>
+            </Button>
             {deleteMealIsError && (
               <p>
                 {deleteMealError instanceof FetchError

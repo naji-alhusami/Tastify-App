@@ -2,7 +2,7 @@ import { type Meal } from "../types/types";
 import { FetchError } from "./error";
 
 interface FetchMealsOptions {
-  signal?: AbortSignal; // Type for signal, assuming you're using AbortController
+  signal?: AbortSignal; // Type for signal, assuming using AbortController
   isCuisine?: string; // Type for cuisine, assuming it's a string
   isRestaurant?: string;
   id?: string;

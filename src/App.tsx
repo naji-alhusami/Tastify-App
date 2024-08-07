@@ -6,8 +6,8 @@ import Home from "./components/Home/HomePage.tsx";
 import Footer from "./components/Footer/Footer.tsx";
 import Dashboard from "./components/SellerAndBuyer/SellerDashboard/Dashboard.tsx";
 import MealsPage from "./components/SellerAndBuyer/BuyerMeals/MealsPage.tsx";
-import { queryClient } from "./lib/http/AddMealHttp.ts";
 import RequireAuth from "./components/RequireAuth/RequireAuth.tsx";
+import { queryClient } from "./lib/http/AddMealHttp.ts";
 
 function App() {
   return (

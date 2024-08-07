@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 import { useAppDispatch } from "../../store/redux/hooks";
 import { loadUser } from "../../store/redux/user-slice";
 

@@ -80,7 +80,6 @@ const Signup = ({
     try {
       await dispatch(
         signupUser({
-          // id: data.id,
           email: data.email,
           password: data.password,
           role: isSignupSellerForm ? "seller" : "buyer",

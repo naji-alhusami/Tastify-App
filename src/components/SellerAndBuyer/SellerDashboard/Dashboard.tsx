@@ -7,6 +7,7 @@ import Meals from "../Meals";
 import useMealManager from "../../../utils/custom-hooks/useMealManager";
 import LoadingDashboard from "../../ui/LoadingDashboard";
 import useLoadUser from "../../../utils/custom-hooks/useLoadUser";
+import Button from "../../ui/Button";
 
 const Dashboard = () => {
   const params = useParams();
@@ -77,10 +78,6 @@ const Dashboard = () => {
     setIsAddMealForm(true);
   }
 
-  // if (loading) {
-  //   return <h1>Loading</h1>
-  // }
-
   return (
     <>
       <div className="relative overflow-hidden rounded-xl">
@@ -94,13 +91,13 @@ const Dashboard = () => {
         )}
       </div>
       <div className="flex flex-row items-center justify-center">
-        <button
+        <Button
           onClick={addNewMealFormHandler}
           type="button"
           className=" mb-[16rem] mt-20 px-4 py-2 cursor-pointer text-white rounded-md bg-rose-500 hover:bg-rose-600"
         >
           Add New Meal
-        </button>
+        </Button>
       </div>
     </>
   );

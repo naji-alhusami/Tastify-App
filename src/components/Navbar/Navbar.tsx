@@ -241,27 +241,30 @@ const Navbar = () => {
           <div className="lg:flex lg:flex-row">
             {!userLogin ? (
               <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-10">
-                <button
+                <Button
+                  type="button"
                   onClick={openLoginModalHandler}
                   className=" mr-4 bg-white border border-rose-500 hover:bg-rose-100 rounded-md px-4 py-2 text-rose-600"
                 >
                   Login
-                </button>
-                <button
+                </Button>
+                <Button
+                  type="button"
                   onClick={openSignupModalHandler}
                   className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
                 >
                   Signup
-                </button>
+                </Button>
               </div>
             ) : (
               <div className="hidden lg:flex lg:flex-row lg:justify-center lg:items-center pr-6">
-                <button
+                <Button
+                  type="button"
                   onClick={logoutHandler}
                   className=" bg-rose-500 hover:bg-rose-600 rounded-md px-4 py-2 text-white"
                 >
                   Logout
-                </button>
+                </Button>
               </div>
             )}
             <div

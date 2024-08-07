@@ -6,9 +6,9 @@ import {
   signOut,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
+import { FirebaseError } from "firebase/app";
 
 import { db, auth } from "../../firebase-config";
-import { FirebaseError } from "firebase/app";
 
 export type User = {
   id: string;
@@ -29,7 +29,6 @@ type UserState = {
 const initialState: UserState = {
   loading: false,
   user: {} as User,
-  // user: null,
   error: null,
   userlogin: false,
 };
@@ -65,7 +64,6 @@ export const signupUser = createAsyncThunk<
     await setDoc(docRef, {
       id: user.uid,
       email,
-      // password,
       role,
       ...(role === "seller" && { restaurant }),
     });
@@ -92,7 +90,6 @@ export const loginUser = createAsyncThunk<
   {
     id: string;
     email: string;
-    // password: string;
     userlogin: boolean;
     error: string | null;
     role: string;
@@ -118,7 +115,6 @@ export const loginUser = createAsyncThunk<
     const userData = {
       id: docSnap.id,
       email: docSnap.data().email,
-      // password: docSnap.data().password,
       userlogin: true,
       error: null,
       role: docSnap.data().role,
@@ -157,7 +153,6 @@ export const loadUser = createAsyncThunk<
   {
     id: string;
     email: string;
-    // password: string;
     userlogin: boolean;
     error: string | null;
     role: string;
@@ -165,7 +160,6 @@ export const loadUser = createAsyncThunk<
   },
   {
     email: string | null;
-    // password: string;
     emailVerified: boolean;
     uid: string;
   }
@@ -184,7 +178,6 @@ export const loadUser = createAsyncThunk<
     const userData = {
       id: docSnap.id,
       email: docSnap.data()?.email,
-      // password: docSnap.data()?.password,
       userlogin: true,
       error: null,
       role: docSnap.data()?.role,
@@ -228,7 +221,6 @@ const usersSlice = createSlice({
       state.user = {
         id: action.payload.id,
         email: action.payload.email,
-        // password: action.meta.arg.password,
         role: action.payload.role,
         ...(action.payload.role === "seller" && {
           restaurant: action.payload.restaurant,
@@ -236,14 +228,6 @@ const usersSlice = createSlice({
       };
     });
     builder.addCase(signupUser.rejected, (state, action) => {
-      // state.loading = false;
-      // state.user = {} as User;
-      // if (action.payload && typeof action.payload === "string") {
-      //   state.error = action.payload;
-      // } else {
-      //   state.error = "An error occurred during sign up.";
-      // }
-
       state.loading = false;
       state.user = {} as User;
       state.userlogin = false;
@@ -264,7 +248,6 @@ const usersSlice = createSlice({
         state.user = {
           id: action.payload.id,
           email: action.payload.email,
-          // password: action.meta.arg.password,
           role: action.payload.role,
           ...(action.payload.role === "seller" && {
             restaurant: action.payload.restaurant,
@@ -275,11 +258,6 @@ const usersSlice = createSlice({
       }
     });
     builder.addCase(loginUser.rejected, (state, action) => {
-      // state.loading = false;
-      // state.user = {} as User;
-      // if (action.payload && typeof action.payload === "string") {
-      //   state.error = action.payload;
-      // }
       state.loading = false;
       state.user = {} as User;
       state.userlogin = false;
@@ -297,11 +275,6 @@ const usersSlice = createSlice({
       state.userlogin = false;
     });
     builder.addCase(logoutUser.rejected, (state, action) => {
-      // state.loading = false;
-      // state.user = {} as User;
-      // if (action.payload && typeof action.payload === "string") {
-      //   state.error = action.payload;
-      // }
       state.loading = false;
       state.user = {} as User;
       state.userlogin = false;
@@ -322,7 +295,6 @@ const usersSlice = createSlice({
         state.user = {
           id: action.payload.id,
           email: action.payload.email,
-          // password: action.meta.arg.password,
           role: action.payload.role,
           ...(action.payload.role === "seller" && {
             restaurant: action.payload.restaurant,
