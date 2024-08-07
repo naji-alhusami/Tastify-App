@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
 import { addToBasket } from "../../store/redux/basket-slice";
@@ -22,8 +22,9 @@ export default function Meals({
   isActive,
   restaurant,
 }: MealProps) {
-  // const params = useParams();
+  const params = useParams();
   const path = useLocation();
+  console.log(params);
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.users);
 
@@ -78,7 +79,9 @@ export default function Meals({
         {/* {isActive && path.pathname === "/meals" && (
           <p className="italic py-4">{description}</p>
         )} */}
-        {isActive && <p className="italic py-4">{description}</p>}
+        {(isActive || params.restaurant) && (
+          <p className="italic py-4">{description}</p>
+        )}
         <p className="text-rose-500 text-2xl">{price}$</p>
         {path.pathname === "/meals" || path.pathname === "/" ? (
           <>

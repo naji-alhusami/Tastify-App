@@ -7,7 +7,12 @@ import AuthModal from "../Auth/AuthModal";
 import Signup from "../Auth/Signup";
 import Login from "../Auth/Login";
 import ThanksModal from "../Thanks/ThanksModal";
-import { logoutUser, setUserLogin } from "../../store/redux/user-slice";
+import {
+  logoutUser,
+  setUserLogin,
+  setUserRole,
+  setUserRestaurant,
+} from "../../store/redux/user-slice";
 import Checkout from "../BasketAndCheckout/Checkout";
 import BasketAndCheckoutModal from "../BasketAndCheckout/BasketAndCheckoutModal";
 import BasketItems from "../BasketAndCheckout/Basket";
@@ -94,10 +99,13 @@ const Navbar = () => {
 
   useEffect(() => {
     const storedUserLogin = localStorage.getItem("userLogin");
+    const storedUserRole = localStorage.getItem("role");
+    const storedUserRestaurant = localStorage.getItem("restaurant");
 
-    if (storedUserLogin) {
-      // Parse stored user state and set Redux state
+    if (storedUserLogin && storedUserRole && storedUserRestaurant) {
       dispatch(setUserLogin(JSON.parse(storedUserLogin)));
+      dispatch(setUserRole(storedUserRole));
+      dispatch(setUserRestaurant(storedUserRestaurant));
     }
   }, [dispatch]);
 
@@ -112,6 +120,7 @@ const Navbar = () => {
     dispatch(clearBasket());
     navigate("/");
     localStorage.removeItem("userLogin");
+    localStorage.removeItem("role");
     localStorage.removeItem("address");
   };
 

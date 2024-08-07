@@ -57,7 +57,6 @@ export const signupUser = createAsyncThunk<
       email,
       password
     );
-    console.log(user);
     // Send Email for verification in Firebase:
     await sendEmailVerification(auth.currentUser!);
 
@@ -212,6 +211,12 @@ const usersSlice = createSlice({
     setUserLogin(state, action) {
       state.userlogin = action.payload;
     },
+    setUserRole(state, action) {
+      state.user.role = action.payload;
+    },
+    setUserRestaurant(state, action) {
+      state.user.restaurant = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // Signup Cases:
@@ -338,4 +343,6 @@ const usersSlice = createSlice({
 });
 
 export const { setUserLogin } = usersSlice.actions;
+export const { setUserRole } = usersSlice.actions;
+export const { setUserRestaurant } = usersSlice.actions;
 export default usersSlice.reducer;

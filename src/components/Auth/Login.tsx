@@ -51,13 +51,18 @@ const Login = ({
       if (response.userlogin) {
         dispatch(setUserLogin(true));
         localStorage.setItem("userLogin", JSON.stringify(response.userlogin));
-
+        
         setIsLoginForm(false);
         setIsAuth(false);
 
-        if (response.role === "seller") {
+        if (response.role === "seller" && response.restaurant) {
+          localStorage.setItem("role", response.role);
+          localStorage.setItem("restaurant", response.restaurant);
+
           navigate(`/dashboard/${response.restaurant}`);
         } else if (response.role === "buyer") {
+          localStorage.setItem("role", response.role);
+
           await determineAddress();
         }
       }
